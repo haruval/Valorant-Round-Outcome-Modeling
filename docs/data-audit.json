@@ -1,0 +1,41 @@
+{
+  "counts": {
+    "started_rounds": 45,
+    "series_invalidations": 1,
+    "correction_events": 13,
+    "unfinished_rounds": 1,
+    "completed_rounds": 44,
+    "rounds_excluded_for_corrections": 0,
+    "games_with_corrections_or_invalidation": 1,
+    "ended_by_cutoff": 1,
+    "eligible_rounds": 43,
+    "series": 1,
+    "games": 2
+  },
+  "sources": [
+    {
+      "file": "events_2629390_grid.jsonl",
+      "sha256": "5a670390d2dc53bace9e64ef9dbe55e71a06fc6acfca34a4a07aa08182e8ef3e"
+    }
+  ],
+  "feature_names": [
+    "elapsed_fraction",
+    "atk_alive",
+    "def_alive",
+    "atk_kills",
+    "def_kills",
+    "spike_planted",
+    "atk_loadout",
+    "def_loadout",
+    "atk_ability_uses",
+    "def_ability_uses",
+    "first_kill_known",
+    "first_kill_atk"
+  ],
+  "observation_seconds": 30,
+  "schema_version": 1,
+  "label_counts": {
+    "1": 17,
+    "0": 26
+  }
+}

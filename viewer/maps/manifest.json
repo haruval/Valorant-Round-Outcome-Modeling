@@ -1,0 +1,50 @@
+{
+  "breeze": {
+    "image": "/maps/breeze.png",
+    "xMultiplier": 7e-05,
+    "yMultiplier": -7e-05,
+    "xScalarToAdd": 0.465123,
+    "yScalarToAdd": 0.833078,
+    "sites": [
+      {
+        "label": "A",
+        "x": 0.86,
+        "y": 0.46
+      },
+      {
+        "label": "B",
+        "x": 0.15,
+        "y": 0.285
+      }
+    ],
+    "source": "https://raw.githubusercontent.com/WesleyJWu/Valorant-Strategy-Mapping-Tool/36aa1bdcea1594748310e9b9e7644230c3ecfdd2/assets/maps/Breeze.png",
+    "archive_date": "2024-09-28",
+    "sha256": "4eedff76b5e37c0ff31f949a0584982c215f119ea8f982e464d84bd85716cb47",
+    "calibration_source": "https://valorant-api.com/v1/maps",
+    "coordinate_order": "image_x = world_y * xMultiplier + xScalarToAdd; image_y = world_x * yMultiplier + yScalarToAdd"
+  },
+  "ascent": {
+    "image": "/maps/ascent.png",
+    "xMultiplier": 7e-05,
+    "yMultiplier": -7e-05,
+    "xScalarToAdd": 0.813895,
+    "yScalarToAdd": 0.573242,
+    "sites": [
+      {
+        "label": "A",
+        "x": 0.265,
+        "y": 0.8
+      },
+      {
+        "label": "B",
+        "x": 0.31,
+        "y": 0.15
+      }
+    ],
+    "source": "https://raw.githubusercontent.com/BrianLiu1319/valorant_minimap_parser/9ae1900e7f475954a86340f9421d1dfaf930d1b8/imgs/Ascent_minimap.png",
+    "archive_date": "2024-09-04",
+    "sha256": "b87bee0d85f884821e7a61cab05b13dfbfe2758aadc221b458340f99c5bdae64",
+    "calibration_source": "https://valorant-api.com/v1/maps",
+    "coordinate_order": "image_x = world_y * xMultiplier + xScalarToAdd; image_y = world_x * yMultiplier + yScalarToAdd"
+  }
+}

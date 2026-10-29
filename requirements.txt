@@ -1,0 +1,5 @@
+# Proposed runtime ranges; verify in an approved environment before locking.
+# No dependency installation is performed by the project itself.
+-r requirements-baseline.txt
+torch>=2.6,<3
+safetensors>=0.5,<1

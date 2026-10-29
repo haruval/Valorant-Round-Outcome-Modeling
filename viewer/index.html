@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Local Valorant event replay and model feature explorer.">
+  <title>visualizer</title>
+  <link rel="stylesheet" href="/style.css">
+  <script src="/app.js" defer></script>
+</head>
+<body>
+  <main>
+    <header class="intro">
+      <div><h1>visualizer</h1><div class="match-context"><strong id="match-title">Loading match…</strong><span id="tournament-name"></span><span id="match-date"></span></div></div>
+      <div class="dataset-summary" id="dataset-summary"></div>
+    </header>
+    <div id="error" class="error" role="alert" hidden></div>
+    <section class="workspace" aria-label="Replay workspace">
+      <aside class="round-sidebar panel">
+        <div class="section-label"><span>SELECT A ROUND</span></div>
+        <label class="field-label" for="series-select">Series</label><select id="series-select" aria-label="Series"></select>
+        <label class="field-label" for="map-select">Map</label><select id="map-select" aria-label="Map"></select>
+        <div class="round-list-head"><span>ROUND</span><span>DURATION</span></div>
+        <nav id="round-list" class="round-list" aria-label="Rounds"></nav>
+      </aside>
+
+      <div class="replay-column">
+        <section class="map-panel panel">
+          <div class="map-heading"><div><div class="section-label"><span>ROUND REPLAY</span></div><h2 id="round-title">Loading replay…</h2></div><span class="phase-pill" id="phase">LIVE START</span></div>
+          <div class="scoreboard"><div class="team-score attack"><span class="side-label">ATTACK</span><strong id="atk-name">—</strong><span id="atk-alive">5 alive</span></div><div class="score-center"><strong id="score">0 <span>:</span> 0</strong><span>ROUND START SCORE</span></div><div class="team-score defense"><span class="side-label">DEFEND</span><strong id="def-name">—</strong><span id="def-alive">5 alive</span></div></div>
+          <div class="map-surface">
+            <div class="map-overlay"><span id="map-kind">MINIMAP</span><span id="spike-state">SPIKE UNPLANTED</span></div>
+            <canvas id="minimap" aria-label="Player locations at the selected replay time. Select a player in the roster for details."></canvas>
+            <div class="map-footer"><span><i class="legend-circle attack-bg"></i> Attackers <i class="legend-circle defense-bg"></i> Defenders <span class="legend-cross">×</span> Eliminated</span><span id="snapshot-age">Last observed positions</span></div>
+            <div id="map-tooltip" class="map-tooltip" hidden></div>
+          </div>
+          <div class="map-controls"><label title="Connects recorded positions; intervening movement is not inferred."><input type="checkbox" id="trails-toggle" checked> Player trails</label><label title="Markers show the caster’s position, not the ability’s impact area."><input type="checkbox" id="abilities-toggle" checked> Cast markers</label><label title="Victim locations in the selected 20-second observation window; colored by the killer’s team."><input type="checkbox" id="kills-toggle"> Window kills</label><button id="rotate" class="text-button" aria-label="Rotate minimap 180 degrees">↻ Rotate map</button></div>
+          <div class="transport">
+            <div class="transport-top"><button id="play" class="play-button" aria-label="Play replay" disabled>▶</button><button id="previous-event" class="step-button" aria-label="Previous event" title="Previous event">|‹</button><button id="next-event" class="step-button" aria-label="Next event" title="Next event">›|</button><div class="clock"><strong id="time-current">00:00.0</strong><span>/ <span id="time-total">00:00.0</span></span></div><label class="speed-label" for="speed">SPEED</label><select id="speed" class="speed-select"><option value="0.5">0.5×</option><option value="1" selected>1×</option><option value="2">2×</option><option value="4">4×</option></select></div>
+            <label class="sr-only" for="timeline">Replay time in seconds</label><input id="timeline" type="range" min="0" max="1" step="0.05" value="0" disabled>
+            <canvas id="event-track" height="18" aria-label="Event markers and the observation cutoff"></canvas>
+            <div class="timeline-labels"><span>BUY TIME ENDS</span><span><i class="cutoff-symbol"></i><span id="cutoff-label">30s observation cutoff</span></span><span>ROUND ENDS</span></div>
+          </div>
+        </section>
+
+        <section class="events-panel panel"><div class="events-heading"><div class="section-label"><span>EVENT LOG</span></div><div class="event-tabs" role="group" aria-label="Filter events"><button class="active" data-filter="all">All</button><button data-filter="kill">Kills</button><button data-filter="ability">Abilities</button><button data-filter="objective">Spike</button></div></div><div id="event-log" class="event-log" aria-label="Events observed by the selected time"></div></section>
+      </div>
+
+      <aside class="inspector-column">
+        <section class="ml-panel panel">
+          <div class="section-label"><span>ROUND OUTCOME</span></div>
+          <label class="field-label" for="model-select">Prediction model</label>
+          <select id="model-select" disabled><option>No predictions loaded</option></select>
+          <div class="prediction-heading"><span>Attacker win probability</span><strong id="prediction">—<small> / 100%</small></strong></div>
+          <div class="prediction-track"><progress id="prediction-progress" max="1" value="0" aria-label="Attacker win probability" hidden></progress></div>
+          <div id="model-status" class="model-status">No predictions loaded</div>
+          <p id="model-caption" class="muted">Features use the first 30 seconds.</p>
+          <canvas id="prediction-curve" height="80" aria-label="Saved attacker win probabilities through the replay time" hidden></canvas>
+          <div id="model-comparison" class="model-comparison" hidden></div>
+          <details class="feature-details" open><summary><span>Prediction provenance</span></summary>
+            <p id="provenance-status" class="muted">No prediction file loaded.</p>
+            <dl id="provenance" class="provenance"></dl>
+          </details>
+          <div class="observation-progress"><span>Observation window</span><strong id="window-progress">0 / 30s</strong></div>
+          <progress id="window-bar" max="30" value="0" aria-label="Observation window progress"></progress>
+          <details class="feature-details"><summary><span id="feature-heading">State snapshot</span><span id="feature-time">Waiting for first bin</span></summary><div id="features" class="features"></div></details>
+          <details class="feature-details" id="fixed-summary"><summary><span>Temporal summaries</span><span id="summary-time">Available at cutoff</span></summary><div id="temporal-features" class="temporal-features"></div><p class="muted">Timing uses one-second bins. Values are normalized; absent events use zero with a presence flag.</p></details>
+          <section id="rolling-evidence" class="rolling-evidence" hidden>
+            <div class="section-label"><span>OBSERVED WINDOW</span><span id="rolling-window-range">Waiting for 20s</span></div>
+            <div id="rolling-counts" class="model-comparison"></div>
+            <p id="rolling-coverage" class="muted"></p>
+            <details class="feature-details"><summary><span>Ability uses</span><span id="rolling-cast-count">—</span></summary><div id="rolling-abilities" class="ability-list"></div></details>
+            <p class="muted">Casts show ability use, not confirmed reveals or effects. Trade candidates use a 5-second return-kill rule.</p>
+          </section>
+        </section>
+        <section class="roster-panel panel"><div class="section-label"><span>PLAYERS</span></div><div id="roster" class="roster"></div><div id="player-detail" class="player-detail"><p>Select a player for details.</p></div></section>
+      </aside>
+    </section>
+    <footer class="page-footer"><details><summary>Map credits</summary><p>VALORANT map artwork © Riot Games. Archived layouts and calibration sources are listed in <a href="/maps/manifest.json">the map manifest</a>.</p></details></footer>
+  </main>
+</body>
+</html>
