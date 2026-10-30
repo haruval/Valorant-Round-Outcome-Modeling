@@ -237,6 +237,7 @@ function renderProvenance() {
   if (isRolling) row("Observation", "20s history · 5s stride");
   if (!prediction) {
     $("provenance-status").textContent = state.round.ml.run ? "No prediction at or before this time." : "No prediction file loaded.";
+    if (isRolling && state.round.ml.rolling.schema_id) row("Features", state.round.ml.rolling.schema_id);
     return;
   }
   const run = isRolling ? state.round.ml.run : prediction.run;
@@ -248,6 +249,10 @@ function renderProvenance() {
   row("Run", run.run_id, isRolling);
   row("Cutoff", `${isRolling ? prediction.at_seconds : prediction.observation_seconds}s after buy time`);
   row("Features", isRolling ? run.schema_id : `Sequence v${run.feature_schema_version} · temporal v${run.temporal_schema_version}`);
+  if (isRolling && run.feature_set && run.feature_set !== "legacy") {
+    row("Feature set", run.feature_set.replaceAll("_", " "));
+    row("Input support", `${run.masked_channel_count} channels masked from training-only coverage`);
+  }
   row("Model SHA-256", prediction.model_artifact_sha256[state.selectedModel], true);
   row("Run SHA-256", prediction.run_manifest_sha256, true);
   row("Checks", "Data and run records match");
@@ -316,9 +321,18 @@ function renderRollingML() {
       ["Ability uses · ATK / DEF", counts ? `${counts.atk_abilities} / ${counts.def_abilities}` : "—"],
       ["Kills · ATK / DEF", counts ? `${counts.atk_kills} / ${counts.def_kills}` : "—"],
       ["Trade candidates", counts ? String(counts.trade_candidates) : "—"],
+      ...(window?.movement ? [
+        ["Position report pairs · ATK / DEF", `${window.movement.atk.report_pairs} / ${window.movement.def.report_pairs}`],
+        ["Pairs after recon cast · ATK / DEF", `${window.movement.atk.after_recon_pairs} / ${window.movement.def.after_recon_pairs}`],
+      ] : []),
     ].map(([label, value]) => { const row = element("div", "comparison-row"); row.append(element("span", "", label), element("strong", "", value)); return row; }));
     $("rolling-coverage").textContent = window ? `${window.fresh_position_fraction === null ? "No" : (100 * window.fresh_position_fraction).toFixed(0) + "%"} fresh position coverage across this window. Coordinates older than 2s are masked in model inputs.` : "Uses only observations before each prediction time.";
-    $("rolling-abilities").replaceChildren(...(window?.abilities || []).map((item) => element("span", "ability-chip ready", `${item.side.toUpperCase()} · ${readable(item.ability)} ×${item.uses}`)));
+    $("rolling-abilities").replaceChildren(...(window?.abilities || []).map((item) => {
+      const chip = element("span", "ability-chip ready", `${item.side.toUpperCase()} · ${readable(item.ability)} ×${item.uses}`);
+      const tags = ml.run?.schema?.ability_taxonomy?.abilities?.[item.ability] || rolling.ability_tags?.[item.ability];
+      if (tags) chip.title = `Model inputs: ${tags.join(", ").replaceAll("_", " ")}. Cast functions, not confirmed effects.`;
+      return chip;
+    }));
     $("rolling-cast-count").textContent = counts ? String(counts.atk_abilities + counts.def_abilities) : "—";
     $("prediction").replaceChildren(document.createTextNode(prediction ? (prediction.probabilities[state.selectedModel] * 100).toFixed(1) : "—"), element("small", "", " / 100%"));
     $("prediction-progress").hidden = !prediction;

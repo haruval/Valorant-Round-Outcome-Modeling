@@ -12,10 +12,13 @@ from pathlib import Path
 
 from evaluation import binary_metrics
 from experiment import is_hash, partition_for, partition_index, round_key
-from rolling_features import FEATURE_NAMES, HISTORY_SECONDS, STRIDE_SECONDS, schema
+from rolling_features import FEATURE_NAMES, HISTORY_SECONDS, STRIDE_SECONDS, schema, validate_contract
+from rolling_inputs import derive_input_policy, validate_input_policy, mask_window
 
 MODEL_LABELS = {"train_prior": "Training prior", "snapshot_logistic": "Rolling snapshot logistic",
-                "history_logistic": "Window-summary logistic", "temporal_cnn": "Temporal CNN"}
+                "history_logistic": "Window-summary logistic", "temporal_cnn": "Temporal CNN",
+                "pooled_mlp": "Pooled history neural control"}
+NEURAL_MODELS = {"temporal_cnn", "pooled_mlp"}
 
 
 def schema_hash(contract):
@@ -26,12 +29,16 @@ def summary(window):
     return list(window[-1]) + [sum(row[i] for row in window) / len(window) for i in range(len(FEATURE_NAMES))]
 
 
-def fit_baselines(windows, labels, weights, seed):
+def fit_baselines(windows, labels, weights, seed, input_policy=None):
     import numpy as np
     from sklearn.preprocessing import StandardScaler
     from sklearn.linear_model import LogisticRegression
 
-    bundle = {"schema": schema(), "train_prior": sum(y * w for y, w in zip(labels, weights)) / sum(weights), "models": {}}
+    input_policy = input_policy or derive_input_policy(windows)
+    validate_input_policy(input_policy)
+    windows = [mask_window(window, input_policy) for window in windows]
+    bundle = {"schema": schema(), "input_policy": input_policy,
+              "train_prior": sum(y * w for y, w in zip(labels, weights)) / sum(weights), "models": {}}
     for name, transform in (("snapshot_logistic", lambda w: w[-1]), ("history_logistic", summary)):
         matrix = np.asarray([transform(w) for w in windows], dtype=float)
         scaler = StandardScaler().fit(matrix, sample_weight=weights)
@@ -49,6 +56,7 @@ def load_baselines(path):
     if path.stat().st_size > 500_000:
         raise ValueError("Rolling baseline file exceeds size limit")
     bundle = json.loads(path.read_text())
+    validate_input_policy(bundle.get("input_policy"))
     if (bundle.get("schema") != schema() or set(bundle.get("models", {})) != {"snapshot_logistic", "history_logistic"}
             or type(bundle.get("train_prior")) not in (int, float) or not 0 <= bundle["train_prior"] <= 1):
         raise ValueError("Incompatible rolling baseline schema")
@@ -63,8 +71,10 @@ def load_baselines(path):
 
 
 def baseline_probabilities(bundle, windows):
+    validate_input_policy(bundle.get("input_policy"))
     probabilities = {name: [] for name in ("train_prior", "snapshot_logistic", "history_logistic")}
     for window in windows:
+        window = mask_window(window, bundle["input_policy"])
         if len(window) != HISTORY_SECONDS or any(len(row) != len(FEATURE_NAMES) for row in window):
             raise ValueError("Incompatible rolling window")
         probabilities["train_prior"].append(bundle["train_prior"])
@@ -97,23 +107,28 @@ def metrics(dataset, indices, probabilities):
                                    for t, rows in sorted(by_time.items())}}
 
 
-def read_manifest(path):
+def read_manifest(path, allow_legacy=False):
     path = Path(path)
     if path.stat().st_size > 5_000_000:
         raise ValueError("Rolling manifest exceeds size limit")
     content = path.read_bytes()
     manifest = json.loads(content)
+    validate_contract(manifest.get("schema"), allow_legacy=allow_legacy)
     if (manifest.get("schema_version") != "rolling-run-v1" or manifest.get("status") != "complete"
-            or manifest.get("schema") != schema() or not is_hash(manifest.get("run_id"))
+            or not is_hash(manifest.get("run_id"))
             or manifest.get("mode") not in ("development_smoke_test", "series_holdout")
             or manifest.get("purpose") not in ("experiment", "ui_fixture")):
         raise ValueError("Incompatible rolling run manifest")
     models = manifest.get("models", {})
     if not {"train_prior", "snapshot_logistic", "history_logistic"} <= set(models) <= set(MODEL_LABELS):
         raise ValueError("Rolling run requires the comparison baselines")
+    if len(NEURAL_MODELS & set(models)) > 1:
+        raise ValueError("One neural architecture per controlled run")
+    if manifest["schema"]["id"] != "rolling-multimodal-v1" and manifest["purpose"] == "experiment":
+        validate_input_policy(manifest.get("input_policy"))
     for name, item in models.items():
         if (not is_hash(item.get("artifact_sha256")) or
-                item.get("artifact") != ("model" if name == "temporal_cnn" else "baselines.json")):
+                item.get("artifact") != ("model" if name in NEURAL_MODELS else "baselines.json")):
             raise ValueError("Invalid rolling model provenance")
     sources = manifest.get("data", {}).get("sources", [])
     if not sources or any(not is_hash(s.get("sha256")) for s in sources):
@@ -162,7 +177,7 @@ def read_predictions(path, manifest_path):
         raise ValueError("Supply both rolling predictions and their manifest")
     if path is None:
         return {}, None
-    manifest, digest = read_manifest(manifest_path)
+    manifest, digest = read_manifest(manifest_path, allow_legacy=True)
     if path.stat().st_size > 50_000_000:
         raise ValueError("Rolling prediction file exceeds 50 MB")
     grouped, seen = defaultdict(list), set()
@@ -180,5 +195,8 @@ def read_predictions(path, manifest_path):
         values.sort(key=lambda row: row["at_seconds"])
     public = {"run_id": manifest["run_id"], "manifest_sha256": digest, "mode": manifest["mode"],
               "purpose": manifest["purpose"], "models": {name: MODEL_LABELS[name] for name in manifest["models"]},
-              "schema_id": manifest["schema"]["id"], "history_seconds": HISTORY_SECONDS, "stride_seconds": STRIDE_SECONDS}
+              "schema_id": manifest["schema"]["id"], "schema": manifest["schema"],
+              "feature_set": manifest.get("input_policy", {}).get("feature_set", "legacy"),
+              "masked_channel_count": sum(not value for value in manifest.get("input_policy", {}).get("keep", [])),
+              "history_seconds": HISTORY_SECONDS, "stride_seconds": STRIDE_SECONDS}
     return dict(grouped), public

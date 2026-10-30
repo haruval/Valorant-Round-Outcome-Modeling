@@ -43,9 +43,9 @@ class RollingTests(unittest.TestCase):
                     (20, event("player-used-ability", player("A"), {"id": "flash-drive"}))]
         result = observe_round(r)
         self.assertEqual(result["endpoints"], [20, 25, 30])
-        self.assertEqual(self.column(result, 20, "atk_ability_recon-bolt_uses"), 1)
-        self.assertEqual(self.column(result, 20, "atk_ability_flash-drive_uses"), 0)
-        self.assertEqual(self.column(result, 21, "atk_ability_flash-drive_uses"), 1)
+        self.assertEqual(self.column(result, 20, "atk_utility_recon_uses"), 1)
+        self.assertEqual(self.column(result, 20, "atk_utility_vision_impair_uses"), 0)
+        self.assertEqual(self.column(result, 21, "atk_utility_vision_impair_uses"), 1)
 
     def test_future_locations_abilities_and_winner_do_not_change_prefix(self):
         a = located_record()
@@ -68,9 +68,10 @@ class RollingTests(unittest.TestCase):
         r.map_name = "new-map"
         r.events = [(1, event("player-used-ability", player("A"), {"id": "future-ability"}))]
         result = observe_round(r)
-        self.assertEqual(self.column(result, 2, "atk_ability_other_uses"), 1)
+        self.assertEqual(self.column(result, 2, "atk_utility_other_uses"), 1)
         self.assertEqual(self.column(result, 2, "atk_cast_origin_unknown"), 1)
-        self.assertEqual(self.column(result, 2, "map_other"), 1)
+        self.assertEqual(self.column(result, 2, "atk_position_unknown"), 1)
+        self.assertFalse(any(name.startswith("map_") for name in FEATURE_NAMES))
 
     def test_trade_requires_killing_the_prior_killer_within_five_seconds(self):
         r = located_record()

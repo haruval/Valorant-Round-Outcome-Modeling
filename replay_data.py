@@ -215,7 +215,7 @@ def build_catalog(data: Path, predictions: Path | None = None,
             payload = build_round_replay(record, prediction)
             if predictions is None:
                 try:
-                    preview = preview_round(record)
+                    preview = preview_round(record, rolling_run["schema"] if rolling_run else None)
                 except ValueError as exc:
                     # Ineligible rounds remain replayable but never accept predictions.
                     preview = {"history_seconds": 20, "stride_seconds": 5, "feature_count": 0,

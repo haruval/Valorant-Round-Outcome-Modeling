@@ -1,130 +1,169 @@
-# Rolling temporal model: feature design
+# Rolling gameplay features and temporal model
 
-The task is to estimate attacker round-win probability using a 20-second history,
-starting 20 seconds after buy time and updating every five seconds. The first
-windows are `[0,20)`, `[5,25)`, `[10,30)`. Each contains twenty one-second bins.
-There is no prediction during warm-up, no use of future observations to fill gaps,
-and no prediction at or after a recorded terminal event or a decisive elimination.
-Eliminating all attackers only decides an unplanted round; eliminating all defenders
-decides either phase. Revive/respawn variants require adapter review.
+The task estimates attacker round-win probability from twenty one-second bins,
+starting 20 seconds after buy time and updating every five seconds. Windows are
+`[0,20)`, `[5,25)`, `[10,30)`, and so on. Events exactly at the endpoint are
+excluded. There is no output during warm-up, at/after a recorded outcome, or after
+a decisive elimination. Eliminating attackers decides an unplanted round;
+eliminating defenders decides either phase. Revive variants need adapter review.
 
-This is analysis from the full recorded spectator state. Enemy positions are not
-restricted to what a player or team could see. The model cannot establish the
-causal benefit of an action or infer confirmed information from a utility cast.
+This is retrospective analysis of recorded spectator state. Enemy coordinates
+are not restricted to what a team could see. The model estimates associations,
+not the causal effect of a strategy.
 
-## Gameplay priorities
+## Input contract: rolling-gameplay-v2
 
-The initial priorities, selected by the project owner, are:
+`rolling_features.schema()` binds feature order, the ability taxonomy, timing,
+map calibration, freshness, trade thresholds, and movement rules. There are
+**222 scalar channels per bin**, down from 365 in v1.
 
-1. Utility combinations before contact.
-2. Rotations after information.
-3. Trades.
+Map identity, team/player identities, agent identity, and match score are excluded.
+Map names remain necessary metadata for coordinate calibration, partitioning, and
+the replay. Coordinates, map geometry, and compositions can still serve as indirect
+map cues. Identically numbered grid cells on different maps do not necessarily
+represent the same tactical area.
 
-Features preserve raw observable ingredients instead of assigning tactical success
-labels. Recon or flash use does not become “enemy revealed” or “enemy blinded.”
-There is no damage-event stream in this export, so a kill is an observed combat
-event, not the start of contact. Position changes following information-related
-casts can be studied, but confirmed information acquisition is not recorded.
-
-## Feature contract
-
-`rolling_features.schema()` is the authoritative versioned contract. It includes
-feature order, a fixed ability vocabulary, map calibration, timing, spatial-grid
-size, and staleness/trade thresholds. The initial version has 365 scalar channels
-per second. Missing observations have explicit indicators; zero is not silently
-treated as an observed coordinate. Individual/player/team identities and match
-scores are excluded. Map identity is included to distinguish different geometry.
-
-| Family | Recorded inputs | Important interpretation |
+| Family | Inputs | Interpretation |
 | --- | --- | --- |
-| Ability use | Per-side counts for 28 named abilities plus an unknown bucket; per-ability mean caster x/y and located-cast count per bin | Cast origin, not trajectory, impact area, duration, reveal, suppression, or blind success |
-| Combat | Kill/death counts per bin, cumulative kills, separate killer/victim grid cells | No continuous damage, crosshair, aim, or line-of-sight observations |
-| Trades | Return-kill candidates and delay | A player kills an opponent who killed their teammate within the previous five seconds; not a provider trade annotation |
-| Positioning | Fresh-player counts per 3×3 grid cell, centroid, dispersion, unknown counts, and position age | Grid cells are geometric bins, not verified sites or claims of map control |
-| Economy | Initial team loadout and last reported loadout of living players | Weapon value does not identify the currently held weapon |
-| Health/armor | Last reported totals, known fractions, and report age | Missing damage events mean these are not guaranteed current health totals |
-| Objective/time | Planted flag, plant age, defusing, persistent defuse checkpoint, reported game clock and age, elapsed feed time | Feed time and game-clock reports remain distinct; the clock is not silently extrapolated |
+| Shared utility | Per-side counts, mean caster x/y, located-cast counts for ten function tags; total/cumulative unique casts | Cast origin and function, not impact geometry, duration, or successful effects |
+| Combat | Kills/deaths, cumulative kills, separate killer/victim 3×3 cells | No continuous damage, aim, or line-of-sight stream |
+| Trade candidates | Return-kill counts and delays | An opponent kills a teammate and is killed in return within `0 < delay <= 5s`; no proximity requirement |
+| Position | Fresh-player cells, centroid, spread, unknown fraction, report age | Geometric presence, not verified map control |
+| Movement | Same-player report-pair coverage and mean normalized displacement; corresponding values after recon casts | Sparse paired reports, not route, velocity, or confirmed rotation |
+| Recon timing | Known flag and clipped age of the team's latest recon-tagged cast | Does not establish that information was acquired |
+| State | Alive counts, initial/alive loadout, reported health/armor with known fractions and age | Last reports can be stale; loadout value does not identify the held weapon |
+| Objective/time | Plant state/age, defusing/checkpoint, reported game clock/age, elapsed feed time | No completed-outcome input; reported clock is not silently extrapolated |
 
-Ability and kill location channels are separate: an opponent can be killed in a
-different cell from the shooter. Events with unknown/stale locations retain their
-nonspatial channels and explicit unknown-location counts. Multiple casts of the
-same ability within one bin retain their count but average their origin coordinates.
-The representation loses within-bin ordering and exact player-to-player geometry.
-These are deliberate prototype limits, not evidence that such detail is irrelevant.
+Events with unavailable locations retain their nonspatial counts and explicit
+unknown-location channels. Same-bin casts of a category retain counts but average
+their origins. The input loses within-bin order, exact player interactions, and
+spatial detail within cells.
 
-## Freshness and source audit
+### Provisional ability functions
 
-Only coordinates reported within the last two seconds contribute to current
-positioning channels. Stale positions remain visible as last-known positions in
-the replay, while the model masks them. The distinction matters because this
-feed reports positions at events, with longer gaps during quieter periods.
+The exact mapping lives in `ability_taxonomy.py` and is embedded in every schema.
+Original names remain in replay evidence. The broad vision-impairment category
+currently groups flash-drive and paranoia; this is a starting design for owner
+review, not an assertion that their effects are interchangeable.
 
-The initial audit found 555 overlapping windows across 44 rounds and one series.
-At one-second observation points, position age has a median of about 2.31 seconds,
-90th percentile 11.02 seconds, and maximum 33.52 seconds. Roughly 46% of living
-player observations meet the provisional two-second freshness rule. The saved
-`rolling-audit.json` records the exact source hash, counts, and coverage.
+| Tag | Included abilities |
+| --- | --- |
+| vision_block | cloudburst, cyber-cage, dark-cover, poison-cloud, toxic-screen, viper's-pit |
+| vision_impair | flash-drive, paranoia |
+| recon | neural-theft, owl-drone, recon-bolt, spycam, zero-point |
+| detection_deployable | alarmbot, trapwire, turret |
+| damage | frag-ment, hunter's-fury, nanoswarm, shock-bolt, snake-bite, turret |
+| mobility | from-the-shadows, shrouded-step, tailwind, updraft |
+| suppression | null-cmd, zero-point |
+| detain | lockdown |
+| weapon_ultimate | blade-storm |
+| other | Unknown ability names |
 
-The ability vocabulary and calibration are fixed source-schema choices based on
-the available export. New abilities enter the `other` bucket; unknown maps retain
-nonspatial inputs and mark positions unknown until calibrated. Neither fallback
-establishes validity on new agents, maps, patches, or tournaments.
+Tags describe selected cast functions, not every secondary effect. For example,
+vulnerability, decay, sound cues, duration, and activation state are not modeled.
+Deploying a detection ability does not imply it triggered. Multi-tagged casts
+increment each relevant category but only increment total casts once. Category
+counts must not be summed to recover unique casts. Any taxonomy change creates
+a different schema contract and requires new training.
 
-## Models and evaluation
+### Movement and freshness
 
-The temporal CNN projects the 365 channels to eight hidden channels with a 1×1
-convolution. Four residual causal convolutions use kernel width three and
-dilations 1, 2, 4, and 8, with ReLU and dropout 0.1. The last hidden state feeds
-the outcome head. The theoretical receptive field spans 31 bins and covers the
-entire 20-second input; padding occurs only to its left. There are 3,746 trainable
-parameters by architecture definition. This runtime has not been executed yet.
+Current-position inputs accept coordinates at most two seconds old. A movement
+pair requires the same living player, a new coordinate-report timestamp, fresh
+endpoints, and at most two seconds between reports. At most one pair per player
+per one-second bin is retained. Deaths and changes in the set of observed players
+cannot masquerade as movement.
 
-Comparisons are a training prior, logistic regression on the current snapshot,
-and logistic regression on the snapshot plus each channel's window mean. The
-last comparison has the same ingredients without their within-window ordering.
-It is a baseline, not a complete set of controls for nonlinear model capacity.
-Future ablations should separately test temporal kernels and feature families.
+After-recon pairs additionally require both reports at/after the team's latest
+recon-tagged cast and the second report within five seconds of that cast.
+Movement is straight-line distance in normalized minimap coordinates. It is not
+path length, is not normalized by elapsed time, and cannot distinguish teleporting.
+A zero displacement without report-pair coverage means no measurement.
 
-Every round has total sample weight one, divided over its windows. The logistic
-scalers and classifiers are fitted on training windows with those weights. The
-CNN's loss uses the same weighting. Series grouping occurs before model fitting;
-all windows from a round remain together. Smoke tests hold out a map within the
-single series and have no test partition.
+The audit still finds 555 windows from 44 rounds and one series. About 46% of
+alive-player observation points meet the two-second freshness rule. Median
+position age is 2.31s, p90 11.02s, maximum 33.52s. Sparse observations limit what
+can be learned about rotations. The replay may connect last-known points across
+larger gaps; the movement features deliberately do not.
 
-CNN selection uses mean validation log loss computed per round, then averaged
-over rounds. Results also report Brier score averaged the same way and metrics at
-each elapsed prediction time, with sample counts. Later times include only rounds
-still active then. They are different subsets, so improving late-round accuracy
-alone does not demonstrate a better model. 555 windows are still only 44 dependent
-rounds from one series, not 555 independent examples.
+## Training-only support and ablations
 
-## Provenance and viewer
+Before fitting, derive per-channel minimum and maximum using training windows
+only. Mask every training-constant channel to zero in every partition. Save this
+policy in the manifest, baseline JSON, and neural configuration. Inference checks
+the same schema and policy; evaluation values never expand training support.
+This prevents validation-only values from activating weights whose inputs never
+varied during fitting. It cannot solve general distribution shift.
 
-Rolling runs use a separate schema and entry point from the earlier fixed-cutoff
-experiment. A prediction is identified by `(series, game, round, prediction time)`.
-Each row binds its window start, feature-contract hash, source hash, model artifact
-hashes, partition, run ID, and run-manifest hash. The viewer rejects duplicate
-timestamps, mismatched files, and predictions at ineligible times. It reads JSON
-only and never opens fitted artifacts.
+The standard-library [support audit](feature-support-v2.json) reports:
 
-The viewer advances its observed window every five seconds, exposes ability-use
-counts and trade candidates, and optionally overlays victim locations from that
-window. Probability curves show only saved predictions reached by the scrubber;
-future values stay hidden. An older prediction can remain visible with its own
-timestamp if a later prediction is missing. No probability is invented while the
-ML runtime awaits approval.
+| Training → validation | Retained / 222 | Masked | Training-constant channels changing in validation |
+| --- | ---: | ---: | ---: |
+| Breeze → Ascent | 174 | 48 | 20 |
+| Ascent → Breeze | 181 | 41 | 13 |
 
-## Gameplay decisions for owner review
+All models share these controls:
 
-- Is a five-second return-kill rule a useful first trade proxy, or should the
-  experiment compare several delays? It currently allows a different teammate
-  to make the return kill and does not require proximity or line of sight.
-- Which ability sequences should be inspected manually before contact? Cast
-  timestamps and origins can support examples; the feed cannot verify effects.
-- Which observed relocation patterns would you call a rotation rather than local
-  repositioning? Named areas/paths should be annotated with your input before
-  labeling either in the dataset. The current model consumes geometric changes.
+- `all`: all input families, subject to the training support mask.
+- `state_only`: fourteen clock/objective, alive-count, and loadout channels.
+- `no_utility`: remove utility counts/origins, recon timing, and movement-after-recon.
+- `no_spatial`: remove locations, grids, freshness, and displacement; keep cast counts.
+- `no_trades`: remove candidate-trade counts/delay; keep underlying kill observations.
 
-No tactical labels or winning-strategy rules should be added from model output
-alone. These questions guide the representation and manual audits, not a search
-for favorable validation scores.
+Ablations overlap. Removing a proxy does not remove all information from which
+the phenomenon might be inferred. For example, kills can still indicate trades.
+
+## Models and controlled comparisons
+
+The temporal CNN projects 222 inputs to eight hidden channels, followed by four
+causal residual convolutions (kernel 3, dilations 1/2/4/8, ReLU, dropout 0.1) and
+a two-class last-state head. Its theoretical receptive field is 31 bins and
+covers the full 20-bin input. The design has **2,602 trainable parameters**;
+runtime verification is pending.
+
+Comparisons use the same input policy and equal total sample weight per round:
+
+| Model | Inputs / architecture |
+| --- | --- |
+| Training prior | Weighted training prevalence |
+| Snapshot logistic | Last observed bin |
+| History logistic | Last bin plus each channel's window mean |
+| Pooled neural control | Shared per-bin projection; four residual 8→12→8 pointwise blocks; mean history plus last bin |
+| Temporal CNN | Causal convolution across ordered bins |
+
+The pooled control has a designed 2,666 parameters, about 2.5% more than the CNN.
+With its last bin fixed, permuting the preceding nineteen bins leaves eval-mode
+output unchanged. Time-valued channels remain present in both models. This tests
+the temporal architecture more fairly than a linear baseline alone, but does
+not perfectly isolate every difference in capacity or optimization.
+
+All windows from a round remain together. Standard runs split by series before
+fitting. With this single series, `--smoke-test --validation-map ascent` or
+`breeze` explicitly selects the held-out map and creates no test partition.
+Neural checkpoint selection uses round-mean validation log loss. Histories save
+training and validation metrics per epoch; reports include round-mean Brier score
+and elapsed-time metrics with sample counts.
+
+The two map directions are development comparisons, not independent test folds.
+Later windows include only rounds still active at that time, so their metrics
+cannot be compared as if they covered the same examples.
+See [the pending experiment protocol](controlled-experiment.md).
+
+## Provenance, compatibility, and verification
+
+Each prediction binds its source, feature schema, manifest, artifact hashes,
+partition, round, and observation time. The viewer reads JSON only, rejects
+mismatched data/times, and never invents probabilities. It shows the model's
+feature set and masked-channel count for v2 runs. Raw ability names and report-pair
+counts support inspecting the feature evidence.
+
+The [frozen v1 schema](../schemas/rolling-multimodal-v1.json) supports existing
+prediction JSON in the viewer. Its 365-channel inputs and historical probabilities
+remain v1; new inference rejects v1 weights. The completed v1 run is documented
+in [historical ML validation](ml-validation.md).
+
+The v2 standard-library suite passes 58 tests. The independent event-count audit
+passes all 16,650 comparisons. It shares the declarative ability mapping but
+counts source events separately; it does not validate tactical labels or model
+performance. Four updated optional ML tests are prepared but **not executed**.
+No v2 accuracy or learning claim is made.

@@ -11,11 +11,12 @@ from dataclasses import dataclass
 from pathlib import Path
 
 from data_processing import discover_data_files, extract_rounds, game_state, team_of
+from ability_taxonomy import CATEGORIES, ability_tags, taxonomy_contract
 
 HISTORY_SECONDS = 20
 STRIDE_SECONDS = 5
 POSITION_MAX_AGE = 2.0
-TRADE_MAX_SECONDS = 5.0  # Reviewable proxy, not a provider trade label.
+TRADE_MAX_SECONDS = 5.0  # Owner-approved initial proxy; not a provider trade label.
 ABILITIES = sorted([
     "alarmbot", "blade-storm", "cloudburst", "cyber-cage", "dark-cover", "flash-drive",
     "frag-ment", "from-the-shadows", "hunter's-fury", "lockdown", "nanoswarm",
@@ -25,10 +26,12 @@ ABILITIES = sorted([
 ]) + ["other"]
 DEATHS = {"player-killed-player", "game-killed-player", "player-selfkilled-player", "player-teamkilled-player"}
 GLOBAL_NAMES = ["elapsed_120s", "spike_planted", "plant_age_45s", "defusing", "defuse_checkpoint",
-                "clock_reported_120s", "clock_known", "clock_age_20s", "map_breeze", "map_ascent", "map_other"]
+                "clock_reported_120s", "clock_known", "clock_age_20s"]
 SIDE_STATE = ["alive", "start_loadout", "alive_loadout", "reported_health", "health_known", "health_age_20s",
               "reported_armor", "armor_known", "armor_age_20s", "position_fresh", "position_unknown",
-              "position_age_20s", "centroid_x", "centroid_y", "spread", "kills_total", "abilities_total"]
+              "position_age_20s", "centroid_x", "centroid_y", "spread", "kills_total", "abilities_total",
+              "recon_cast_known", "recon_cast_age_20s", "movement_pairs", "movement_mean",
+              "movement_after_recon_pairs", "movement_after_recon_mean"]
 SIDE_EVENTS = ["kills_1s", "deaths_1s", "trade_candidates_1s", "trade_delay_5s", "abilities_1s"]
 SPATIAL_EVENTS = ["kill_origin", "kill_victim", "cast_origin"]
 
@@ -41,8 +44,8 @@ def feature_names():
         for kind in SPATIAL_EVENTS:
             names += [f"{side}_{kind}_cell_{cell}" for cell in range(9)]
             names += [f"{side}_{kind}_unknown"]
-        for ability in ABILITIES:
-            names += [f"{side}_ability_{ability}_{field}" for field in ("uses", "x", "y", "located")]
+        for category in CATEGORIES:
+            names += [f"{side}_utility_{category}_{field}" for field in ("uses", "x", "y", "located")]
     return names
 
 
@@ -53,10 +56,23 @@ def schema():
     calibration = json.loads((Path(__file__).parent / "viewer/maps/manifest.json").read_text())
     geometry = {name: {key: value[key] for key in
                        ("xMultiplier", "yMultiplier", "xScalarToAdd", "yScalarToAdd")} for name, value in calibration.items()}
-    return {"id": "rolling-multimodal-v1", "feature_names": FEATURE_NAMES,
+    return {"id": "rolling-gameplay-v2", "feature_names": FEATURE_NAMES,
             "history_seconds": HISTORY_SECONDS, "stride_seconds": STRIDE_SECONDS,
             "bin_seconds": 1, "interval": "[start,end)", "position_max_age": POSITION_MAX_AGE,
-            "trade_max_seconds": TRADE_MAX_SECONDS, "grid": [3, 3], "calibration": geometry}
+            "trade_max_seconds": TRADE_MAX_SECONDS, "grid": [3, 3], "calibration": geometry,
+            "map_identity_inputs": False, "ability_taxonomy": taxonomy_contract(),
+            "movement": {"max_report_gap_seconds": 2, "after_recon_seconds": 5,
+                         "unit": "normalized minimap displacement; not path length or confirmed rotation"}}
+
+
+def legacy_schema():
+    """Frozen v1 contract, supported only for replaying existing prediction JSON."""
+    return json.loads((Path(__file__).parent / "schemas/rolling-multimodal-v1.json").read_text())
+
+
+def validate_contract(contract, allow_legacy=False):
+    if contract != schema() and not (allow_legacy and contract == legacy_schema()):
+        raise ValueError("Unsupported rolling feature contract")
 
 
 def xy(position, calibration):
@@ -88,6 +104,8 @@ def observe_round(record, contract=None):
     use observed coordinates only. Timing and unknown masks retain source limits.
     """
     contract = contract or schema()
+    validate_contract(contract, allow_legacy=True)
+    legacy = contract["id"] == "rolling-multimodal-v1"
     if record.live_at is None or record.ended_at is None or record.paused:
         raise ValueError("Rolling observations require an unpaused completed round with a live start")
     end = min(record.ended_at, record.terminal_at or record.ended_at) - record.live_at
@@ -112,6 +130,8 @@ def observe_round(record, contract=None):
     cursor = 0
     decided_at = end
     ages = []
+    last_recon = {"atk": None, "def": None}
+    previous_positions = {}
     for endpoint in range(1, math.ceil(end)):
         counts = Counter()
         locations = {}
@@ -157,6 +177,13 @@ def observe_round(record, contract=None):
                 if point is not None:
                     locations.setdefault((side, ability), []).append(point)
                 add_location(side, "cast_origin", point)
+                tags = ability_tags(str(target.get("id", "unknown")))
+                for tag in tags:
+                    counts[f"{side}_utility_{tag}_uses"] += 1
+                    if point is not None:
+                        locations.setdefault((side, "utility_" + tag), []).append(point)
+                if "recon" in tags:
+                    last_recon[side] = at
                 evidence.append({"t": at, "kind": "ability", "side": side,
                                  "ability": str(target.get("id", "unknown")), "origin": point})
             elif kind in DEATHS:
@@ -200,10 +227,13 @@ def observe_round(record, contract=None):
                   "defusing": float(defusing), "defuse_checkpoint": float(checkpoint),
                   "clock_reported_120s": clock_value / 120 if clock_value is not None else 0,
                   "clock_known": float(clock_value is not None),
-                  "clock_age_20s": min((endpoint - clock_at) / 20, 1) if clock_value is not None else 1,
-                  "map_breeze": float(record.map_name == "breeze"), "map_ascent": float(record.map_name == "ascent"),
-                  "map_other": float(record.map_name not in ("breeze", "ascent"))}
+                  "clock_age_20s": min((endpoint - clock_at) / 20, 1) if clock_value is not None else 1}
+        if legacy:
+            values.update(map_breeze=float(record.map_name == "breeze"),
+                          map_ascent=float(record.map_name == "ascent"),
+                          map_other=float(record.map_name not in ("breeze", "ascent")))
         values.update(counts)
+        next_positions = {}
         for side in ("atk", "def"):
             living = [p for p in players.values() if p["side"] == side and p["alive"]]
             values.update({f"{side}_alive": len(living) / 5, f"{side}_start_loadout": start_loadout[side],
@@ -238,6 +268,30 @@ def observe_round(record, contract=None):
                 center = [sum(point[i] for point in fresh) / len(fresh) for i in (0, 1)]
                 values[f"{side}_centroid_x"], values[f"{side}_centroid_y"] = center
                 values[f"{side}_spread"] = sum(math.dist(point, center) for point in fresh) / len(fresh)
+            # Match the same living player across bins. Changing roster membership
+            # cannot turn a death into movement. Do not bridge stale report gaps.
+            distances, after_recon = [], []
+            for player_id, player in players.items():
+                if player["side"] != side or not player["alive"]:
+                    continue
+                point = xy(player.get("position"), calibration)
+                reported_at = player.get("position_at", -1e9)
+                if point is None or endpoint - reported_at > POSITION_MAX_AGE:
+                    continue
+                next_positions[player_id] = (point, reported_at)
+                previous = previous_positions.get(player_id)
+                if previous and 0 < reported_at - previous[1] <= 2:
+                    distance = math.dist(point, previous[0])
+                    distances.append(distance)
+                    if (last_recon[side] is not None and previous[1] >= last_recon[side]
+                            and reported_at - last_recon[side] <= 5):
+                        after_recon.append(distance)
+            values[f"{side}_movement_pairs"] = len(distances) / 5
+            values[f"{side}_movement_mean"] = sum(distances) / len(distances) if distances else 0
+            values[f"{side}_movement_after_recon_pairs"] = len(after_recon) / 5
+            values[f"{side}_movement_after_recon_mean"] = sum(after_recon) / len(after_recon) if after_recon else 0
+            values[f"{side}_recon_cast_known"] = float(last_recon[side] is not None)
+            values[f"{side}_recon_cast_age_20s"] = min((endpoint - last_recon[side]) / 20, 1) if last_recon[side] is not None else 1
             for ability in ABILITIES:
                 points = locations.get((side, ability), [])
                 prefix = f"{side}_ability_{ability}"
@@ -245,7 +299,15 @@ def observe_round(record, contract=None):
                 if points:
                     values[prefix + "_x"] = sum(p[0] for p in points) / len(points)
                     values[prefix + "_y"] = sum(p[1] for p in points) / len(points)
-        row = [float(values.get(name, 0)) for name in FEATURE_NAMES]
+            for tag in CATEGORIES:
+                points = locations.get((side, "utility_" + tag), [])
+                prefix = f"{side}_utility_{tag}"
+                values[prefix + "_located"] = len(points)
+                if points:
+                    values[prefix + "_x"] = sum(p[0] for p in points) / len(points)
+                    values[prefix + "_y"] = sum(p[1] for p in points) / len(points)
+        previous_positions = next_positions
+        row = [float(values.get(name, 0)) for name in contract["feature_names"]]
         if not all(math.isfinite(value) for value in row):
             raise ValueError("Nonfinite rolling feature")
         rows.append(row)
@@ -264,14 +326,14 @@ class RollingDataset:
     audit: dict
 
 
-def preview_round(record):
+def preview_round(record, contract=None):
     """Compact feature-only viewer payload; never calculates a model probability."""
-    contract = schema()
+    contract = contract or schema()
     observed = observe_round(record, contract)
     names = ["atk_alive", "def_alive", "atk_start_loadout", "def_start_loadout", "spike_planted",
              "plant_age_45s", "defusing", "defuse_checkpoint", "atk_position_fresh", "def_position_fresh",
              "atk_position_age_20s", "def_position_age_20s"]
-    columns = {name: FEATURE_NAMES.index(name) for name in FEATURE_NAMES}
+    columns = {name: i for i, name in enumerate(contract["feature_names"])}
     windows = []
     for at in observed["endpoints"]:
         events = [e for e in observed["events"] if at - HISTORY_SECONDS <= e["t"] < at]
@@ -282,13 +344,24 @@ def preview_round(record):
         rows = observed["rows"][at - HISTORY_SECONDS:at]
         alive = sum(row[columns[f"{side}_alive"]] for row in rows for side in ("atk", "def"))
         fresh = sum(row[columns[f"{side}_position_fresh"]] for row in rows for side in ("atk", "def"))
-        windows.append({"at_seconds": at, "window_start": at - HISTORY_SECONDS, "counts": counts,
+        window = {"at_seconds": at, "window_start": at - HISTORY_SECONDS, "counts": counts,
                         "fresh_position_fraction": fresh / alive if alive else None,
                         "abilities": [{"side": s, "ability": a, "uses": n} for (s, a), n in sorted(uses.items())],
                         "kills": [e for e in events if e["kind"] == "kill"],
-                        "features": [observed["rows"][at - 1][columns[name]] for name in names]})
+                        "features": [observed["rows"][at - 1][columns[name]] for name in names]}
+        if contract["id"] == "rolling-gameplay-v2":
+            tagged = Counter((e["side"], tag) for e in events if e["kind"] == "ability"
+                             for tag in ability_tags(e["ability"]))
+            window["utility_categories"] = [{"side": side, "category": tag, "uses": count}
+                                             for (side, tag), count in sorted(tagged.items())]
+            window["movement"] = {
+                side: {"report_pairs": round(5 * sum(row[columns[f"{side}_movement_pairs"]] for row in rows)),
+                       "after_recon_pairs": round(5 * sum(row[columns[f"{side}_movement_after_recon_pairs"]] for row in rows))}
+                for side in ("atk", "def")}
+        windows.append(window)
     return {"schema_id": contract["id"], "history_seconds": HISTORY_SECONDS, "stride_seconds": STRIDE_SECONDS,
-            "feature_count": len(FEATURE_NAMES), "display_names": names, "windows": windows,
+            "feature_count": len(contract["feature_names"]), "display_names": names, "windows": windows,
+            "ability_tags": contract.get("ability_taxonomy", {}).get("abilities", {}),
             "position_max_age": POSITION_MAX_AGE}
 
 
