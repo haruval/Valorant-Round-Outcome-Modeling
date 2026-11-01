@@ -6,6 +6,7 @@
   <meta name="description" content="Local Valorant event replay and model feature explorer.">
   <title>visualizer</title>
   <link rel="stylesheet" href="/style.css">
+  <script src="/comparisons.js" defer></script>
   <script src="/app.js" defer></script>
 </head>
 <body>
@@ -20,6 +21,7 @@
         <div class="section-label"><span>SELECT A ROUND</span></div>
         <label class="field-label" for="series-select">Series</label><select id="series-select" aria-label="Series"></select>
         <label class="field-label" for="map-select">Map</label><select id="map-select" aria-label="Map"></select>
+        <div id="review-case-picker" hidden><label class="field-label" for="review-case-select">Review cases</label><select id="review-case-select"><option value="">Choose a window</option></select></div>
         <div class="round-list-head"><span>ROUND</span><span>DURATION</span></div>
         <nav id="round-list" class="round-list" aria-label="Rounds"></nav>
       </aside>
@@ -43,12 +45,20 @@
           </div>
         </section>
 
+        <section id="entry-review" class="entry-review panel" hidden>
+          <div class="section-label"><span>UTILITY AND MOVEMENT</span><span>FEATURE PROTOTYPE</span></div>
+          <p class="muted">Review candidate relationships between reported movement and casts. These features are untrained and do not affect the predictions.</p>
+          <div class="entry-controls"><label for="entry-player">Player</label><select id="entry-player"><option value="">All players</option></select><label><input id="entry-moving-only" type="checkbox" checked> Moving pairs only</label><label><input id="hide-predictions" type="checkbox"> Hide probabilities</label></div>
+          <p id="entry-summary" class="muted"></p><div id="entry-pairs" class="entry-pairs"></div>
+          <p class="muted">Casts within 5s are candidates, including utility used elsewhere. Distances use feed coordinates. Locations, effects, contact and an entry out of a named choke require review.</p>
+        </section>
         <section class="events-panel panel"><div class="events-heading"><div class="section-label"><span>EVENT LOG</span></div><div class="event-tabs" role="group" aria-label="Filter events"><button class="active" data-filter="all">All</button><button data-filter="kill">Kills</button><button data-filter="ability">Abilities</button><button data-filter="objective">Spike</button></div></div><div id="event-log" class="event-log" aria-label="Events observed by the selected time"></div></section>
       </div>
 
       <aside class="inspector-column">
         <section class="ml-panel panel">
           <div class="section-label"><span>ROUND OUTCOME</span></div>
+          <div id="run-picker" hidden><label class="field-label" for="run-select">Experiment</label><select id="run-select"></select></div>
           <label class="field-label" for="model-select">Prediction model</label>
           <select id="model-select" disabled><option>No predictions loaded</option></select>
           <div class="prediction-heading"><span>Attacker win probability</span><strong id="prediction">—<small> / 100%</small></strong></div>
@@ -57,6 +67,7 @@
           <p id="model-caption" class="muted">Features use the first 30 seconds.</p>
           <canvas id="prediction-curve" height="80" aria-label="Saved attacker win probabilities through the replay time" hidden></canvas>
           <div id="model-comparison" class="model-comparison" hidden></div>
+          <details id="run-comparison" class="feature-details" hidden><summary><span>Compare experiments</span></summary><p class="muted">Same round and cutoff; validation predictions only. Seed 42 is fixed for inspection.</p><div id="run-comparison-values" class="model-comparison"></div></details>
           <details class="feature-details" open><summary><span>Prediction provenance</span></summary>
             <p id="provenance-status" class="muted">No prediction file loaded.</p>
             <dl id="provenance" class="provenance"></dl>

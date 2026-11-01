@@ -12,6 +12,7 @@ from replay_data import build_catalog
 WEB_ROOT = Path(__file__).resolve().parent / "viewer"
 ASSETS = {"/": ("index.html", "text/html; charset=utf-8"),
           "/app.js": ("app.js", "text/javascript; charset=utf-8"),
+          "/comparisons.js": ("comparisons.js", "text/javascript; charset=utf-8"),
           "/style.css": ("style.css", "text/css; charset=utf-8"),
           "/maps/manifest.json": ("maps/manifest.json", "application/json; charset=utf-8"),
           "/maps/breeze.png": ("maps/breeze.png", "image/png"),
@@ -74,12 +75,21 @@ def main():
     parser.add_argument("--run-manifest", type=Path, help="Matching run.json for prediction provenance")
     parser.add_argument("--rolling-predictions", type=Path, help="Time-indexed rolling prediction JSONL")
     parser.add_argument("--rolling-run-manifest", type=Path, help="Matching rolling run.json")
+    parser.add_argument("--comparison-config", type=Path, help="Pinned validation runs and utility/movement review; JSON only")
     args = parser.parse_args()
     if not 1024 <= args.port <= 65535:
         parser.error("Port must be between 1024 and 65535")
+    if args.comparison_config and any((args.predictions, args.run_manifest, args.rolling_predictions, args.rolling_run_manifest)):
+        parser.error("Comparison config supplies its own separate prediction runs")
     try:
         catalog, payloads = build_catalog(args.data_dir, args.predictions, args.run_manifest,
                                          args.rolling_predictions, args.rolling_run_manifest)
+        if args.comparison_config:
+            from comparison_data import load_comparisons, attach_comparisons, add_entry_review
+            config, comparisons = load_comparisons(args.comparison_config, Path(__file__).resolve().parent)
+            attach_comparisons(catalog, payloads, config, comparisons)
+            add_entry_review(args.data_dir, payloads)
+            catalog["entry_review_cases"] = config.get("review_cases", [])
         server = ThreadingHTTPServer(("127.0.0.1", args.port), make_handler(catalog, payloads))
     except (OSError, ValueError, KeyError, TypeError) as exc:
         parser.error(str(exc))

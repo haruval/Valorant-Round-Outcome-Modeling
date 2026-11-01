@@ -1,10 +1,11 @@
 # ML validation
 
 This is the historical **rolling-multimodal-v1** run (365 channels). The current
-source uses **rolling-gameplay-v2** (222 channels) and has not been ML-validated.
+source uses **rolling-gameplay-v2** (222 channels), whose separate bounded
+validation completed October 31, 2026.
 Do not rerun the commands below expecting identical features or models. Existing
 v1 prediction JSON remains viewable with its frozen schema; the new runtime
-rejects v1 artifacts. See the [pending v2 execution plan](controlled-experiment.md).
+rejects v1 artifacts. See the [v2 execution results](controlled-experiment.md#completed-run).
 
 Prepared and approved October 29, 2026. The owner approved the reviewed dependency,
 test, three-epoch training, local artifact reload, and preview plan. That run is
@@ -328,4 +329,6 @@ execution for review. The metrics above describe only the completed limited run.
 The included data has one series: `--smoke-test` holds out one map and creates no
 test partition. Its scores check pipeline behavior and offer exploratory
 comparisons; they do not establish generalization to independent matches.
-Longer training, repeated seeds, ablations, and additional data are later work.
+Subsequent longer training, repeated seeds and feature ablations are documented
+in the [v2 execution record](controlled-experiment.md). Additional independent
+data and a held-out test remain future work.

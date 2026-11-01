@@ -122,6 +122,7 @@ async function loadRound(id) {
     else button.removeAttribute("aria-current");
   }
   const isRolling = round.ml.mode === "rolling";
+  if (typeof setupComparisons === "function") setupComparisons(round);
   $("feature-heading").textContent = isRolling ? "State snapshot" : "Sequence features";
   $("features").replaceChildren(...(isRolling ? round.ml.rolling.display_names : round.ml.feature_names).map((name, index) => {
     const row = element("div", "feature"); row.title = name;
@@ -251,8 +252,10 @@ function renderProvenance() {
   row("Features", isRolling ? run.schema_id : `Sequence v${run.feature_schema_version} · temporal v${run.temporal_schema_version}`);
   if (isRolling && run.feature_set && run.feature_set !== "legacy") {
     row("Feature set", run.feature_set.replaceAll("_", " "));
-    row("Input support", `${run.masked_channel_count} channels masked from training-only coverage`);
+    row("Input mask", `${run.masked_channel_count} channels excluded by feature set or constant training values`);
   }
+  if (run.model_seed !== undefined) row("Model seed", String(run.model_seed));
+  if (run.validation_map) row("Validation map", mapName(run.validation_map));
   row("Model SHA-256", prediction.model_artifact_sha256[state.selectedModel], true);
   row("Run SHA-256", prediction.run_manifest_sha256, true);
   row("Checks", "Data and run records match");
@@ -309,7 +312,8 @@ function renderRollingML() {
   state.activeWindow = window || null;
   $("window-bar").value = Math.min(state.time, 20);
   $("window-progress").textContent = window ? `${window.window_start}–${window.at_seconds}s` : `${Math.floor(Math.min(state.time, 20))} / 20s`;
-  const signature = `${window?.at_seconds}/${prediction?.at_seconds}/${state.selectedModel}`;
+  const signature = `${window?.at_seconds}/${prediction?.at_seconds}/${state.selectedModel}/${ml.run?.run_id}`;
+  if (typeof renderComparisons === "function") renderComparisons(window);
   if (signature !== state.lastRolling) {
     state.lastRolling = signature;
     renderProvenance();
@@ -326,7 +330,7 @@ function renderRollingML() {
         ["Pairs after recon cast · ATK / DEF", `${window.movement.atk.after_recon_pairs} / ${window.movement.def.after_recon_pairs}`],
       ] : []),
     ].map(([label, value]) => { const row = element("div", "comparison-row"); row.append(element("span", "", label), element("strong", "", value)); return row; }));
-    $("rolling-coverage").textContent = window ? `${window.fresh_position_fraction === null ? "No" : (100 * window.fresh_position_fraction).toFixed(0) + "%"} fresh position coverage across this window. Coordinates older than 2s are masked in model inputs.` : "Uses only observations before each prediction time.";
+    $("rolling-coverage").textContent = window ? `${window.fresh_position_fraction === null ? "No" : (100 * window.fresh_position_fraction).toFixed(0) + "%"} fresh position coverage across this window. ${ml.run?.feature_set === "no_spatial" ? "Spatial channels are excluded from this experiment; replay evidence remains visible." : "Coordinates older than 2s are masked in model inputs."}` : "Uses only observations before each prediction time.";
     $("rolling-abilities").replaceChildren(...(window?.abilities || []).map((item) => {
       const chip = element("span", "ability-chip ready", `${item.side.toUpperCase()} · ${readable(item.ability)} ×${item.uses}`);
       const tags = ml.run?.schema?.ability_taxonomy?.abilities?.[item.ability] || rolling.ability_tags?.[item.ability];
@@ -420,6 +424,7 @@ function drawMap(frame) {
       ctx.beginPath(); ctx.moveTo(x0, y); ctx.lineTo(x0 + mapWidth, y); ctx.stroke();
     }
   }
+  if (typeof drawEntryPair === "function") drawEntryPair(ctx, project);
   if ($("trails-toggle").checked) {
     for (const player of frame.players) {
       if (state.selected && state.selected !== player.id) continue;
@@ -617,6 +622,7 @@ requestAnimationFrame(tick);
 async function start() {
   [state.catalog, state.maps] = await Promise.all([getJSON("/api/catalog"), getJSON("/maps/manifest.json")]);
   const catalog = state.catalog;
+  if (typeof setupReviewCases === "function") setupReviewCases(catalog);
   $("dataset-summary").textContent = `${catalog.rounds.length} rounds · ${catalog.map_count} maps`;
   const series = [...new Set(catalog.rounds.map((r) => r.series_id))];
   $("series-select").replaceChildren(...series.map((id) => { const match = catalog.series.find((item) => item.id === id); const option = element("option", "", match.teams.join(" vs ")); option.value = id; return option; }));

@@ -118,8 +118,7 @@ the phenomenon might be inferred. For example, kills can still indicate trades.
 The temporal CNN projects 222 inputs to eight hidden channels, followed by four
 causal residual convolutions (kernel 3, dilations 1/2/4/8, ReLU, dropout 0.1) and
 a two-class last-state head. Its theoretical receptive field is 31 bins and
-covers the full 20-bin input. The design has **2,602 trainable parameters**;
-runtime verification is pending.
+covers the full 20-bin input. Runtime checks confirm **2,602 trainable parameters**.
 
 Comparisons use the same input policy and equal total sample weight per round:
 
@@ -131,7 +130,7 @@ Comparisons use the same input policy and equal total sample weight per round:
 | Pooled neural control | Shared per-bin projection; four residual 8→12→8 pointwise blocks; mean history plus last bin |
 | Temporal CNN | Causal convolution across ordered bins |
 
-The pooled control has a designed 2,666 parameters, about 2.5% more than the CNN.
+The pooled control has 2,666 parameters, about 2.5% more than the CNN.
 With its last bin fixed, permuting the preceding nineteen bins leaves eval-mode
 output unchanged. Time-valued channels remain present in both models. This tests
 the temporal architecture more fairly than a linear baseline alone, but does
@@ -147,7 +146,7 @@ and elapsed-time metrics with sample counts.
 The two map directions are development comparisons, not independent test folds.
 Later windows include only rounds still active at that time, so their metrics
 cannot be compared as if they covered the same examples.
-See [the pending experiment protocol](controlled-experiment.md).
+See [the validation results and subsequent study protocol](controlled-experiment.md).
 
 ## Provenance, compatibility, and verification
 
@@ -162,8 +161,26 @@ prediction JSON in the viewer. Its 365-channel inputs and historical probabiliti
 remain v1; new inference rejects v1 weights. The completed v1 run is documented
 in [historical ML validation](ml-validation.md).
 
-The v2 standard-library suite passes 58 tests. The independent event-count audit
+The standard-library suite now passes 74 tests, including review-window,
+utility/movement-prototype and comparison-provenance regressions. The independent event-count audit
 passes all 16,650 comparisons. It shares the declarative ability mapping but
 counts source events separately; it does not validate tactical labels or model
-performance. Four updated optional ML tests are prepared but **not executed**.
-No v2 accuracy or learning claim is made.
+performance. All four optional ML tests passed on October 31, 2026, and both
+three-epoch neural runs completed. Each run's 555 saved predictions matched
+exactly after reload. The CNN did not beat the baselines in this bounded check.
+The subsequent [12-run, 20-epoch comparison](controlled-experiment.md#completed-12-run-study)
+improved both neural architectures over the logistic baselines at their selected
+validation checkpoints, but did not establish a consistent CNN advantage over
+the pooled control. All 6,660 study prediction rows matched exactly after reload.
+The subsequent [16-run ablation study](controlled-experiment.md#completed-feature-ablations)
+also completed, with all 8,880 new prediction rows matching after reload.
+Spatial removal improved both neural architectures in both directions, while
+snapshot logistic without spatial features had the best Breeze log loss.
+Generalization and a stable temporal-CNN advantage remain unestablished.
+
+The [eight-run repeat](controlled-experiment.md#completed-reduced-input-seed-check)
+adds seeds 43 and 44 to the reduced-input comparison. Spatial removal improved
+11 of 12 matched log losses over three seeds; the pooled control had lower mean
+loss than the CNN on both maps. All 4,440 new rows reproduced after reload.
+The separate `entry-support-prototype-v0` has 34 review-only channels and leaves
+the trained v2 contract unchanged. See [its rules](feature-review.md#utilitymovement-prototype).

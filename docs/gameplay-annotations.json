@@ -1,0 +1,39 @@
+{
+  "schema_id": "owner-gameplay-annotations-v1",
+  "source": "Project owner's response in this project chat, October 31, 2026",
+  "information_priority": {
+    "order": ["confirmed enemy sightings", "teammate death and its location"],
+    "owner_quote": "visible enemy positions would be the main one, followed by a teammate's death and it's location",
+    "owner_context": "The owner expects a dying player to often learn about additional nearby opponents through vision, the death camera, and audio as those opponents help fight.",
+    "scope": "Domain guidance, not proof of which enemies were seen or heard in this export. A death alone does not label an exact enemy count or site occupancy."
+  },
+  "annotations": [
+    {
+      "round": ["2629390", "cd0ede88-b842-4de2-ae9f-bb8776a99437", "round-13"],
+      "at_seconds": 25,
+      "status": "relationship_identified; nanoswarm support assessed by owner; remaining tactical assessment incomplete",
+      "source_sha256": "5a670390d2dc53bace9e64ef9dbe55e71a06fc6acfca34a4a07aa08182e8ef3e",
+      "owner_quote": "here the main relationship would be the entry, mwzera, entrying outside of b main, off of this util",
+      "focus_player_ids": ["57"],
+      "interpretation": "Entry movement out of B main in coordination with allied utility.",
+      "scope": "Owner interpretation for this case; not a confirmed utility effect, model attribution, or general rule.",
+      "event_assessments": [
+        {
+          "event_id": "46a150db-1a13-49d7-9538-92a1b0e1b019",
+          "ability": "nanoswarm",
+          "caster_id": "51",
+          "caster": "Khalil",
+          "supported_player_id": "57",
+          "supported_player": "mwzera",
+          "useful_entry_support": true,
+          "reported_effect_area": "CT",
+          "owner_quote": "Yes, that nanoswarm was a lineup landing ct to help mwzera entry.",
+          "evidence_source": "Project owner's assessment in this chat, October 31, 2026",
+          "scope": "This cast supported this entry according to the owner. The export verifies the cast, not its landing location, effect, damage, or causal impact on round outcome."
+        }
+      ],
+      "favored_side": null,
+      "missing_evidence": null
+    }
+  ]
+}

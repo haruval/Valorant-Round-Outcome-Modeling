@@ -1,0 +1,171 @@
+{
+  "schema": "comparison-view-v1",
+  "selection": "Seed 42 fixed for inspection, independent of validation scores; separate validation run for each map.",
+  "default_by_map": {
+    "ascent": "ascent-no_spatial-temporal_cnn-seed42",
+    "breeze": "breeze-no_spatial-temporal_cnn-seed42"
+  },
+  "runs": [
+    {
+      "id": "ascent-no_spatial-temporal_cnn-seed42",
+      "label": "Temporal CNN \u00b7 no spatial",
+      "directory": "runs/gameplay-v2-ablations/ascent-no_spatial-temporal_cnn-seed42",
+      "validation_map": "ascent",
+      "model_seed": 42,
+      "architecture": "temporal_cnn",
+      "feature_set": "no_spatial",
+      "manifest_sha256": "89bf18c28bfa7b4d05b2d4c51671e29f36472f703abfdacf8e026b78d7aa1370",
+      "predictions_sha256": "c360f2c061fce38e70c75d3506d7b417734da5b200bbfe57ae0be15f2000d2c2"
+    },
+    {
+      "id": "ascent-no_spatial-pooled_mlp-seed42",
+      "label": "Pooled control \u00b7 no spatial",
+      "directory": "runs/gameplay-v2-ablations/ascent-no_spatial-pooled_mlp-seed42",
+      "validation_map": "ascent",
+      "model_seed": 42,
+      "architecture": "pooled_mlp",
+      "feature_set": "no_spatial",
+      "manifest_sha256": "5ebf6f0b47e95a766c98951becce8489b8c3c0c6b767cfde95ea0ce2d797ee10",
+      "predictions_sha256": "0bb8ba7ca74c0c785f2334cf50630d3a38c2c7966fcb32be869dc792a6a1d34e"
+    },
+    {
+      "id": "ascent-all-temporal_cnn-seed42",
+      "label": "Temporal CNN \u00b7 all inputs",
+      "directory": "runs/gameplay-v2-study/ascent-all-temporal_cnn-seed42",
+      "validation_map": "ascent",
+      "model_seed": 42,
+      "architecture": "temporal_cnn",
+      "feature_set": "all",
+      "manifest_sha256": "fcf6962613c5332b7e8d04fb9d4773a435e8771ea47f62652d15fbd357c23f93",
+      "predictions_sha256": "3dd9f0ab50009a01e7c585aa0295bf366bbb471aa5c51003d07cb17508cab69d"
+    },
+    {
+      "id": "ascent-all-pooled_mlp-seed42",
+      "label": "Pooled control \u00b7 all inputs",
+      "directory": "runs/gameplay-v2-study/ascent-all-pooled_mlp-seed42",
+      "validation_map": "ascent",
+      "model_seed": 42,
+      "architecture": "pooled_mlp",
+      "feature_set": "all",
+      "manifest_sha256": "7203bb39f8a46f920b52522860e5cb840afa747fbc664ecb8f3246ad8a5443ed",
+      "predictions_sha256": "e515d1e2f672aaf05e10f4f7796d6638c2178b12f9c8848975d247459f575b9e"
+    },
+    {
+      "id": "breeze-no_spatial-temporal_cnn-seed42",
+      "label": "Temporal CNN \u00b7 no spatial",
+      "directory": "runs/gameplay-v2-ablations/breeze-no_spatial-temporal_cnn-seed42",
+      "validation_map": "breeze",
+      "model_seed": 42,
+      "architecture": "temporal_cnn",
+      "feature_set": "no_spatial",
+      "manifest_sha256": "a0eae45919534e03b48c1eeca24198615f098879ed42ac4cee8d6499b0bdbe5e",
+      "predictions_sha256": "3168f829d911d3ee9469d76033c41770f307f7c11218a0928bf0f1cffca68820"
+    },
+    {
+      "id": "breeze-no_spatial-pooled_mlp-seed42",
+      "label": "Pooled control \u00b7 no spatial",
+      "directory": "runs/gameplay-v2-ablations/breeze-no_spatial-pooled_mlp-seed42",
+      "validation_map": "breeze",
+      "model_seed": 42,
+      "architecture": "pooled_mlp",
+      "feature_set": "no_spatial",
+      "manifest_sha256": "48865044b1668c234d9a92d4b4e05e7fd7d758f1dd41753eb14b4bd89384dba9",
+      "predictions_sha256": "6b9399212e521dba5650efbfc432d232a10c9fc8007adcea201f77736b249120"
+    },
+    {
+      "id": "breeze-all-temporal_cnn-seed42",
+      "label": "Temporal CNN \u00b7 all inputs",
+      "directory": "runs/gameplay-v2-study/breeze-all-temporal_cnn-seed42",
+      "validation_map": "breeze",
+      "model_seed": 42,
+      "architecture": "temporal_cnn",
+      "feature_set": "all",
+      "manifest_sha256": "b5ccbbf86415612efd8466e72bb78a935951977bdbaec59b4d9305f576266c20",
+      "predictions_sha256": "801654046bded39506827642ac0727f4f5bf9da82ea68a289e1e8ecf05de5d98"
+    },
+    {
+      "id": "breeze-all-pooled_mlp-seed42",
+      "label": "Pooled control \u00b7 all inputs",
+      "directory": "runs/gameplay-v2-study/breeze-all-pooled_mlp-seed42",
+      "validation_map": "breeze",
+      "model_seed": 42,
+      "architecture": "pooled_mlp",
+      "feature_set": "all",
+      "manifest_sha256": "3e4e13da3c33fbc8bb72f59938bea97c6a6d4862220497bdd0baaa924bffd06d",
+      "predictions_sha256": "16e83c37b4f14f27b9d68aa77dd5eecf5b64d5e02b8341cc0d8dcf810744a9e0"
+    }
+  ],
+  "review_cases": [
+    {
+      "round": [
+        "2629390",
+        "cd0ede88-b842-4de2-ae9f-bb8776a99437",
+        "round-13"
+      ],
+      "map": "ascent",
+      "at_seconds": 25,
+      "selection_reason": "Previously owner-identified B-main entry; no outcome-based selection",
+      "focus_player_id": "57"
+    },
+    {
+      "round": [
+        "2629390",
+        "cd0ede88-b842-4de2-ae9f-bb8776a99437",
+        "round-1"
+      ],
+      "map": "ascent",
+      "at_seconds": 20,
+      "selection_reason": "Movement near allied casts; first eligible window in source order"
+    },
+    {
+      "round": [
+        "2629390",
+        "cd0ede88-b842-4de2-ae9f-bb8776a99437",
+        "round-1"
+      ],
+      "map": "ascent",
+      "at_seconds": 90,
+      "selection_reason": "Moving pairs without recent allied casts; first eligible window in source order"
+    },
+    {
+      "round": [
+        "2629390",
+        "cd0ede88-b842-4de2-ae9f-bb8776a99437",
+        "round-1"
+      ],
+      "map": "ascent",
+      "at_seconds": 40,
+      "selection_reason": "No usable moving pairs; missingness/stationarity review; first eligible window in source order"
+    },
+    {
+      "round": [
+        "2629390",
+        "719f343f-e8d5-44de-98c5-e66f04d0f5ab",
+        "round-1"
+      ],
+      "map": "breeze",
+      "at_seconds": 20,
+      "selection_reason": "Movement near allied casts; first eligible window in source order"
+    },
+    {
+      "round": [
+        "2629390",
+        "719f343f-e8d5-44de-98c5-e66f04d0f5ab",
+        "round-4"
+      ],
+      "map": "breeze",
+      "at_seconds": 80,
+      "selection_reason": "Moving pairs without recent allied casts; first eligible window in source order"
+    },
+    {
+      "round": [
+        "2629390",
+        "719f343f-e8d5-44de-98c5-e66f04d0f5ab",
+        "round-5"
+      ],
+      "map": "breeze",
+      "at_seconds": 55,
+      "selection_reason": "No usable moving pairs; missingness/stationarity review; first eligible window in source order"
+    }
+  ]
+}
