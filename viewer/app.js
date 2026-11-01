@@ -4,7 +4,7 @@ const $ = (id) => document.getElementById(id);
 const state = { catalog: null, round: null, time: 0, playing: false, rate: 1,
   selected: null, filter: "all", rotate: false, lastTick: 0, frameIndex: -1,
   lastLog: "", lastFeature: -2, lastRolling: "", activeWindow: null, selectedModel: "temporal_cnn", points: [], loadVersion: 0, maps: {}, mapImages: new Map() };
-const colors = { attacker: "#f47d66", defender: "#61d6bd" };
+const colors = { attacker: "#885b52", defender: "#52736b" };
 const featureLabels = ["Elapsed", "ATK alive", "DEF alive", "ATK kills", "DEF kills", "Spike planted",
   "ATK loadout", "DEF loadout", "ATK abilities", "DEF abilities", "First kill known", "First kill ATK"];
 const temporalLabels = ["First kill time / window", "Elimination observed", "Last elimination age / window",
@@ -351,22 +351,22 @@ function renderRollingML() {
   $("prediction-curve").hidden = !prediction;
   if (prediction) {
     const { ctx, width, height } = fitCanvas($("prediction-curve"));
-    ctx.strokeStyle = "#dce0d8"; ctx.beginPath(); ctx.moveTo(0, height / 2); ctx.lineTo(width, height / 2); ctx.stroke();
+    ctx.strokeStyle = "#111111"; ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.moveTo(0, height - .5); ctx.lineTo(width, height - .5); ctx.stroke();
     const points = ml.predictions.filter((p) => p.at_seconds <= state.time);
-    ctx.strokeStyle = colors.attacker; ctx.lineWidth = 1.7; ctx.beginPath();
+    ctx.strokeStyle = "#111111"; ctx.lineWidth = 1; ctx.beginPath();
     points.forEach((p, i) => {
       const x = p.at_seconds / state.round.duration * width, y = 6 + (1 - p.probabilities[state.selectedModel]) * (height - 12);
       if (i === 0) ctx.moveTo(x, y);
       else { ctx.lineTo(x, 6 + (1 - points[i - 1].probabilities[state.selectedModel]) * (height - 12)); ctx.lineTo(x, y); }
     });
     ctx.lineTo(state.time / state.round.duration * width, 6 + (1 - prediction.probabilities[state.selectedModel]) * (height - 12)); ctx.stroke();
-    ctx.fillStyle = colors.attacker;
     for (const p of points) {
       ctx.beginPath();
       ctx.arc(p.at_seconds / state.round.duration * width, 6 + (1 - p.probabilities[state.selectedModel]) * (height - 12), 2.2, 0, Math.PI * 2);
-      ctx.fill();
+      ctx.stroke();
     }
-    ctx.font = "8px ui-monospace, monospace"; ctx.fillStyle = "#758082"; ctx.fillText("100%", 0, 8); ctx.fillText("0%", 0, height - 1);
+    ctx.font = "9px ui-monospace, monospace"; ctx.fillStyle = "#686868"; ctx.fillText("100%", 0, 8); ctx.fillText("0%", 0, height - 7);
   }
 }
 
@@ -400,36 +400,31 @@ function drawMap(frame) {
                               p.x * map.yMultiplier + map.yScalarToAdd)
                  : normalized((p.x - bounds.min.x) / dx, 1 - (p.y - bounds.min.y) / dy);
   }
-  const gradient = ctx.createRadialGradient(width * .5, height * .5, 0, width * .5, height * .5, width * .6);
-  gradient.addColorStop(0, "#1c3038"); gradient.addColorStop(1, "#101b23");
-  ctx.fillStyle = gradient; ctx.fillRect(0, 0, width, height);
+  ctx.fillStyle = "#fafaf8"; ctx.fillRect(0, 0, width, height);
   $("map-kind").textContent = ready ? "MINIMAP" : map ? "MAP IMAGE UNAVAILABLE" : "COORDINATE VIEW";
   if (ready) {
     ctx.save();
     ctx.translate(width / 2, height / 2);
     if (state.rotate) ctx.rotate(Math.PI);
-    ctx.globalAlpha = .68;
+    ctx.globalAlpha = .45;
+    ctx.globalCompositeOperation = "luminosity";
     ctx.drawImage(artwork, -size / 2, -size / 2, size, size);
     ctx.restore();
     for (const site of map.sites) {
       const [x, y] = normalized(site.x, site.y);
-      ctx.fillStyle = "#d5d9bb"; ctx.font = "bold 12px ui-monospace, monospace"; ctx.textAlign = "center";
+      ctx.fillStyle = "#111111"; ctx.font = "12px ui-monospace, monospace"; ctx.textAlign = "center";
       ctx.fillText(site.label, x, y + 4);
     }
   } else {
-    ctx.lineWidth = 1; ctx.strokeStyle = "#637d7b30";
-    for (let n = 0; n <= 10; n++) {
-      const x = x0 + n * mapWidth / 10, y = y0 + n * mapHeight / 10;
-      ctx.beginPath(); ctx.moveTo(x, y0); ctx.lineTo(x, y0 + mapHeight); ctx.stroke();
-      ctx.beginPath(); ctx.moveTo(x0, y); ctx.lineTo(x0 + mapWidth, y); ctx.stroke();
-    }
+    ctx.lineWidth = 1; ctx.strokeStyle = "#686868";
+    ctx.strokeRect(x0, y0, mapWidth, mapHeight);
   }
   if (typeof drawEntryPair === "function") drawEntryPair(ctx, project);
   if ($("trails-toggle").checked) {
     for (const player of frame.players) {
       if (state.selected && state.selected !== player.id) continue;
-      ctx.strokeStyle = colors[player.side]; ctx.globalAlpha = state.selected ? .5 : .2;
-      ctx.lineWidth = state.selected ? 1.6 : 1; ctx.beginPath();
+      ctx.strokeStyle = colors[player.side]; ctx.globalAlpha = state.selected ? .7 : .4;
+      ctx.lineWidth = 1; ctx.beginPath();
       let started = false;
       for (const past of state.round.frames) {
         if (past.t > state.time) break;
@@ -449,9 +444,9 @@ function drawMap(frame) {
       const age = state.time - event.t;
       if (event.category !== "ability" || !event.position || age < 0 || age > 3) continue;
       const [x, y] = project(event.position);
-      ctx.globalAlpha = 1 - age / 3; ctx.strokeStyle = colors[event.side] || "#c5cba9"; ctx.lineWidth = 1;
+      ctx.globalAlpha = 1 - age / 3; ctx.strokeStyle = colors[event.side] || "#686868"; ctx.lineWidth = 1;
       ctx.beginPath(); ctx.arc(x, y, 16 + age * 6, 0, Math.PI * 2); ctx.stroke();
-      ctx.font = "8px ui-monospace, monospace"; ctx.fillStyle = "#e2e9d8"; ctx.textAlign = "center";
+      ctx.font = "9px ui-monospace, monospace"; ctx.fillStyle = "#111111"; ctx.textAlign = "center";
       ctx.fillText(readable(event.ability), x, y - 27); ctx.globalAlpha = 1;
     }
   }
@@ -460,9 +455,9 @@ function drawMap(frame) {
       if (!kill.victim_position) continue;
       const [x, y] = normalized(...kill.victim_position);
       ctx.strokeStyle = kill.side === "atk" ? colors.attacker : colors.defender;
-      ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(x - 6, y - 6); ctx.lineTo(x + 6, y + 6);
+      ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(x - 6, y - 6); ctx.lineTo(x + 6, y + 6);
       ctx.moveTo(x - 6, y + 6); ctx.lineTo(x + 6, y - 6); ctx.stroke();
-      ctx.font = "8px ui-monospace, monospace"; ctx.fillStyle = "#e2e9d8"; ctx.textAlign = "center";
+      ctx.font = "9px ui-monospace, monospace"; ctx.fillStyle = "#111111"; ctx.textAlign = "center";
       ctx.fillText(`${kill.t.toFixed(1)}s`, x, y - 10);
     }
   }
@@ -473,15 +468,15 @@ function drawMap(frame) {
     const selected = state.selected === player.id;
     const age = Math.max(0, state.time - player.position_at);
     ctx.globalAlpha = player.alive ? (age > 10 ? .65 : 1) : .38;
-    ctx.strokeStyle = colors[player.side]; ctx.fillStyle = colors[player.side];
+    ctx.strokeStyle = colors[player.side]; ctx.fillStyle = "#fafaf8";
     if (selected) { ctx.lineWidth = 1; ctx.beginPath(); ctx.arc(x, y, 15, 0, Math.PI * 2); ctx.stroke(); }
     if (player.alive) {
-      ctx.shadowBlur = selected ? 12 : 5; ctx.shadowColor = `${colors[player.side]}88`;
-      ctx.beginPath(); ctx.arc(x, y, selected ? 9 : 7.5, 0, Math.PI * 2); ctx.fill(); ctx.shadowBlur = 0;
-      ctx.fillStyle = "#182d31"; ctx.font = "bold 8px ui-monospace, monospace"; ctx.textAlign = "center";
+      ctx.lineWidth = selected ? 2 : 1;
+      ctx.beginPath(); ctx.arc(x, y, selected ? 9 : 7.5, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
+      ctx.fillStyle = "#111111"; ctx.font = "9px ui-monospace, monospace"; ctx.textAlign = "center";
       ctx.fillText(String(player.number), x, y + 3);
     } else {
-      ctx.lineWidth = 1.6; ctx.beginPath(); ctx.moveTo(x - 4, y - 4); ctx.lineTo(x + 4, y + 4); ctx.moveTo(x - 4, y + 4); ctx.lineTo(x + 4, y - 4); ctx.stroke();
+      ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(x - 4, y - 4); ctx.lineTo(x + 4, y + 4); ctx.moveTo(x - 4, y + 4); ctx.lineTo(x + 4, y - 4); ctx.stroke();
     }
     ctx.globalAlpha = 1;
     state.points.push({ x, y, player });
@@ -490,7 +485,7 @@ function drawMap(frame) {
   const overlaps = (a, b) => a.left < b.right && a.right > b.left && a.top < b.bottom && a.bottom > b.top;
   for (const point of state.points.slice().sort((a, b) => Number(b.player.id === state.selected) - Number(a.player.id === state.selected))) {
     const { x, y, player } = point;
-    ctx.font = `${player.id === state.selected ? "bold " : ""}8px ui-monospace, monospace`;
+    ctx.font = `${player.id === state.selected ? "bold " : ""}9px ui-monospace, monospace`;
     const half = ctx.measureText(player.name).width / 2 + 3;
     const candidates = [[0, 21], [0, -17], [half + 15, 3], [-half - 15, 3], [0, 34], [0, -30], [half + 15, 21], [-half - 15, -17]];
     let placement = null;
@@ -503,18 +498,18 @@ function drawMap(frame) {
     if (!placement) continue; // Overlapping markers remain selectable through the roster.
     occupied.push(placement.box);
     ctx.globalAlpha = player.alive ? .9 : .35;
-    ctx.strokeStyle = "#76939255"; ctx.lineWidth = .5;
+    ctx.strokeStyle = "#686868"; ctx.lineWidth = .5;
     ctx.beginPath(); ctx.moveTo(x, y); ctx.lineTo(placement.x, placement.y - 4); ctx.stroke();
-    ctx.strokeStyle = "#13232b"; ctx.lineWidth = 3; ctx.textAlign = "center";
+    ctx.strokeStyle = "#fafaf8"; ctx.lineWidth = 3; ctx.textAlign = "center";
     ctx.strokeText(player.name, placement.x, placement.y);
-    ctx.fillStyle = "#dce6df"; ctx.fillText(player.name, placement.x, placement.y); ctx.globalAlpha = 1;
+    ctx.fillStyle = "#111111"; ctx.fillText(player.name, placement.x, placement.y); ctx.globalAlpha = 1;
   }
 }
 function drawTrack() {
   const { ctx, width, height } = fitCanvas($("event-track"));
   for (const event of state.round.events) {
     const x = event.t / state.round.duration * width;
-    ctx.fillStyle = event.category === "kill" ? "#c16b50" : event.category === "ability" ? "#83a48b" : "#b9aa6d";
+    ctx.fillStyle = event.category === "ability" ? "#686868" : "#111111";
     ctx.globalAlpha = event.t <= state.time ? .9 : .27;
     ctx.fillRect(x, 2, event.category === "kill" ? 2 : 1, event.category === "kill" ? 7 : 4);
   }
@@ -523,9 +518,10 @@ function drawTrack() {
     if (state.activeWindow) {
       const start = state.activeWindow.window_start / state.round.duration * width;
       const end = state.activeWindow.at_seconds / state.round.duration * width;
-      ctx.fillStyle = "#dc573f22"; ctx.fillRect(start, 0, end - start, height);
+      ctx.strokeStyle = "#111111"; ctx.lineWidth = 1;
+      ctx.strokeRect(start, .5, end - start, height - 1);
     }
-    ctx.strokeStyle = "#ce6046";
+    ctx.strokeStyle = "#111111";
     for (const window of state.round.ml.rolling.windows) {
       const x = window.at_seconds / state.round.duration * width;
       ctx.beginPath(); ctx.moveTo(x, height - 5); ctx.lineTo(x, height); ctx.stroke();
@@ -533,7 +529,7 @@ function drawTrack() {
     return;
   }
   if (state.round.duration > state.round.ml.cutoff) {
-    const x = state.round.ml.cutoff / state.round.duration * width; ctx.strokeStyle = "#ce6046"; ctx.setLineDash([2, 2]);
+    const x = state.round.ml.cutoff / state.round.duration * width; ctx.strokeStyle = "#111111"; ctx.setLineDash([2, 2]);
     ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, height - 2); ctx.stroke(); ctx.setLineDash([]);
   }
 }
@@ -623,7 +619,7 @@ async function start() {
   [state.catalog, state.maps] = await Promise.all([getJSON("/api/catalog"), getJSON("/maps/manifest.json")]);
   const catalog = state.catalog;
   if (typeof setupReviewCases === "function") setupReviewCases(catalog);
-  $("dataset-summary").textContent = `${catalog.rounds.length} rounds · ${catalog.map_count} maps`;
+  $("dataset-summary").textContent = `${catalog.rounds.length} rounds ${catalog.map_count} maps`;
   const series = [...new Set(catalog.rounds.map((r) => r.series_id))];
   $("series-select").replaceChildren(...series.map((id) => { const match = catalog.series.find((item) => item.id === id); const option = element("option", "", match.teams.join(" vs ")); option.value = id; return option; }));
   fillMaps();

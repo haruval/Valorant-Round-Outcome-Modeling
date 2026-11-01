@@ -93,7 +93,7 @@ function drawEntryPair(ctx, project) {
       || entryPair.start_t < state.activeWindow.window_start) return;
   const a = project({ x: entryPair.from[0], y: entryPair.from[1] });
   const b = project({ x: entryPair.to[0], y: entryPair.to[1] });
-  ctx.save(); ctx.strokeStyle = "#ffe18a"; ctx.fillStyle = "#ffe18a"; ctx.lineWidth = 3;
+  ctx.save(); ctx.strokeStyle = "#111111"; ctx.fillStyle = "#111111"; ctx.lineWidth = 1;
   ctx.setLineDash([5, 4]); ctx.beginPath(); ctx.moveTo(...a); ctx.lineTo(...b); ctx.stroke(); ctx.setLineDash([]);
   for (const point of [a, b]) { ctx.beginPath(); ctx.arc(...point, 5, 0, Math.PI * 2); ctx.stroke(); }
   ctx.font = "10px ui-monospace, monospace"; ctx.textAlign = "left";
