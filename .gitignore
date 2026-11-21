@@ -23,3 +23,6 @@ project_report*
 report2*
 generate_report*.py
 *.pdf
+
+/AGENTS.md
+/agents.md
