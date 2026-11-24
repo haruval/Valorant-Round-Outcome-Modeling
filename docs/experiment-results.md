@@ -1,25 +1,3 @@
-# Experiment results: v2 validation and controlled experiments
-
-Plans, machine-readable outputs of the earlier studies, audits and review records
-mentioned below are working documents kept outside the public repository. The
-36-run experiment's complete results are in
-[utility-structure-results.json](utility-structure-results.json).
-
-**Bounded validation completed October 31, 2026.** No new packages were installed.
-The retained macOS arm64 /
-CPython 3.12 environment contains NumPy 2.5.4, scikit-learn 1.9.1, PyTorch 2.15.0,
-safetensors 0.8.0 and their reviewed dependencies. These are the installed pins,
-not a recommendation to upgrade. Full hashes and installation history are in
-the existing validation record (kept locally).
-
-The owner authorized a new safety review and execution if it passed on October 31.
-The limited run below passed that review and completed. A later approval covered
-the 12-run full-input study, which also completed. A separately approved
-16-run feature-ablation study is now complete; results appear below. A 36-run
-[utility-structure experiment](#completed-utility-structure-experiment) was approved and completed on
-November 23, 2026. No package downloads, remote
-models, public endpoints, or global environment changes were needed.
-
 ## Completed run
 
 All 58 standard-library tests and four optional ML tests passed. Both architectures
@@ -207,7 +185,7 @@ done
 
 After stopping study previews, deleting only the dedicated study directory removes
 its expected outputs while preserving the environment and previous validation.
-No cleanup was performed. The security/removal limitations below still apply.
+No cleanup was performed.
 
 ## First execution: bounded validation
 
@@ -446,7 +424,7 @@ and matching `run.json` using `--rolling-predictions` and
 
 After stopping any preview that uses these artifacts, removing only the dedicated
 ablation directory removes its expected files while preserving the environment
-and earlier runs. No cleanup was performed. The limits below still apply.
+and earlier runs. No cleanup was performed.
 
 ## Completed reduced-input seed check
 
@@ -607,42 +585,3 @@ data, the 12 control manifests and prediction files, and the installed files,
 then ran sequentially on CPU with one thread. This is an integrity check, not a
 host malware scan. The visualizer would label these runs as plain `no_spatial`
 runs, so they have not been added to it.
-
-## Security and removal
-
-The reviewed environment is reused without installation. It is still third-party
-Python and native code executing with the account's permissions. A venv isolates
-package selection, not filesystem or network access. The code has no download or
-upload path, uses CPU with one worker/thread configuration, and saves bounded
-JSON/safetensors artifacts instead of pickle; this reduces specific risks but
-does not guarantee safety. Schema checks and hashes detect mismatches, not malicious
-code that was already approved or introduced later.
-
-Bounded validation files live under `runs/gameplay-v2-validation/`; full-input
-study files under `runs/gameplay-v2-study/`; and the new ablation files, temporary
-checkpoints and configured caches under `runs/gameplay-v2-ablations/` (about
-29 MiB). Utility-structure files are under `runs/utility-structure-v1/` (about 76 MB). Python bytecode writes are disabled by `-B`.
-Expected new outputs can be removed without changing the original v1 environment
-or run. Stop the preview and any ML process first. The following cleanup is also
-**not executed**:
-
-```bash
-/usr/bin/python3 -I -S -B - <<'PY'
-from pathlib import Path
-import shutil
-repo = Path('/Users/arigladstone/Documents/Valorant-Round-Outcome-Modeling')
-root = repo / 'runs' / 'gameplay-v2-validation'
-if Path.cwd().resolve() != repo.resolve():
-    raise SystemExit('Run from the repository directory.')
-if root.is_symlink() or root.parent.is_symlink() or not root.is_dir():
-    raise SystemExit('Expected the dedicated nonsymlink v2 directory.')
-shutil.rmtree(root)
-assert not root.exists()
-print('Removed v2 validation outputs; original environment and v1 run retained.')
-PY
-```
-
-Deleting expected files cannot undo arbitrary dependency behavior or guarantee
-erasure of OS logs, swap, backups, or browser/shell history. The full-input study
-and ablation directories have separate lifecycles and are not removed by this
-bounded-validation cleanup command.
