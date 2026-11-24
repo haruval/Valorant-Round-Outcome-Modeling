@@ -58,6 +58,8 @@ cannot establish that an action caused a change in win probability.
 
 ## Visualizer
 
+![Visualizer screenshot](visualizer.png)
+
 View the visualizer and saved data on a fresh clone:
 
 ```bash
