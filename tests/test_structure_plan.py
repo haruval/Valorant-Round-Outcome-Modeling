@@ -7,10 +7,12 @@ from structure_inputs import ARMS, extension_contract
 from rolling_experiment import schema_hash
 
 REPO = Path(__file__).resolve().parents[1]
-PLAN = json.loads((REPO / "docs" / "utility-structure-plan.json").read_text())
+PLAN_PATH = REPO / "docs" / "utility-structure-plan.json"
+PLAN = json.loads(PLAN_PATH.read_text()) if PLAN_PATH.exists() else None
 PYTHON = "runs/ml-validation-20261029/venv/bin/python"
 
 
+@unittest.skipUnless(PLAN, "The run plan is an internal record kept locally")
 class StructurePlanTests(unittest.TestCase):
     def test_execution_needs_a_recorded_owner_approval(self):
         approved = PLAN["execution_authorized"]
@@ -43,10 +45,19 @@ class StructurePlanTests(unittest.TestCase):
             self.assertEqual(r["expected_retained_extension_channels"], ARMS[r["arm"]])
         self.assertEqual(len(controls), 12)
 
-    def test_pending_plan_is_bound_to_the_current_sources(self):
-        # Once a plan has been executed it describes that snapshot and is no longer rechecked.
-        if PLAN["status"] not in ("draft_not_approved", "approved_not_executed"):
-            self.skipTest("Plan already executed")
+    def test_plan_is_bound_to_its_sources_or_to_its_results(self):
+        if PLAN["status"] == "completed":
+            # An executed plan describes that snapshot; its sources may move on. Its results must name it.
+            results = json.loads((REPO / "docs" / PLAN["results"]).read_text())
+            self.assertEqual(results["approved_plan_sha256"], PLAN["approved_plan_sha256"])
+            self.assertEqual(results["protocol_id"], PLAN["protocol_id"])
+            self.assertEqual(len(results["runs"]), PLAN["run_count"])
+            self.assertEqual(results["parity"], {"runs": 12, "unequal_probabilities": 0,
+                                                 "max_control_difference": 0.0, "best_epochs_match": True})
+            for verdict in ("structure_helps", "order_matters"):
+                self.assertIs(type(results["readout"][verdict]["verdict"]), bool)
+            return
+        self.assertIn(PLAN["status"], ("draft_not_approved", "approved_not_executed"))
         for name, expected in PLAN["source_sha256"].items():
             path = (REPO / name).resolve()
             self.assertTrue(path.is_relative_to(REPO))

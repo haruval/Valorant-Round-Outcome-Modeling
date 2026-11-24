@@ -23,9 +23,11 @@ def load_comparisons(config_path, repo):
     loaded, names = [], set()
     for entry in config["runs"]:
         directory = (repo / entry["directory"]).resolve()
-        allowed = (repo / "runs").resolve()
-        if not directory.is_relative_to(allowed) or directory == allowed:
-            raise ValueError("Comparison artifacts must be under project runs/")
+        # Local run outputs, or the tracked saved-prediction demo. Both hold JSON only.
+        allowed = next((root for root in ((repo / name).resolve() for name in ("runs", "demo"))
+                        if directory.is_relative_to(root) and directory != root), None)
+        if allowed is None:
+            raise ValueError("Comparison artifacts must be under project runs/ or demo/")
         for name in ("run.json", "predictions.jsonl"):
             path = directory / name
             if not path.resolve().is_relative_to(allowed) or path.stat().st_size > 10_000_000:

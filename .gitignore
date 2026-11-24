@@ -27,6 +27,7 @@ generate_report*.py
 /AGENTS.md
 /agents.md
 
-# internal working writeups
-/docs/feature-review.md
-/docs/utility-structure-design.md
+
+/docs/*
+!/docs/experiment-results.md
+!/docs/utility-structure-results.json

@@ -147,6 +147,8 @@ class UtilityStructureTests(unittest.TestCase):
 
     def test_saved_owner_verdicts_quote_the_owner(self):
         path = Path(__file__).resolve().parents[1] / "docs" / "gameplay-annotations.json"
+        if not path.exists():
+            self.skipTest("Owner annotations are an internal record kept locally")
         saved = json.loads(path.read_text(encoding="utf-8"))
         keys = {(*a["round"], a["at_seconds"]) for a in saved["annotations"]}
         self.assertEqual(len(keys), len(saved["annotations"]))

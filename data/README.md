@@ -15,8 +15,8 @@
 Run `python3 -S -B data_processing.py data` for SHA-256, label counts, and
 cutoff-specific eligibility/exclusion counts. Every training run saves the same
 audit in its manifest. No downloader, API key, or account connection is needed.
-The checked-in [audit](../docs/data-audit.json) uses a 30-second cutoff and
-retains 43 rounds: 17 attacker wins and 26 defender wins.
+With a 30-second cutoff that audit retains 43 rounds: 17 attacker wins and 26
+defender wins.
 
 This single series is a development sample. It does not provide independent
 training, validation, and test series. Synthetic cases in `tests/` exercise edge
@@ -25,4 +25,5 @@ conditions without depending on this file.
 API access ended after the hackathon. No ongoing API access is required: the
 audit, training pipeline, and viewer discover additional JSONL exports recursively
 under this directory. Keep complete event streams in their original format and
-do not put prediction outputs here. See [the pipeline](../docs/pipeline.md).
+do not put prediction outputs here. Ingestion is implemented in
+`data_processing.py`.

@@ -76,6 +76,22 @@ class ComparisonTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "under project"):
             self.load()
 
+    def test_tracked_demo_directory_is_accepted_and_cannot_be_escaped(self):
+        demo = self.repo / "demo" / "synthetic"
+        demo.parent.mkdir()
+        self.run.rename(demo)
+        self.config["runs"][0]["directory"] = "demo/synthetic"
+        _, loaded = self.load()
+        self.assertEqual(loaded[0]["id"], "test")
+        for directory in ("demo", "viewer/synthetic"):
+            self.config["runs"][0]["directory"] = directory
+            with self.assertRaisesRegex(ValueError, "under project"):
+                self.load()
+        (self.repo / "demo" / "escape").symlink_to(self.repo)
+        self.config["runs"][0]["directory"] = "demo/escape"
+        with self.assertRaisesRegex(ValueError, "under project"):
+            self.load()
+
     def test_training_or_wrong_source_is_never_presented_as_validation(self):
         for field, value in (("partition", "train"), ("source_sha256", "b" * 64)):
             _, loaded = self.load()

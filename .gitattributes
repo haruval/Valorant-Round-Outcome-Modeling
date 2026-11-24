@@ -1,2 +1,5 @@
 # Auto detect text files and perform LF normalization
 * text=auto
+
+# Saved demo predictions are pinned by hash; never convert their line endings.
+demo/** -text

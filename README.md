@@ -1,44 +1,40 @@
 # VALORANT Round-Outcome Modeling
 
-Estimate attacker round-win probability from recent utility, combat, positioning,
-economy, and objective state. A temporal CNN receives 20 seconds of observations
-and updates every five seconds. This began as an undergraduate ML final project
-and is now an independent study of temporal modeling with sparse event data.
-
-**Current status:** 100 standard-library tests pass. The unchanged ML execution
-code previously passed four runtime tests and the full event audit. A
-[three-seed follow-up](docs/controlled-experiment.md#completed-reduced-input-seed-check)
-found that removing current spatial features improved log loss in 11 of 12
-matched neural comparisons. The pooled neural control had better average log
-loss than the temporal CNN on both maps. A reliable benefit from temporal
-convolution remains unestablished.
-
-The [full-input study](docs/controlled-experiment.md#completed-12-run-study),
-[feature ablations](docs/controlled-experiment.md#completed-feature-ablations),
-and follow-up retain every outcome, including weaker runs. All 4,440 new
-follow-up prediction rows reproduced exactly after reload. The visualizer
-compares separately verified validation runs and includes an
-[untrained utility/movement prototype](entry_support.py)
-for domain review. Earlier results remain in the [v1 record](docs/ml-validation.md#completed-run).
-
-The project owner reviewed that prototype's seven cases by hand on November 23,
-2026. Each verdict and design decision is recorded in
-[gameplay-annotations.json](docs/gameplay-annotations.json), and a second, still
-untrained prototype, [`utility_structure.py`](utility_structure.py), follows from
-them. Those channels are wired into a separate training entry point, and a
-[36-run draft plan](docs/utility-structure-plan.json) awaits approval. No model
-has been trained on either prototype, and the new model and training code has
-not been executed.
+I applied a temporal CNN to professional VALORANT rounds to estimate attacker
+round-win probability from recent utility, combat, positioning, economy, and
+objective state. The model receives 20 seconds of observations and updates
+every five seconds. I designed its features from my experience as a competitive
+VALORANT player. This began as my undergraduate ML final project and I have continued building off of it after graduation.
 
 The dataset contains 44 rounds from Breeze and Ascent in one FURIA–NRG series:
 VCT Americas Kickoff, February 16, 2024. Its 555 overlapping windows are not
-independent samples. There is no independent test set in this sample.
+independent samples, and there is no independent test set.
+[Results so far](#results-so-far), and what a sample this small can show, are at
+the end.
 
-## Research question
+## Feature design from competitive play
 
-Does a temporal CNN learn useful event sequences beyond current state and
-history summaries? Gameplay priorities are utility combinations before contact,
-movement following information-related casts, and trades.
+I chose what the model should watch for from how rounds are actually played. In
+priority order: utility combinations before contact, movement after
+information-gathering casts, and trades.
+
+- **Rolling 5-second predictions.** The model looks at the last 20 seconds of
+  a round and makes a new prediction every 5 seconds.
+- **What happened in each sequence.** The inputs describe the events in that
+  window: utility used, kills, positions, economy, and the spike. Abilities are
+  grouped by what they do (smoke, flash, recon, damage, and so on).
+- **Trades.** A return kill within five seconds of a teammate's death counts as
+  a candidate trade.
+- **Replay review.** I reviewed flagged review cases from
+  [untrained utility/movement prototype](entry_support.py) by hand, comparing against the
+  broadcast.
+- **Channels from those reads.** A second set of channels,
+  [`utility_structure.py`](utility_structure.py), follows from my verdicts and
+  design decisions: how many different players have support utility live at
+  once, how many different functions it covers, and whether an attacker's entry
+  dash had a teammate's utility close to it.
+
+## Model and comparisons
 
 The v2 model has 222 input channels and 2,602 parameters. It uses
 shared ability functions instead of ability-specific channels and excludes map,
@@ -53,7 +49,7 @@ encoded bins. Feature ablations remove groups of utility, spatial observations,
 and trade proxies; other inputs may retain correlated information. Every model
 uses the same training-only support rule: channels constant
 in training stay zero during validation and inference.
-See [feature definitions and limits](docs/rolling-design.md).
+Feature definitions and their limits are in `rolling_features.py`.
 
 The feed records casts, not successful blinds or reveals. Sparse position reports
 support limited displacement measurements, not verified rotations or map control.
@@ -62,91 +58,44 @@ cannot establish that an action caused a change in win probability.
 
 ## Visualizer
 
-No dependencies or model loading are needed to inspect the events:
+View the visualizer and saved data on a fresh clone:
+
+```bash
+python3 -E -S -B serve.py --data-dir data --port 8771 --comparison-config demo/comparison.json
+```
+
+Open [the visualizer](http://127.0.0.1:8771/). Select a map and round, then play
+or scrub the timeline. It shows calibrated minimaps, player states, raw ability
+names, kills, observation windows, and position-report coverage. Hover an
+ability-use chip to inspect its provisional function tags.
+
+From 20 seconds into a round it also shows the saved attacker win probability
+for the selected run beside its logistic baselines. [`demo/`](demo/README.md)
+holds validation predictions and run manifests for eight runs: full and reduced
+inputs, temporal CNN and pooled control, for each map. Seed 42 is fixed for
+inspection independently of scores. Changing **Experiment** changes the complete
+run and its provenance together.
+
+**Review cases** lists the seven windows I reviewed, starting with Ascent round
+13 at 25s, focused on mwzera. Selecting one hides probabilities; uncheck
+**Hide probabilities** after forming your own read. Expand a movement pair to
+inspect casts or highlight its observed displacement on the map. These prototype
+features do not affect any displayed prediction.
+
+To replay events without predictions:
 
 ```bash
 python3 -E -S -B serve.py --data-dir data --port 8767
 ```
 
-Open [the visualizer](http://127.0.0.1:8767/). Select a map and round, then play or
-scrub the timeline. It shows calibrated minimaps, player states, raw ability
-names, kills, observation windows, and position-report coverage. The v2 display
-also counts matched position reports and those following recon casts. Hover an
-ability-use chip to inspect its provisional function tags.
-
-Saved probabilities require prediction JSONL and its matching run manifest.
-The server reads JSON and never loads models. Provenance identifies the schema,
-partition, hashes, and (for v2 runs) feature set and masked-channel count.
-To inspect the study's seed-42 CNN and baseline predictions (Breeze training,
-Ascent validation; the demonstration seed was fixed independently of scores):
+To load a single run on both maps, pass its two files directly. The map it
+trained on then shows training predictions, labeled as such:
 
 ```bash
 python3 -E -S -B serve.py --data-dir data --port 8769 \
-  --rolling-predictions runs/gameplay-v2-study/ascent-all-temporal_cnn-seed42/predictions.jsonl \
-  --rolling-run-manifest runs/gameplay-v2-study/ascent-all-temporal_cnn-seed42/run.json
+  --rolling-predictions demo/ascent-all-temporal_cnn-seed42/predictions.jsonl \
+  --rolling-run-manifest demo/ascent-all-temporal_cnn-seed42/run.json
 ```
-
-That ignored local run directory is not included in a fresh clone. The original
-v1 prediction JSON remains viewable under its 365-channel contract. New inference
-code rejects v1 checkpoints; old probabilities are not presented as v2 results.
-
-With the retained full-input and ablation artifacts, compare both neural models
-and their logistic baselines on the same rounds:
-
-```bash
-python3 -E -S -B serve.py --data-dir data --port 8771 \
-  --comparison-config docs/visualizer-comparison.json
-```
-
-Open [the comparison visualizer](http://127.0.0.1:8771/). Each map uses its
-validation runs; seed 42 is fixed for inspection independently of scores.
-Changing **Experiment** changes the complete run and its provenance together.
-**Review cases** includes Ascent round 13 at 25s, focused on mwzera, plus examples
-with and without nearby allied casts. It hides probabilities on selection;
-uncheck **Hide probabilities** after forming an initial assessment. Expand a
-movement pair to inspect casts or highlight its observed displacement on the map.
-These prototype features do not affect any displayed prediction.
-The pinned JSON configuration requires local ignored artifacts; a fresh clone
-can use the feature-only command above without ML dependencies.
-
-## Validation
-
-Standard-library checks run on Python 3.9+:
-
-```bash
-python3 -E -S -B -m unittest discover -s tests -v
-python3 -E -S -B audit_rolling.py data
-python3 -E -S -B audit_inputs.py data
-```
-
-All 16,650 v2 event-channel comparisons pass across 555 windows.
-[The event audit](docs/feature-audit-v2.json) and
-[training-support audit](docs/feature-support-v2.json) bind results to the source
-hash. [Saved review cases](docs/entry-support-review.json) identify concrete
-sequences for checking gameplay assumptions. The standard-library
-[disagreement review](review_windows.py) reconstructs six validation cases with
-outcomes and probabilities withheld by default. Its saved
-[evidence](docs/disagreement-review.json) includes source events, position ages,
-input-mask exclusions and run provenance. Initial owner guidance covers entry
-movement supported by utility and information-driven rotations; assessments of
-those six disagreement cases remain incomplete. The owner's completed review of
-the seven utility/movement cases is recorded in
-[gameplay-annotations.json](docs/gameplay-annotations.json).
-
-ML execution uses NumPy, scikit-learn, PyTorch, and safetensors. No new dependency
-is needed for v2. The reviewed environment and v1 artifacts remain in
-`runs/ml-validation-20261029/`. New validation artifacts live separately in
-`runs/gameplay-v2-validation/`; the 12-run comparison lives in
-`runs/gameplay-v2-study/`; the ablation study lives in
-`runs/gameplay-v2-ablations/`. The [execution record](docs/controlled-experiment.md)
-lists results, exact commands, risks, and removal instructions. The
-[16-run ablation plan](docs/ablation-plan.json) is complete, with
-[all results](docs/ablation-results.json) retained. The
-[eight-run follow-up plan](docs/reduced-seed-plan.json) is also complete, with
-[three-seed results](docs/reduced-seed-results.json) and separate artifacts in
-`runs/gameplay-v2-seed-check/`. Player-level utility/movement relationships are
-implemented as a standard-library review prototype, with no model training or
-feature-contract changes. Additional ML execution or installation needs owner approval.
 
 ## Changes from the class project
 
@@ -162,8 +111,8 @@ feature-contract changes. Additional ML execution or installation needs owner ap
 - Replaced Hub/Transformers wrappers with local model code and safetensors.
   Original whole-round checkpoints and generated reports are excluded.
 
-The [earlier fixed-cutoff pipeline](docs/fixed-cutoff.md) remains available.
-New exports can enter the [ingestion pipeline](docs/pipeline.md). Independent
+The earlier fixed-cutoff pipeline (`train.py`, `predict.py`) remains available.
+New exports can enter the ingestion pipeline in `data_processing.py`. Independent
 matches are needed before claiming generalization; more windows from these
 rounds do not resolve that limitation.
 
@@ -178,13 +127,39 @@ rounds do not resolve that limitation.
 | `train_rolling.py`, `predict_rolling.py` | Approved-runtime training and export |
 | `audit_rolling.py`, `audit_inputs.py` | Standard-library audits |
 | `entry_support.py`, `comparison_data.py` | Untrained relationship evidence and separately verified comparison runs |
-| `utility_structure.py` | Untrained cast-structure channels revised after the owner's case review |
-| `structure_inputs.py`, `plan_structure.py` | Extension inputs beside the frozen v2 contract; draft run plan |
-| `structure_model.py`, `train_structure.py`, `predict_structure.py` | Approved-runtime training with extension channels; not yet executed |
+| `utility_structure.py` | Cast-structure channels built from my case review |
+| `structure_inputs.py`, `plan_structure.py` | Extension inputs beside the frozen v2 contract; run-plan tool |
+| `structure_model.py`, `train_structure.py`, `predict_structure.py` | Approved-runtime training with extension channels |
 | `serve.py`, `replay_data.py`, `viewer/` | Local replay and prediction inspection |
+| `demo/` | Saved validation predictions and run manifests for the visualizer |
 | `tests/`, `tests_ml/` | Separate standard-library and optional ML tests |
 | `schemas/` | Historical contracts for JSON replay |
 
-The owner confirmed redistribution permission for the supplied hackathon data.
-See [data provenance](data/README.md) and map artwork credits in the visualizer.
-Personal report drafts remain outside the repository.
+## Results so far
+
+So far the temporal CNN has not shown an advantage over simpler models on this
+data.
+
+- In a [three-seed follow-up](docs/experiment-results.md#completed-reduced-input-seed-check),
+  removing the current spatial features improved log loss in 11 of 12 matched
+  neural comparisons, and the pooled neural control had better average log loss
+  than the temporal CNN on both maps.
+- The channels from my replay review did not lower validation log loss. I
+  tested them in a
+  [36-run experiment](docs/experiment-results.md#completed-utility-structure-experiment)
+  under a hash-bound plan. All 12 saved control runs were reproduced exactly
+  first. The new channels then beat both the base run and a volume placebo in
+  4 of 12 matched pairs, against a threshold of 9 fixed in advance
+  ([results](docs/utility-structure-results.json)).
+
+The sample limits what these results can say. My API access ended after the
+hackathon, so the dataset stops at 44 rounds from one series. Most differences
+between models here are about 0.01 in log loss or less, while the same model
+varies from 0.30 to 0.37 across random seeds on Ascent. A sample this small cannot
+separate an effect of that size from noise, so these results do not tell me
+whether the approach would help with more data. Answering that needs more
+independent matches.
+
+The [full-input study](docs/experiment-results.md#completed-12-run-study),
+[feature ablations](docs/experiment-results.md#completed-feature-ablations),
+and follow-ups retain every outcome, including weaker runs.

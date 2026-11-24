@@ -1,16 +1,23 @@
-# V2 validation and controlled experiment
+# Experiment results: v2 validation and controlled experiments
+
+Plans, machine-readable outputs of the earlier studies, audits and review records
+mentioned below are working documents kept outside the public repository. The
+36-run experiment's complete results are in
+[utility-structure-results.json](utility-structure-results.json).
 
 **Bounded validation completed October 31, 2026.** No new packages were installed.
 The retained macOS arm64 /
 CPython 3.12 environment contains NumPy 2.5.4, scikit-learn 1.9.1, PyTorch 2.15.0,
 safetensors 0.8.0 and their reviewed dependencies. These are the installed pins,
 not a recommendation to upgrade. Full hashes and installation history are in
-[the existing validation record](ml-validation.md).
+the existing validation record (kept locally).
 
 The owner authorized a new safety review and execution if it passed on October 31.
 The limited run below passed that review and completed. A later approval covered
 the 12-run full-input study, which also completed. A separately approved
-16-run feature-ablation study is now complete; results appear below. No package downloads, remote
+16-run feature-ablation study is now complete; results appear below. A 36-run
+[utility-structure experiment](#completed-utility-structure-experiment) was approved and completed on
+November 23, 2026. No package downloads, remote
 models, public endpoints, or global environment changes were needed.
 
 ## Completed run
@@ -76,7 +83,7 @@ direction. Logs contained no warning or error lines. The previous 58 standard-li
 and four ML tests still apply to the unchanged execution code; they were not
 unnecessarily rerun for this study.
 
-The [machine-readable results](study-12runs.json) include every seed, epoch,
+The machine-readable results (kept locally) include every seed, epoch,
 training/validation curve, run ID, and manifest hash. Neural entries below show
 mean **(minimum–maximum)** over three seeds. Baselines are deterministic here;
 they are not six independent estimates. All scores are development validation
@@ -323,7 +330,7 @@ directions and four input subsets. Features, optimizer, weighting, epoch budget,
 partitions and checkpoint selection were unchanged. Each run also refit all three
 baselines with the same input mask. The four full-input seed-42 runs are the
 matched controls; the three-seed averages from the earlier study are not used as
-ablation controls. See the [executed plan](ablation-plan.json).
+ablation controls. The executed plan is kept locally.
 
 All **8,880 new prediction rows** matched exactly after checkpoint re-export;
 the four controls' 2,220 rows were rechecked. Independent arithmetic reproduced
@@ -335,7 +342,7 @@ no changes to the 20,032 hashed installed package files. These integrity checks
 are not a host malware scan. The previously passing 60 standard-library and four
 ML tests cover unchanged execution code; they were not rerun for this batch.
 
-The [machine-readable results](ablation-results.json) preserve every result,
+The machine-readable results (kept locally) preserve every result,
 20-epoch training/validation curve, run ID, manifest hash and masked-channel list.
 There is still **one series, 44 rounds, 555 overlapping windows and no independent
 test set**. Ascent validation has 21 rounds / 269 windows; Breeze has 23 / 286.
@@ -416,7 +423,7 @@ Other baseline log losses are shown below; all Brier scores are in the result JS
   establish a stable advantage from temporal convolution.
 
 The follow-up is to test player-level relationships identified in
-[owner review](gameplay-annotations.json):
+owner review:
 entry movement timed with allied supporting utility, and movement after teammate
 deaths with location and observation-coverage context. Keep the reduced-input
 CNN and pooled model as additional controls. Confirmed sightings require a
@@ -444,14 +451,14 @@ and earlier runs. No cleanup was performed. The limits below still apply.
 ## Completed reduced-input seed check
 
 **Completed October 31, 2026: eight new runs / 160 epochs.** The owner approved
-the proposed next steps. The [exact command plan](reduced-seed-plan.json) repeats
+the proposed next steps. The exact command plan (kept locally) repeats
 `no_spatial` for seeds 43 and 44, both architectures and both validation maps,
 using the existing environment. Training code, data, optimizer, input policy,
 partitions and 20-epoch budget were frozen. Seed 42 comes from the completed
 ablation study; all three seeds have matched full-input controls from the earlier
 study. No new prototype channels were passed to a model.
 
-The [complete results](reduced-seed-results.json) include per-seed selected and
+The complete results (kept locally) include per-seed selected and
 epoch-20 scores, all histories, baselines, provenance and paired differences.
 Each cell below is mean round-balanced validation log loss over seeds 42–44.
 Lower is better; these remain development-validation results.
@@ -487,13 +494,119 @@ training implementation itself is unchanged. Removing this dedicated directory
 after its processes have stopped removes its expected outputs, independently
 of earlier studies and the reviewed environment. No cleanup was performed.
 
-The [comparison viewer configuration](visualizer-comparison.json) pins eight
+The comparison viewer configuration (kept locally) pins eight
 seed-42 manifests and prediction files: full/reduced inputs, both architectures,
 both map directions. Each replay map receives only its validation predictions;
 switching experiments preserves separate manifests and model hashes. Seed 42
 is an inspection convention, not a best-seed selection. The additional
 [utility/movement prototype](../entry_support.py) is
 untrained and displayed separately from prediction inputs.
+
+## Completed utility-structure experiment
+
+**Completed November 23, 2026: 36 runs / 720 epochs.** The owner approved
+the hash-bound plan that day. It tested six
+channels built from the owner's review of seven replay cases: how many distinct
+players had support utility live, how many distinct functions, and whether an
+attacker's Tailwind or Updraft before the plant had another attacker's support
+cast near it. `utility_structure.py` defines them; the owner's verdicts and
+decisions are recorded in a local annotation file.
+
+The frozen v2 training files were not edited. Extension channels enter through
+a second input and an added first-layer projection (`structure_model.py`,
+`train_structure.py`), and an arm is a mask over the 14 extension channels.
+Three arms ran for both validation maps, both architectures and seeds 42–44,
+on the `no_spatial` inputs, with the existing environment and no new dependency:
+
+- **Base:** every extension channel masked.
+- **Structure:** the six structure channels.
+- **Placebo:** per-side counts of live support casts, without who cast them or
+  which function they had.
+
+### Checks before the comparison
+
+- Four existing and seven new ML tests passed.
+- **All 12 base-arm runs reproduced their saved `no_spatial` controls exactly:**
+  zero unequal probabilities across 555 windows and four models per run, and
+  the same selected epoch. With no extension channel kept, the new code path
+  computes what the frozen path computes.
+- Every re-export after reload matched its predictions exactly. All 20,032
+  installed files hashed the same before and after.
+- The summary recomputed each validation score from the saved predictions and
+  matched the training script's metric files.
+
+### Selected-checkpoint round-mean log loss
+
+Mean over seeds 42–44; lower is better. "Wins" counts the seeds where structure
+beat its base run.
+
+| Validation map | Model | Base | Structure | Placebo | Structure wins |
+| --- | --- | ---: | ---: | ---: | ---: |
+| Ascent | Temporal CNN | 0.3289 | 0.3148 | 0.3246 | 2 / 3 |
+| Ascent | Pooled control | 0.3170 | 0.3255 | 0.3152 | 0 / 3 |
+| Breeze | Temporal CNN | 0.4242 | 0.4226 | 0.4257 | 2 / 3 |
+| Breeze | Pooled control | 0.4121 | 0.4157 | 0.4133 | 1 / 3 |
+
+### Readout fixed before the runs
+
+| Rule | Required | Observed | Met |
+| --- | --- | --- | --- |
+| Structure helps | Beats both its base run and the placebo in at least 9 of 12 pairs, with and without the 16 windows that have no living attacker | 4 of 12 in both window sets | No |
+| Order matters | Structure helps; the CNN improves in at least 5 of 6 pairs; the CNN's mean gain exceeds the pooled control's on both maps | Structure does not help; 4 of 6; yes on both maps | No |
+
+Structure beat its base run in 5 of 12 pairs and the placebo in 5 of 12. At
+epoch 20 it beat both in 2 of 12 (3 of 12 without the no-attacker windows). Averaged over all 12 pairs, structure changed
+log loss by −0.0009 and the placebo by −0.0009.
+
+### Logistic baselines under the same masks
+
+These do not depend on the neural seed; each value was identical across the six
+runs that share a map direction and arm.
+
+| Validation map | Baseline | Base | Structure | Placebo |
+| --- | --- | ---: | ---: | ---: |
+| Ascent | Snapshot logistic | 0.4164 | 0.4331 | 0.4174 |
+| Ascent | History logistic | 0.3734 | 0.3925 | 0.3796 |
+| Breeze | Snapshot logistic | 0.4081 | 0.4108 | 0.4093 |
+| Breeze | History logistic | 0.5420 | 0.5506 | 0.5417 |
+
+### Interpretation
+
+**No benefit was demonstrated.** The structure channels did not lower validation
+log loss beyond a count of live support casts, and the rule fixed in advance was
+missed by a wide margin.
+
+- The temporal CNN improved in 4 of 6 pairs (mean change −0.0078) while the
+  pooled control got worse in 5 of 6 (mean +0.0061). That is the direction a
+  sequence effect would take, but it does not meet the rule, and one pair
+  supplies most of it: Ascent seed 43, whose base run was the weakest of its
+  three seeds (0.3717 to 0.3261). Without that pair the CNN's mean change is
+  −0.0003.
+- Differences near 0.01 are small beside seed variation. The Ascent CNN base
+  runs alone span 0.2991 to 0.3717.
+- Both logistic baselines got worse with the structure channels in both map
+  directions. The placebo left them within 0.007 of base.
+- Excluding the 16 windows with no living attacker raised the mean neural scores
+  by about 0.004 to 0.007 and left every selected-checkpoint structure count
+  unchanged.
+
+This result is about one encoding on 44 rounds from one series. It does not
+test whether the tactical reads behind the channels are correct, and it cannot
+detect a small effect. The channels were also designed from windows in these
+same rounds, which favors them, and they still showed no gain. The answer and
+caster-spacing arms were planned only if structure showed something, so they
+were not run.
+
+### Artifacts and execution
+
+[Complete results](utility-structure-results.json) hold every run, pair, count,
+baseline and hash. `runs/utility-structure-v1/` (about 76 MB) retains the
+approved plan, protocol, runner, logs, checkpoints, re-exports, summary script
+and both integrity records. The runner verified the plan's 27 source hashes, the
+data, the 12 control manifests and prediction files, and the installed files,
+then ran sequentially on CPU with one thread. This is an integrity check, not a
+host malware scan. The visualizer would label these runs as plain `no_spatial`
+runs, so they have not been added to it.
 
 ## Security and removal
 
@@ -508,7 +621,7 @@ code that was already approved or introduced later.
 Bounded validation files live under `runs/gameplay-v2-validation/`; full-input
 study files under `runs/gameplay-v2-study/`; and the new ablation files, temporary
 checkpoints and configured caches under `runs/gameplay-v2-ablations/` (about
-29 MiB). Python bytecode writes are disabled by `-B`.
+29 MiB). Utility-structure files are under `runs/utility-structure-v1/` (about 76 MB). Python bytecode writes are disabled by `-B`.
 Expected new outputs can be removed without changing the original v1 environment
 or run. Stop the preview and any ML process first. The following cleanup is also
 **not executed**:

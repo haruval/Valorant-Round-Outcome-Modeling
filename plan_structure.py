@@ -1,19 +1,30 @@
 """Draft the hash-bound utility-structure run plan; standard library only.
 
 Rewrites docs/structure-support.json and docs/utility-structure-plan.json from the
-current sources and the saved control runs. Nothing here executes ML code, and an
-approved plan is never overwritten. Drafting a plan does not authorize running it.
+current sources and the saved control runs. Nothing here executes ML code. Drafting
+a plan does not authorize running it. `--approve` records the owner's own words; an
+approved plan is rewritten only by `--redraft`, which returns it to a draft after a
+source change, and an executed plan is never rewritten.
 """
+import argparse
 import hashlib
 import json
 from pathlib import Path
 
 from structure_inputs import audit
 
+parser = argparse.ArgumentParser(description=__doc__)
+parser.add_argument("--approve", metavar="OWNER_WORDS", help="Record the owner's approval, quoting their words")
+parser.add_argument("--approval-date", help="ISO date of that approval")
+parser.add_argument("--redraft", action="store_true", help="Return an approved, unexecuted plan to a draft")
+args = parser.parse_args()
+if bool(args.approve) != bool(args.approval_date) or (args.approve and args.redraft):
+    parser.error("Approval needs both the owner's words and a date, and cannot be combined with --redraft")
 repo = Path(__file__).resolve().parent
 target = repo / "docs/utility-structure-plan.json"
-if target.exists() and json.loads(target.read_text())["status"] != "draft_not_approved":
-    raise SystemExit("Refusing to overwrite a plan that is no longer a draft")
+current = json.loads(target.read_text())["status"] if target.exists() else "draft_not_approved"
+if current != "draft_not_approved" and not (args.redraft and current == "approved_not_executed"):
+    raise SystemExit(f"Refusing to overwrite a plan whose status is {current}")
 (repo / "docs/structure-support.json").write_text(json.dumps(audit(repo / "data"), indent=2, allow_nan=False) + "\n")
 support = json.loads((repo / "docs/structure-support.json").read_text())
 PY = "runs/ml-validation-20261029/venv/bin/python"
@@ -74,7 +85,8 @@ tests = [[PY, "-E", "-s", "-B", "-m", "unittest", "discover", "-s", "tests_ml", 
 
 plan = {
     "protocol_id": "gameplay-v2-utility-structure-v1",
-    "status": "draft_not_approved", "execution_authorized": False, "approval_date": None, "authorization": None,
+    "status": "approved_not_executed" if args.approve else "draft_not_approved",
+    "execution_authorized": bool(args.approve), "approval_date": args.approval_date, "authorization": args.approve,
     "drafted": "2026-11-23",
     "question": "Do channels describing who cast which support utility together, and attacker entries supported by "
                 "teammates, lower validation log loss beyond a count of live support casts?",
@@ -118,7 +130,9 @@ plan = {
     "run_count": len(runs), "total_epochs": 20 * len(runs),
     "controls": controls, "runs": runs,
     "readout": {
-        "status": "Proposed; the thresholds are the assistant's and are for the owner to confirm or change at approval.",
+        "status": ("Fixed at approval. The thresholds are the assistant's proposal; the owner started the run "
+                   "without changing them." if args.approve else
+                   "Proposed; the thresholds are the assistant's and are for the owner to confirm or change at approval."),
         "metric": "Round-mean validation log loss at the selected epoch (lowest all-window validation log loss "
                   "of 20) and at epoch 20, each for all windows and for windows with a living attacker.",
         "pairs": "Within validation map, architecture and seed: structure against the base-arm run that "
