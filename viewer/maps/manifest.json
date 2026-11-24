@@ -31,12 +31,12 @@
     "yScalarToAdd": 0.573242,
     "sites": [
       {
-        "label": "A",
+        "label": "B",
         "x": 0.265,
         "y": 0.8
       },
       {
-        "label": "B",
+        "label": "A",
         "x": 0.31,
         "y": 0.15
       }

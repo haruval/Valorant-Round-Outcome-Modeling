@@ -237,9 +237,11 @@ def build_review(data_dir, annotations=None):
             if annotation and annotation.get("source_sha256", case["source_sha256"]) != case["source_sha256"]:
                 raise ValueError("Owner annotation source differs from review data")
             selected.add(key)
+            # Only an assessment the owner recorded fills this field; it is never inferred.
             cases.append({**case, "selection_reason": reason,
                           "owner_annotation": annotation,
-                          "owner_review": {"useful_support": None, "reason": None}})
+                          "owner_review": (annotation or {}).get("window_assessment")
+                          or {"useful_support": None, "reason": None}})
 
     for case in candidates:
         if case["map"] == "ascent" and case["round"][-1] == "round-13" and case["at_seconds"] == 25:

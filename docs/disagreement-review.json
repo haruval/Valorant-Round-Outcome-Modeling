@@ -1,7 +1,7 @@
 {
   "schema_id": "disagreement-review-v1",
   "feature_schema_sha256": "7b8dfaa430873f1e4e8d85ca05eed14ed00f7a78fd7a97f2cf5b34d071a5dd0f",
-  "annotations_sha256": "5f5071838c49fdc22118f9d4d72aafcf403b577fcd79cc87d7f7f1beb8a05bc1",
+  "annotations_sha256": "d6a011eec7f1f2d02624ba4927e39d5827bd68a7e5c1664aca20c798f4a12612",
   "study_result_sha256": "8fcac4d1959ff7be54ef57928c3a29143b71d989ae2c09d2082acd42b59bb1f9",
   "selection": "Seed 42, largest CNN/control disagreement per round, top three rounds per validation map; no winner filter.",
   "outcomes_and_probabilities_shown": false,
@@ -745,7 +745,7 @@
           "round-13"
         ],
         "at_seconds": 25,
-        "status": "relationship_identified; nanoswarm support assessed by owner; remaining tactical assessment incomplete",
+        "status": "owner_reviewed: entry relationship, Nanoswarm and each listed cast assessed",
         "source_sha256": "5a670390d2dc53bace9e64ef9dbe55e71a06fc6acfca34a4a07aa08182e8ef3e",
         "owner_quote": "here the main relationship would be the entry, mwzera, entrying outside of b main, off of this util",
         "focus_player_ids": [
@@ -765,11 +765,152 @@
             "reported_effect_area": "CT",
             "owner_quote": "Yes, that nanoswarm was a lineup landing ct to help mwzera entry.",
             "evidence_source": "Project owner's assessment in this chat, October 31, 2026",
-            "scope": "This cast supported this entry according to the owner. The export verifies the cast, not its landing location, effect, damage, or causal impact on round outcome."
+            "scope": "This cast supported this entry according to the owner. The export verifies the cast, not its landing location, effect, damage, or causal impact on round outcome.",
+            "at_cast_seconds": 12.27,
+            "relation": "ally",
+            "owner_role": "Lineup landing CT to help the entry"
+          },
+          {
+            "event_id": "1795cde2-5394-42a3-92bf-d71ce01133cb",
+            "ability": "dark-cover",
+            "caster_id": "45",
+            "caster": "liazzi",
+            "at_cast_seconds": 13.6,
+            "relation": "ally",
+            "owner_role": "Spawn smoke blocking the CT sightline during the execute",
+            "useful_entry_support": true,
+            "owner_quote": "spawn smoke blocking the ct sightline during the execute",
+            "evidence_source": "Project owner's hand-labeled worksheet, pasted into this project chat on November 23, 2026",
+            "supported_player_id": "57",
+            "supported_player": "mwzera",
+            "reported_effect_area": "CT sightline",
+            "basis": "Entry support recorded from the owner's later sentence: CT smoked off by the initial Dark Cover limits the angles mwzera has to consider on entering."
+          },
+          {
+            "event_id": "a5c8955b-4858-4994-89ff-1545eee299c8",
+            "ability": "flash-drive",
+            "caster_id": "3314",
+            "caster": "havoc",
+            "at_cast_seconds": 13.961,
+            "relation": "ally",
+            "owner_role": "B main control before the site execute",
+            "useful_entry_support": null,
+            "owner_quote": "that flash was for the b main line, to take b main control before starting the site execute",
+            "evidence_source": "Project owner's hand-labeled worksheet, pasted into this project chat on November 23, 2026",
+            "supported_player_id": "57",
+            "supported_player": "mwzera",
+            "reported_effect_area": "B main line",
+            "basis": "The owner placed this cast in the preceding map-control phase and named it as the first step of the execute's utility sequence. No yes/no entry-support verdict was given."
+          },
+          {
+            "event_id": "484bf172-bdfa-4b91-b12c-64945e357b30",
+            "ability": "paranoia",
+            "caster_id": "45",
+            "caster": "liazzi",
+            "at_cast_seconds": 16.325,
+            "relation": "ally",
+            "owner_role": "Blinds lane and stairs as mwzera enters; the owner's most enabling cast",
+            "useful_entry_support": true,
+            "owner_quote": "that blinds lane and stairs while mwzera entries. probably the most enabling util for mwzera\u2019s entry on this site execute.",
+            "evidence_source": "Project owner's hand-labeled worksheet, pasted into this project chat on November 23, 2026",
+            "supported_player_id": "57",
+            "supported_player": "mwzera",
+            "reported_effect_area": "lane and stairs"
+          },
+          {
+            "event_id": "bf815082-4c34-4127-8e19-cb3ddf82f8e4",
+            "ability": "recon-bolt",
+            "caster_id": "19",
+            "caster": "kon4n",
+            "at_cast_seconds": 16.577,
+            "relation": "ally",
+            "owner_role": "Clears site and forces a defender to reveal himself by shooting the dart",
+            "useful_entry_support": true,
+            "owner_quote": "that dart clears site, and forces victor on site to shoot that dart to avoid getting him and demon1 scanned, which forces him to give away his position. at this point, the paranoia covers lane and stairs and the dart covers site, at around the same time, and ct has been smoked off by the initial dark cover, so the angles that mwzera has to be concerned with on entering are limited.",
+            "evidence_source": "Project owner's hand-labeled worksheet, pasted into this project chat on November 23, 2026",
+            "supported_player_id": "57",
+            "supported_player": "mwzera",
+            "reported_effect_area": "site"
           }
         ],
         "favored_side": null,
-        "missing_evidence": null
+        "missing_evidence": null,
+        "case_id": 2,
+        "sessions": [
+          "chat-2026-10-31",
+          "worksheet-2026-11-23"
+        ],
+        "worksheet_prompt": "Ascent R13 at 25s \u2014 which utility helped the B-main entry?",
+        "owner_responses": [
+          {
+            "prompt": "liazzi\u2019s Dark Cover, 13.600s",
+            "owner_quote": "spawn smoke blocking the ct sightline during the execute"
+          },
+          {
+            "prompt": "havoc\u2019s FLASH/drive, 13.961s",
+            "owner_quote": "that flash was for the b main line, to take b main control before starting the site execute"
+          },
+          {
+            "prompt": "liazzi\u2019s Paranoia, 16.325s",
+            "owner_quote": "that blinds lane and stairs while mwzera entries. probably the most enabling util for mwzera\u2019s entry on this site execute."
+          },
+          {
+            "prompt": "kon4n\u2019s Recon Bolt, 16.577s",
+            "owner_quote": "that dart clears site, and forces victor on site to shoot that dart to avoid getting him and demon1 scanned, which forces him to give away his position. at this point, the paranoia covers lane and stairs and the dart covers site, at around the same time, and ct has been smoked off by the initial dark cover, so the angles that mwzera has to be concerned with on entering are limited."
+          },
+          {
+            "prompt": "Which timing or placement mattered most for mwzera?",
+            "owner_quote": "using the flash/drive to clear b main, then within 3 seconds using the dart and paranoia combination to overwhelm site as mwzera dashes in on their execute is a perfect example of util synergy on a site execute, while keeping the time between initially showing their positions (with the flash/drive to clear the first b main line) and the main part of the site execute (paranoia and recon bolt) down to just 3 seconds not giving the defenders enough time to rotate (there already were a large number of NRG players B, they had a good read but that\u2019s not Furia\u2019s fault)"
+          }
+        ],
+        "window_assessment": {
+          "useful_support": true,
+          "reason": "using the flash/drive to clear b main, then within 3 seconds using the dart and paranoia combination to overwhelm site as mwzera dashes in on their execute is a perfect example of util synergy on a site execute, while keeping the time between initially showing their positions (with the flash/drive to clear the first b main line) and the main part of the site execute (paranoia and recon bolt) down to just 3 seconds not giving the defenders enough time to rotate (there already were a large number of NRG players B, they had a good read but that\u2019s not Furia\u2019s fault)"
+        },
+        "sequence_assessment": {
+          "owner_quote": "using the flash/drive to clear b main, then within 3 seconds using the dart and paranoia combination to overwhelm site as mwzera dashes in on their execute is a perfect example of util synergy on a site execute, while keeping the time between initially showing their positions (with the flash/drive to clear the first b main line) and the main part of the site execute (paranoia and recon bolt) down to just 3 seconds not giving the defenders enough time to rotate (there already were a large number of NRG players B, they had a good read but that\u2019s not Furia\u2019s fault)",
+          "phases": [
+            {
+              "owner_phase": "Clear B main before the site execute",
+              "event_ids": [
+                "a5c8955b-4858-4994-89ff-1545eee299c8"
+              ]
+            },
+            {
+              "owner_phase": "Main part of the site execute as mwzera dashes in",
+              "event_ids": [
+                "484bf172-bdfa-4b91-b12c-64945e357b30",
+                "bf815082-4c34-4127-8e19-cb3ddf82f8e4"
+              ]
+            }
+          ],
+          "owner_reported_gap_seconds": 3,
+          "recorded_gap_seconds": {
+            "flash_drive_to_paranoia": 2.364,
+            "flash_drive_to_recon_bolt": 2.616
+          },
+          "defender_context": {
+            "owner_quote": "there already were a large number of NRG players B, they had a good read but that\u2019s not Furia\u2019s fault",
+            "scope": "Owner observation. No defender-count-by-site measure exists in this project."
+          },
+          "scope": "One execute. The three-second tempo is the owner's description of this sequence, not a general rule."
+        },
+        "feed_check": {
+          "source": "Assistant check of the recorded events on November 23, 2026; not an owner statement",
+          "findings": [
+            "Recorded attacker casts: Khalil Nanoswarm 12.270s, liazzi Dark Cover 13.600s, havoc Flash/drive 13.961s, mwzera Tailwind 15.116s, liazzi Paranoia 16.325s, kon4n Recon Bolt 16.577s, mwzera Cloudburst 16.838s.",
+            "Paranoia and Recon Bolt follow the Flash/drive by 2.364s and 2.616s, consistent with the owner's \"within 3 seconds\".",
+            "The export does not record the dart being shot, a blind landing, or any sightline."
+          ]
+        },
+        "followups": [
+          {
+            "session": "decisions-2026-11-23",
+            "question": "In Ascent R13 the feed records mwzera's Tailwind at 15.116s, but his largest position jump is between 20.667s and 21.349s. From the VOD, what does the 15.116s event mark?",
+            "owner_selection": "The activation",
+            "option_text": "He primed Tailwind at about 15s and dashed later. Support timing measured from the event would then be early by however long he held it."
+          }
+        ]
       }
     },
     {

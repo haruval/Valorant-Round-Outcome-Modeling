@@ -183,4 +183,4 @@ adds seeds 43 and 44 to the reduced-input comparison. Spatial removal improved
 11 of 12 matched log losses over three seeds; the pooled control had lower mean
 loss than the CNN on both maps. All 4,440 new rows reproduced after reload.
 The separate `entry-support-prototype-v0` has 34 review-only channels and leaves
-the trained v2 contract unchanged. See [its rules](feature-review.md#utilitymovement-prototype).
+the trained v2 contract unchanged. Its rules are in the [`entry_support.py`](../entry_support.py) contract.

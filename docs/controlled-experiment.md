@@ -416,7 +416,7 @@ Other baseline log losses are shown below; all Brier scores are in the result JS
   establish a stable advantage from temporal convolution.
 
 The follow-up is to test player-level relationships identified in
-[owner review](feature-review.md#owner-guidance-and-representation-follow-up):
+[owner review](gameplay-annotations.json):
 entry movement timed with allied supporting utility, and movement after teammate
 deaths with location and observation-coverage context. Keep the reduced-input
 CNN and pooled model as additional controls. Confirmed sightings require a
@@ -492,7 +492,7 @@ seed-42 manifests and prediction files: full/reduced inputs, both architectures,
 both map directions. Each replay map receives only its validation predictions;
 switching experiments preserves separate manifests and model hashes. Seed 42
 is an inspection convention, not a best-seed selection. The additional
-[utility/movement prototype](feature-review.md#utilitymovement-prototype) is
+[utility/movement prototype](../entry_support.py) is
 untrained and displayed separately from prediction inputs.
 
 ## Security and removal

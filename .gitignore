@@ -26,3 +26,7 @@ generate_report*.py
 
 /AGENTS.md
 /agents.md
+
+# Internal working write-ups, kept locally. Tracked files must not link to them.
+/docs/feature-review.md
+/docs/utility-structure-design.md

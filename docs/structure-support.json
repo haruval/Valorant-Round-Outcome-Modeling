@@ -1,0 +1,296 @@
+{
+  "extension": {
+    "id": "utility-structure-extension-v1",
+    "base_schema_sha256": "7b8dfaa430873f1e4e8d85ca05eed14ed00f7a78fd7a97f2cf5b34d071a5dd0f",
+    "feature_names": [
+      "atk_combo_casters",
+      "atk_combo_functions",
+      "atk_combo_spacing",
+      "atk_combo_spacing_known",
+      "atk_supported_entry",
+      "atk_entry_support_casters",
+      "def_combo_casters",
+      "def_combo_functions",
+      "def_combo_spacing",
+      "def_combo_spacing_known",
+      "def_answer_casters",
+      "def_answer_functions",
+      "atk_support_casts_live",
+      "def_support_casts_live"
+    ],
+    "structure": {
+      "id": "utility-structure-prototype-v1",
+      "status": "untrained_experiment_not_approved",
+      "revises": "entry-support-prototype-v0",
+      "bin_seconds": 1,
+      "owner_decisions": "docs/gameplay-annotations.json design_decisions, 2026-11-23",
+      "evaluation": "Peak within each second, taken at the bin start and at each cast time in the bin",
+      "span_seconds": {
+        "vision_block": 5.0,
+        "damage": 5.0,
+        "vision_impair": 3.0,
+        "recon": 3.0
+      },
+      "answer_lookback_seconds": 10.0,
+      "position_max_age_seconds": 2.0,
+      "spacing_divisor_feed_units": 10000.0,
+      "support_functions": [
+        "vision_block",
+        "damage",
+        "vision_impair",
+        "recon"
+      ],
+      "entry_abilities": [
+        "tailwind",
+        "updraft"
+      ],
+      "entry_time": "Cast event time. For Tailwind the owner reports this is the activation, not the dash",
+      "excluded_setup_function": "detection_deployable",
+      "feature_names": [
+        "atk_combo_casters",
+        "atk_combo_functions",
+        "atk_combo_spacing",
+        "atk_combo_spacing_known",
+        "atk_supported_entry",
+        "atk_entry_support_casters",
+        "def_combo_casters",
+        "def_combo_functions",
+        "def_combo_spacing",
+        "def_combo_spacing_known",
+        "def_answer_casters",
+        "def_answer_functions"
+      ],
+      "families": {
+        "structure": [
+          "atk_combo_casters",
+          "atk_combo_functions",
+          "atk_supported_entry",
+          "atk_entry_support_casters",
+          "def_combo_casters",
+          "def_combo_functions"
+        ],
+        "caster_spacing_proxy": [
+          "atk_combo_spacing",
+          "atk_combo_spacing_known",
+          "def_combo_spacing",
+          "def_combo_spacing_known"
+        ],
+        "answer_after_opposing_block": [
+          "def_answer_casters",
+          "def_answer_functions"
+        ]
+      },
+      "identity_inputs": false,
+      "absolute_coordinates": false,
+      "side_asymmetry": "Supported entry is attacker-only and pre-plant; answers are defender-only",
+      "semantics": "Recorded casts by distinct players; no verified effect, landing spot or entry"
+    },
+    "placebo": {
+      "names": [
+        "atk_support_casts_live",
+        "def_support_casts_live"
+      ],
+      "definition": "Peak count of live support casts per side within the second, divided by 5. Same spans as the structure channels, without who cast or which function."
+    },
+    "arms": {
+      "base": [],
+      "structure": [
+        "atk_combo_casters",
+        "atk_combo_functions",
+        "atk_supported_entry",
+        "atk_entry_support_casters",
+        "def_combo_casters",
+        "def_combo_functions"
+      ],
+      "placebo": [
+        "atk_support_casts_live",
+        "def_support_casts_live"
+      ],
+      "structure_answer": [
+        "atk_combo_casters",
+        "atk_combo_functions",
+        "atk_supported_entry",
+        "atk_entry_support_casters",
+        "def_combo_casters",
+        "def_combo_functions",
+        "def_answer_casters",
+        "def_answer_functions"
+      ],
+      "structure_spacing": [
+        "atk_combo_casters",
+        "atk_combo_functions",
+        "atk_supported_entry",
+        "atk_entry_support_casters",
+        "def_combo_casters",
+        "def_combo_functions",
+        "atk_combo_spacing",
+        "atk_combo_spacing_known",
+        "def_combo_spacing",
+        "def_combo_spacing_known"
+      ]
+    },
+    "alignment": "Row t of a window pairs with v2 row t: the one-second bin ending at t+1"
+  },
+  "extension_sha256": "7399b9a71334d82bc75ee645af0446b4d79f66864de7b784441c8c4fed20eb83",
+  "base_feature_set": "no_spatial",
+  "sources": [
+    {
+      "file": "events_2629390_grid.jsonl",
+      "sha256": "5a670390d2dc53bace9e64ef9dbe55e71a06fc6acfca34a4a07aa08182e8ef3e"
+    }
+  ],
+  "counts": {
+    "started_rounds": 45,
+    "series_invalidations": 1,
+    "correction_events": 13,
+    "unfinished_rounds": 1,
+    "completed_rounds": 44,
+    "rounds_excluded_for_corrections": 0,
+    "games_with_corrections_or_invalidation": 1,
+    "eligible_rounds": 44,
+    "windows": 555,
+    "series": 1,
+    "maps": 2
+  },
+  "status": "extension support audited; no models fitted",
+  "validation_map": {
+    "ascent": {
+      "training_windows": 286,
+      "validation_windows": 269,
+      "validation_windows_living_attacker": 263,
+      "validation_rounds": 21,
+      "retained_base_channels": 56,
+      "arms": {
+        "base": {
+          "retained_extension_channels": 0,
+          "kept_channels": [],
+          "constant_training_channels_changed": [],
+          "handling": "always masked; never expand support using evaluation data"
+        },
+        "structure": {
+          "retained_extension_channels": 6,
+          "kept_channels": [
+            "atk_combo_casters",
+            "atk_combo_functions",
+            "atk_supported_entry",
+            "atk_entry_support_casters",
+            "def_combo_casters",
+            "def_combo_functions"
+          ],
+          "constant_training_channels_changed": [],
+          "handling": "always masked; never expand support using evaluation data"
+        },
+        "placebo": {
+          "retained_extension_channels": 2,
+          "kept_channels": [
+            "atk_support_casts_live",
+            "def_support_casts_live"
+          ],
+          "constant_training_channels_changed": [],
+          "handling": "always masked; never expand support using evaluation data"
+        },
+        "structure_answer": {
+          "retained_extension_channels": 8,
+          "kept_channels": [
+            "atk_combo_casters",
+            "atk_combo_functions",
+            "atk_supported_entry",
+            "atk_entry_support_casters",
+            "def_combo_casters",
+            "def_combo_functions",
+            "def_answer_casters",
+            "def_answer_functions"
+          ],
+          "constant_training_channels_changed": [],
+          "handling": "always masked; never expand support using evaluation data"
+        },
+        "structure_spacing": {
+          "retained_extension_channels": 10,
+          "kept_channels": [
+            "atk_combo_casters",
+            "atk_combo_functions",
+            "atk_combo_spacing",
+            "atk_combo_spacing_known",
+            "atk_supported_entry",
+            "atk_entry_support_casters",
+            "def_combo_casters",
+            "def_combo_functions",
+            "def_combo_spacing",
+            "def_combo_spacing_known"
+          ],
+          "constant_training_channels_changed": [],
+          "handling": "always masked; never expand support using evaluation data"
+        }
+      }
+    },
+    "breeze": {
+      "training_windows": 269,
+      "validation_windows": 286,
+      "validation_windows_living_attacker": 276,
+      "validation_rounds": 23,
+      "retained_base_channels": 59,
+      "arms": {
+        "base": {
+          "retained_extension_channels": 0,
+          "kept_channels": [],
+          "constant_training_channels_changed": [],
+          "handling": "always masked; never expand support using evaluation data"
+        },
+        "structure": {
+          "retained_extension_channels": 6,
+          "kept_channels": [
+            "atk_combo_casters",
+            "atk_combo_functions",
+            "atk_supported_entry",
+            "atk_entry_support_casters",
+            "def_combo_casters",
+            "def_combo_functions"
+          ],
+          "constant_training_channels_changed": [],
+          "handling": "always masked; never expand support using evaluation data"
+        },
+        "placebo": {
+          "retained_extension_channels": 2,
+          "kept_channels": [
+            "atk_support_casts_live",
+            "def_support_casts_live"
+          ],
+          "constant_training_channels_changed": [],
+          "handling": "always masked; never expand support using evaluation data"
+        },
+        "structure_answer": {
+          "retained_extension_channels": 8,
+          "kept_channels": [
+            "atk_combo_casters",
+            "atk_combo_functions",
+            "atk_supported_entry",
+            "atk_entry_support_casters",
+            "def_combo_casters",
+            "def_combo_functions",
+            "def_answer_casters",
+            "def_answer_functions"
+          ],
+          "constant_training_channels_changed": [],
+          "handling": "always masked; never expand support using evaluation data"
+        },
+        "structure_spacing": {
+          "retained_extension_channels": 10,
+          "kept_channels": [
+            "atk_combo_casters",
+            "atk_combo_functions",
+            "atk_combo_spacing",
+            "atk_combo_spacing_known",
+            "atk_supported_entry",
+            "atk_entry_support_casters",
+            "def_combo_casters",
+            "def_combo_functions",
+            "def_combo_spacing",
+            "def_combo_spacing_known"
+          ],
+          "constant_training_channels_changed": [],
+          "handling": "always masked; never expand support using evaluation data"
+        }
+      }
+    }
+  }
+}

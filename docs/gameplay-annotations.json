@@ -1,20 +1,161 @@
 {
-  "schema_id": "owner-gameplay-annotations-v1",
-  "source": "Project owner's response in this project chat, October 31, 2026",
+  "schema_id": "owner-gameplay-annotations-v2",
+  "source": "Project owner's responses in this project chat on October 31, 2026 and November 23, 2026",
+  "review_sessions": [
+    {
+      "id": "chat-2026-10-31",
+      "date": "2026-10-31",
+      "form": "Chat responses",
+      "source": "Project owner's response in this project chat, October 31, 2026"
+    },
+    {
+      "id": "worksheet-2026-11-23",
+      "date": "2026-11-23",
+      "form": "Seven-case worksheet \"FURIA vs NRG \u2014 utility and movement review\", hand-labeled by the owner",
+      "source": "Project owner's hand-labeled worksheet, pasted into this project chat on November 23, 2026",
+      "hide_probabilities_kept_checked": true,
+      "owner_note": "note: I was looking through the visualizer as well as the recorded vods of the match on YouTube to make sure I had a perfect understanding of what was going on through the round.",
+      "evidence_consulted": [
+        "Local visualizer with probabilities hidden",
+        "Recorded YouTube VODs of the match"
+      ],
+      "blinding": "Model probabilities were hidden. A broadcast VOD shows how each round ended, so these are not outcome-blind labels.",
+      "scope": "Seven windows from one series. Reads that rely on the VOD describe things this export does not record, and no model input reproduces them."
+    },
+    {
+      "id": "decisions-2026-11-23",
+      "date": "2026-11-23",
+      "form": "Option dialogs in the project chat, answered one decision at a time",
+      "source": "Project owner's selections in this project chat, November 23, 2026",
+      "scope": "The assistant wrote the questions, the option wording and the recommendations. The selections are the owner's. Free-text replies are quoted verbatim."
+    }
+  ],
   "information_priority": {
-    "order": ["confirmed enemy sightings", "teammate death and its location"],
+    "order": [
+      "confirmed enemy sightings",
+      "teammate death and its location"
+    ],
     "owner_quote": "visible enemy positions would be the main one, followed by a teammate's death and it's location",
     "owner_context": "The owner expects a dying player to often learn about additional nearby opponents through vision, the death camera, and audio as those opponents help fight.",
     "scope": "Domain guidance, not proof of which enemies were seen or heard in this export. A death alone does not label an exact enemy count or site occupancy."
   },
+  "design_guidance": [
+    {
+      "id": "attack-execute-versus-defensive-hold",
+      "session": "worksheet-2026-11-23",
+      "case_id": 3,
+      "owner_quote": "in this case, especially on defense, you should not be thinking about strictly how the duelist\u2019s space revolves around the team\u2019s utility, that is more suited for attacking when you need to execute a site.",
+      "scope": "Stated about one defensive round; treated as a design principle pending more cases."
+    },
+    {
+      "id": "execute-tempo",
+      "session": "worksheet-2026-11-23",
+      "case_id": 2,
+      "owner_quote": "using the flash/drive to clear b main, then within 3 seconds using the dart and paranoia combination to overwhelm site as mwzera dashes in on their execute is a perfect example of util synergy on a site execute, while keeping the time between initially showing their positions (with the flash/drive to clear the first b main line) and the main part of the site execute (paranoia and recon bolt) down to just 3 seconds not giving the defenders enough time to rotate (there already were a large number of NRG players B, they had a good read but that\u2019s not Furia\u2019s fault)",
+      "scope": "One execute. Three seconds is the owner's description of this sequence."
+    },
+    {
+      "id": "distance-between-utility",
+      "session": "worksheet-2026-11-23",
+      "case_id": 3,
+      "owner_quote": "I dont know if the event stream covers where the util was thrown or in what direction, but try to also account for the distance between pieces of util and how that affects how a team\u2019s space control ends up. ex: in this example, marved smoked tree, then havoc used his zero point and flash drive to fight out of that exact smoke and reclear tree, forcing the attackers back out of tree and back into mid, and giving furia information on where the attackers are and being forced to go. this was a significant example of trading utility for space and information in a midround setting.",
+      "feed_answer": "The event stream does not record where utility was thrown, its direction, or where it landed. A cast event carries the caster's own position.",
+      "scope": "Owner request. Only the spacing between casters is measurable in this export."
+    },
+    {
+      "id": "utility-for-space-and-information",
+      "session": "worksheet-2026-11-23",
+      "case_id": 3,
+      "owner_quote": "this was a significant example of trading utility for space and information in a midround setting.",
+      "scope": "Owner assessment of one sequence."
+    }
+  ],
   "annotations": [
     {
-      "round": ["2629390", "cd0ede88-b842-4de2-ae9f-bb8776a99437", "round-13"],
+      "case_id": 1,
+      "sessions": [
+        "worksheet-2026-11-23"
+      ],
+      "round": [
+        "2629390",
+        "719f343f-e8d5-44de-98c5-e66f04d0f5ab",
+        "round-1"
+      ],
+      "at_seconds": 20,
+      "status": "owner_reviewed",
+      "source_sha256": "5a670390d2dc53bace9e64ef9dbe55e71a06fc6acfca34a4a07aa08182e8ef3e",
+      "worksheet_prompt": "Breeze R1 at 20s \u2014 did the wall support mwzera?",
+      "owner_responses": [
+        {
+          "prompt": "Screen verdict",
+          "owner_quote": "that wall is the standard smokes you cast when hitting b on breeze. it enables mwzera\u2019s entry to site, using tailwind to make space and break the b main choke."
+        },
+        {
+          "prompt": "What I saw",
+          "owner_quote": "he entered site and the viper wall was the attacker\u2019s smokes for the execute."
+        }
+      ],
+      "owner_quote": "that wall is the standard smokes you cast when hitting b on breeze. it enables mwzera\u2019s entry to site, using tailwind to make space and break the b main choke.",
+      "interpretation": "Toxic Screen is the standard execute smoke for a Breeze B hit and enabled mwzera's entry; his own Tailwind made space through the B main choke.",
+      "scope": "Owner assessment for this case, formed with the visualizer and the broadcast VOD. The export verifies cast times, casters and reported positions. It does not record where utility landed, what it blocked or revealed, where a player was facing, or any causal effect on the round.",
+      "window_assessment": {
+        "useful_support": true,
+        "reason": "that wall is the standard smokes you cast when hitting b on breeze. it enables mwzera\u2019s entry to site, using tailwind to make space and break the b main choke."
+      },
+      "feed_check": {
+        "source": "Assistant check of the recorded events on November 23, 2026; not an owner statement",
+        "findings": [
+          "Recorded: mwzera Tailwind 9.011s, liazzi Toxic Screen 9.216s, mwzera Cloudburst 9.935s, havoc Zero/point 10.285s, mwzera Updraft 10.585s, kon4n Shock Bolt 10.887s. mwzera completes the plant at 16.653s.",
+          "The export does not record where the wall was placed or what it blocked."
+        ]
+      },
+      "favored_side": null,
+      "missing_evidence": null,
+      "focus_player_ids": [
+        "57"
+      ],
+      "event_assessments": [
+        {
+          "event_id": "8461cf76-a385-4ae9-afe4-7c54ba05b60a",
+          "ability": "toxic-screen",
+          "caster_id": "45",
+          "caster": "liazzi",
+          "at_cast_seconds": 9.216,
+          "relation": "ally",
+          "owner_role": "Standard execute smokes for a B hit",
+          "useful_entry_support": true,
+          "owner_quote": "that wall is the standard smokes you cast when hitting b on breeze. it enables mwzera\u2019s entry to site, using tailwind to make space and break the b main choke.",
+          "evidence_source": "Project owner's hand-labeled worksheet, pasted into this project chat on November 23, 2026",
+          "supported_player_id": "57",
+          "supported_player": "mwzera"
+        },
+        {
+          "event_id": "f31273b8-e0a1-4f25-9aa6-2b4712f012f7",
+          "ability": "tailwind",
+          "caster_id": "57",
+          "caster": "mwzera",
+          "at_cast_seconds": 9.011,
+          "relation": "self",
+          "owner_role": "The entry player's own tool: make space and break the B main choke",
+          "useful_entry_support": null,
+          "owner_quote": "that wall is the standard smokes you cast when hitting b on breeze. it enables mwzera\u2019s entry to site, using tailwind to make space and break the b main choke.",
+          "evidence_source": "Project owner's hand-labeled worksheet, pasted into this project chat on November 23, 2026"
+        }
+      ]
+    },
+    {
+      "round": [
+        "2629390",
+        "cd0ede88-b842-4de2-ae9f-bb8776a99437",
+        "round-13"
+      ],
       "at_seconds": 25,
-      "status": "relationship_identified; nanoswarm support assessed by owner; remaining tactical assessment incomplete",
+      "status": "owner_reviewed: entry relationship, Nanoswarm and each listed cast assessed",
       "source_sha256": "5a670390d2dc53bace9e64ef9dbe55e71a06fc6acfca34a4a07aa08182e8ef3e",
       "owner_quote": "here the main relationship would be the entry, mwzera, entrying outside of b main, off of this util",
-      "focus_player_ids": ["57"],
+      "focus_player_ids": [
+        "57"
+      ],
       "interpretation": "Entry movement out of B main in coordination with allied utility.",
       "scope": "Owner interpretation for this case; not a confirmed utility effect, model attribution, or general rule.",
       "event_assessments": [
@@ -29,11 +170,543 @@
           "reported_effect_area": "CT",
           "owner_quote": "Yes, that nanoswarm was a lineup landing ct to help mwzera entry.",
           "evidence_source": "Project owner's assessment in this chat, October 31, 2026",
-          "scope": "This cast supported this entry according to the owner. The export verifies the cast, not its landing location, effect, damage, or causal impact on round outcome."
+          "scope": "This cast supported this entry according to the owner. The export verifies the cast, not its landing location, effect, damage, or causal impact on round outcome.",
+          "at_cast_seconds": 12.27,
+          "relation": "ally",
+          "owner_role": "Lineup landing CT to help the entry"
+        },
+        {
+          "event_id": "1795cde2-5394-42a3-92bf-d71ce01133cb",
+          "ability": "dark-cover",
+          "caster_id": "45",
+          "caster": "liazzi",
+          "at_cast_seconds": 13.6,
+          "relation": "ally",
+          "owner_role": "Spawn smoke blocking the CT sightline during the execute",
+          "useful_entry_support": true,
+          "owner_quote": "spawn smoke blocking the ct sightline during the execute",
+          "evidence_source": "Project owner's hand-labeled worksheet, pasted into this project chat on November 23, 2026",
+          "supported_player_id": "57",
+          "supported_player": "mwzera",
+          "reported_effect_area": "CT sightline",
+          "basis": "Entry support recorded from the owner's later sentence: CT smoked off by the initial Dark Cover limits the angles mwzera has to consider on entering."
+        },
+        {
+          "event_id": "a5c8955b-4858-4994-89ff-1545eee299c8",
+          "ability": "flash-drive",
+          "caster_id": "3314",
+          "caster": "havoc",
+          "at_cast_seconds": 13.961,
+          "relation": "ally",
+          "owner_role": "B main control before the site execute",
+          "useful_entry_support": null,
+          "owner_quote": "that flash was for the b main line, to take b main control before starting the site execute",
+          "evidence_source": "Project owner's hand-labeled worksheet, pasted into this project chat on November 23, 2026",
+          "supported_player_id": "57",
+          "supported_player": "mwzera",
+          "reported_effect_area": "B main line",
+          "basis": "The owner placed this cast in the preceding map-control phase and named it as the first step of the execute's utility sequence. No yes/no entry-support verdict was given."
+        },
+        {
+          "event_id": "484bf172-bdfa-4b91-b12c-64945e357b30",
+          "ability": "paranoia",
+          "caster_id": "45",
+          "caster": "liazzi",
+          "at_cast_seconds": 16.325,
+          "relation": "ally",
+          "owner_role": "Blinds lane and stairs as mwzera enters; the owner's most enabling cast",
+          "useful_entry_support": true,
+          "owner_quote": "that blinds lane and stairs while mwzera entries. probably the most enabling util for mwzera\u2019s entry on this site execute.",
+          "evidence_source": "Project owner's hand-labeled worksheet, pasted into this project chat on November 23, 2026",
+          "supported_player_id": "57",
+          "supported_player": "mwzera",
+          "reported_effect_area": "lane and stairs"
+        },
+        {
+          "event_id": "bf815082-4c34-4127-8e19-cb3ddf82f8e4",
+          "ability": "recon-bolt",
+          "caster_id": "19",
+          "caster": "kon4n",
+          "at_cast_seconds": 16.577,
+          "relation": "ally",
+          "owner_role": "Clears site and forces a defender to reveal himself by shooting the dart",
+          "useful_entry_support": true,
+          "owner_quote": "that dart clears site, and forces victor on site to shoot that dart to avoid getting him and demon1 scanned, which forces him to give away his position. at this point, the paranoia covers lane and stairs and the dart covers site, at around the same time, and ct has been smoked off by the initial dark cover, so the angles that mwzera has to be concerned with on entering are limited.",
+          "evidence_source": "Project owner's hand-labeled worksheet, pasted into this project chat on November 23, 2026",
+          "supported_player_id": "57",
+          "supported_player": "mwzera",
+          "reported_effect_area": "site"
         }
       ],
       "favored_side": null,
+      "missing_evidence": null,
+      "case_id": 2,
+      "sessions": [
+        "chat-2026-10-31",
+        "worksheet-2026-11-23"
+      ],
+      "worksheet_prompt": "Ascent R13 at 25s \u2014 which utility helped the B-main entry?",
+      "owner_responses": [
+        {
+          "prompt": "liazzi\u2019s Dark Cover, 13.600s",
+          "owner_quote": "spawn smoke blocking the ct sightline during the execute"
+        },
+        {
+          "prompt": "havoc\u2019s FLASH/drive, 13.961s",
+          "owner_quote": "that flash was for the b main line, to take b main control before starting the site execute"
+        },
+        {
+          "prompt": "liazzi\u2019s Paranoia, 16.325s",
+          "owner_quote": "that blinds lane and stairs while mwzera entries. probably the most enabling util for mwzera\u2019s entry on this site execute."
+        },
+        {
+          "prompt": "kon4n\u2019s Recon Bolt, 16.577s",
+          "owner_quote": "that dart clears site, and forces victor on site to shoot that dart to avoid getting him and demon1 scanned, which forces him to give away his position. at this point, the paranoia covers lane and stairs and the dart covers site, at around the same time, and ct has been smoked off by the initial dark cover, so the angles that mwzera has to be concerned with on entering are limited."
+        },
+        {
+          "prompt": "Which timing or placement mattered most for mwzera?",
+          "owner_quote": "using the flash/drive to clear b main, then within 3 seconds using the dart and paranoia combination to overwhelm site as mwzera dashes in on their execute is a perfect example of util synergy on a site execute, while keeping the time between initially showing their positions (with the flash/drive to clear the first b main line) and the main part of the site execute (paranoia and recon bolt) down to just 3 seconds not giving the defenders enough time to rotate (there already were a large number of NRG players B, they had a good read but that\u2019s not Furia\u2019s fault)"
+        }
+      ],
+      "window_assessment": {
+        "useful_support": true,
+        "reason": "using the flash/drive to clear b main, then within 3 seconds using the dart and paranoia combination to overwhelm site as mwzera dashes in on their execute is a perfect example of util synergy on a site execute, while keeping the time between initially showing their positions (with the flash/drive to clear the first b main line) and the main part of the site execute (paranoia and recon bolt) down to just 3 seconds not giving the defenders enough time to rotate (there already were a large number of NRG players B, they had a good read but that\u2019s not Furia\u2019s fault)"
+      },
+      "sequence_assessment": {
+        "owner_quote": "using the flash/drive to clear b main, then within 3 seconds using the dart and paranoia combination to overwhelm site as mwzera dashes in on their execute is a perfect example of util synergy on a site execute, while keeping the time between initially showing their positions (with the flash/drive to clear the first b main line) and the main part of the site execute (paranoia and recon bolt) down to just 3 seconds not giving the defenders enough time to rotate (there already were a large number of NRG players B, they had a good read but that\u2019s not Furia\u2019s fault)",
+        "phases": [
+          {
+            "owner_phase": "Clear B main before the site execute",
+            "event_ids": [
+              "a5c8955b-4858-4994-89ff-1545eee299c8"
+            ]
+          },
+          {
+            "owner_phase": "Main part of the site execute as mwzera dashes in",
+            "event_ids": [
+              "484bf172-bdfa-4b91-b12c-64945e357b30",
+              "bf815082-4c34-4127-8e19-cb3ddf82f8e4"
+            ]
+          }
+        ],
+        "owner_reported_gap_seconds": 3,
+        "recorded_gap_seconds": {
+          "flash_drive_to_paranoia": 2.364,
+          "flash_drive_to_recon_bolt": 2.616
+        },
+        "defender_context": {
+          "owner_quote": "there already were a large number of NRG players B, they had a good read but that\u2019s not Furia\u2019s fault",
+          "scope": "Owner observation. No defender-count-by-site measure exists in this project."
+        },
+        "scope": "One execute. The three-second tempo is the owner's description of this sequence, not a general rule."
+      },
+      "feed_check": {
+        "source": "Assistant check of the recorded events on November 23, 2026; not an owner statement",
+        "findings": [
+          "Recorded attacker casts: Khalil Nanoswarm 12.270s, liazzi Dark Cover 13.600s, havoc Flash/drive 13.961s, mwzera Tailwind 15.116s, liazzi Paranoia 16.325s, kon4n Recon Bolt 16.577s, mwzera Cloudburst 16.838s.",
+          "Paranoia and Recon Bolt follow the Flash/drive by 2.364s and 2.616s, consistent with the owner's \"within 3 seconds\".",
+          "The export does not record the dart being shot, a blind landing, or any sightline."
+        ]
+      },
+      "followups": [
+        {
+          "session": "decisions-2026-11-23",
+          "question": "In Ascent R13 the feed records mwzera's Tailwind at 15.116s, but his largest position jump is between 20.667s and 21.349s. From the VOD, what does the 15.116s event mark?",
+          "owner_selection": "The activation",
+          "option_text": "He primed Tailwind at about 15s and dashed later. Support timing measured from the event would then be early by however long he held it."
+        }
+      ]
+    },
+    {
+      "case_id": 3,
+      "sessions": [
+        "worksheet-2026-11-23"
+      ],
+      "round": [
+        "2629390",
+        "cd0ede88-b842-4de2-ae9f-bb8776a99437",
+        "round-1"
+      ],
+      "at_seconds": 20,
+      "status": "owner_reviewed",
+      "source_sha256": "5a670390d2dc53bace9e64ef9dbe55e71a06fc6acfca34a4a07aa08182e8ef3e",
+      "worksheet_prompt": "Ascent R1 at 20s \u2014 what was the defensive utility supporting?",
+      "owner_responses": [
+        {
+          "prompt": "What was mwzera doing?",
+          "owner_quote": "mwzera is tucked in heaven, getting ready to swing the attackers coming out of tree on a timing while not being exposed to main"
+        },
+        {
+          "prompt": "Which allied cast, if either, helped that move?",
+          "owner_quote": "none, let me explain: when marved smoked off havoc and kon4n in tree, liazzi used his paranoia, combined with havoc using zero point on tree and then flash driving out of that smoke to refight for the tree space while mwzera switched to holding main, since his team was fighting for tree. in this case, especially on defense, you should not be thinking about strictly how the duelist\u2019s space revolves around the team\u2019s utility, that is more suited for attacking when you need to execute a site. here, it\u2019s more important that liazzi\u2019s paranoia combined with havoc\u2019s zero point then flash drive was used to reclaim the tree space after marved\u2019s smoke."
+        },
+        {
+          "prompt": "my feedback",
+          "owner_quote": "I dont know if the event stream covers where the util was thrown or in what direction, but try to also account for the distance between pieces of util and how that affects how a team\u2019s space control ends up. ex: in this example, marved smoked tree, then havoc used his zero point and flash drive to fight out of that exact smoke and reclear tree, forcing the attackers back out of tree and back into mid, and giving furia information on where the attackers are and being forced to go. this was a significant example of trading utility for space and information in a midround setting."
+        }
+      ],
+      "owner_quote": "mwzera is tucked in heaven, getting ready to swing the attackers coming out of tree on a timing while not being exposed to main",
+      "interpretation": "Neither allied cast helped mwzera's move. He held heaven and then main while liazzi and havoc used utility to retake tree after Marved's smoke.",
+      "scope": "Owner assessment for this case, formed with the visualizer and the broadcast VOD. The export verifies cast times, casters and reported positions. It does not record where utility landed, what it blocked or revealed, where a player was facing, or any causal effect on the round.",
+      "window_assessment": {
+        "useful_support": false,
+        "reason": "none, let me explain: when marved smoked off havoc and kon4n in tree, liazzi used his paranoia, combined with havoc using zero point on tree and then flash driving out of that smoke to refight for the tree space while mwzera switched to holding main, since his team was fighting for tree. in this case, especially on defense, you should not be thinking about strictly how the duelist\u2019s space revolves around the team\u2019s utility, that is more suited for attacking when you need to execute a site. here, it\u2019s more important that liazzi\u2019s paranoia combined with havoc\u2019s zero point then flash drive was used to reclaim the tree space after marved\u2019s smoke."
+      },
+      "feed_check": {
+        "source": "Assistant check of the recorded events on November 23, 2026; not an owner statement",
+        "findings": [
+          "Recorded: Marved Dark Cover 11.064s, then defender casts liazzi Paranoia 14.687s, mwzera Tailwind 14.964s, havoc Zero/point 15.259s, kon4n Shock Bolt 16.219s, havoc Flash/drive 17.050s, kon4n Shock Bolt 19.307s. The owner did not mention kon4n's Shock Bolts.",
+          "mwzera's reported position changes by about 117 feed units between 15.259s and 16.219s. Nine of the ten players have a nonzero change over that pair, so prototype v0 counted nearly everyone as moving.",
+          "Prototype v0 linked Paranoia and Zero/point to that 117-unit change by timing alone. The owner's verdict makes this a false link.",
+          "Cast events carry the caster's position only. Marved's caster position for the 11.064s smoke and havoc's for Zero/point are about 0.25 of the minimap apart, so the feed cannot show that havoc fought out of that smoke."
+        ]
+      },
+      "favored_side": null,
+      "missing_evidence": null,
+      "focus_player_ids": [
+        "57"
+      ],
+      "event_assessments": [
+        {
+          "event_id": "2ebb7ffd-c7dc-4ec7-9bb7-da4b9db92e54",
+          "ability": "paranoia",
+          "caster_id": "45",
+          "caster": "liazzi",
+          "at_cast_seconds": 14.687,
+          "relation": "ally",
+          "owner_role": "Reclaim the tree space after Marved's smoke",
+          "useful_entry_support": false,
+          "owner_quote": "none, let me explain: when marved smoked off havoc and kon4n in tree, liazzi used his paranoia, combined with havoc using zero point on tree and then flash driving out of that smoke to refight for the tree space while mwzera switched to holding main, since his team was fighting for tree. in this case, especially on defense, you should not be thinking about strictly how the duelist\u2019s space revolves around the team\u2019s utility, that is more suited for attacking when you need to execute a site. here, it\u2019s more important that liazzi\u2019s paranoia combined with havoc\u2019s zero point then flash drive was used to reclaim the tree space after marved\u2019s smoke.",
+          "evidence_source": "Project owner's hand-labeled worksheet, pasted into this project chat on November 23, 2026",
+          "supported_player_id": "57",
+          "supported_player": "mwzera"
+        },
+        {
+          "event_id": "6e4617b6-dfda-4c0e-bd77-63fde4cb9d2c",
+          "ability": "zero-point",
+          "caster_id": "3314",
+          "caster": "havoc",
+          "at_cast_seconds": 15.259,
+          "relation": "ally",
+          "owner_role": "On tree, to reclaim that space",
+          "useful_entry_support": false,
+          "owner_quote": "none, let me explain: when marved smoked off havoc and kon4n in tree, liazzi used his paranoia, combined with havoc using zero point on tree and then flash driving out of that smoke to refight for the tree space while mwzera switched to holding main, since his team was fighting for tree. in this case, especially on defense, you should not be thinking about strictly how the duelist\u2019s space revolves around the team\u2019s utility, that is more suited for attacking when you need to execute a site. here, it\u2019s more important that liazzi\u2019s paranoia combined with havoc\u2019s zero point then flash drive was used to reclaim the tree space after marved\u2019s smoke.",
+          "evidence_source": "Project owner's hand-labeled worksheet, pasted into this project chat on November 23, 2026",
+          "supported_player_id": "57",
+          "supported_player": "mwzera"
+        },
+        {
+          "event_id": "945c8d0e-55b3-4d38-85d6-1a6dfa0d895a",
+          "ability": "flash-drive",
+          "caster_id": "3314",
+          "caster": "havoc",
+          "at_cast_seconds": 17.05,
+          "relation": "ally",
+          "owner_role": "Flash out of the tree smoke to re-fight for tree",
+          "useful_entry_support": null,
+          "owner_quote": "none, let me explain: when marved smoked off havoc and kon4n in tree, liazzi used his paranoia, combined with havoc using zero point on tree and then flash driving out of that smoke to refight for the tree space while mwzera switched to holding main, since his team was fighting for tree. in this case, especially on defense, you should not be thinking about strictly how the duelist\u2019s space revolves around the team\u2019s utility, that is more suited for attacking when you need to execute a site. here, it\u2019s more important that liazzi\u2019s paranoia combined with havoc\u2019s zero point then flash drive was used to reclaim the tree space after marved\u2019s smoke.",
+          "evidence_source": "Project owner's hand-labeled worksheet, pasted into this project chat on November 23, 2026",
+          "supported_player_id": "57",
+          "supported_player": "mwzera",
+          "basis": "Not one of the two casts the worksheet asked about; role recorded from the owner's explanation."
+        },
+        {
+          "event_id": "2a5e72cd-d106-4e01-ae81-1d572abc54c7",
+          "ability": "dark-cover",
+          "caster_id": "292",
+          "caster": "Marved",
+          "at_cast_seconds": 11.064,
+          "relation": "opponent",
+          "owner_role": "The tree smoke the defenders answered",
+          "useful_entry_support": null,
+          "owner_quote": "none, let me explain: when marved smoked off havoc and kon4n in tree, liazzi used his paranoia, combined with havoc using zero point on tree and then flash driving out of that smoke to refight for the tree space while mwzera switched to holding main, since his team was fighting for tree. in this case, especially on defense, you should not be thinking about strictly how the duelist\u2019s space revolves around the team\u2019s utility, that is more suited for attacking when you need to execute a site. here, it\u2019s more important that liazzi\u2019s paranoia combined with havoc\u2019s zero point then flash drive was used to reclaim the tree space after marved\u2019s smoke.",
+          "owner_selection": "The 11.064s smoke",
+          "evidence_source": "Project owner's selections in this project chat, November 23, 2026",
+          "basis": "Asked which recorded Marved Dark Cover (0.432s or 11.064s) was the tree smoke, the owner selected this one."
+        }
+      ],
+      "followups": [
+        {
+          "session": "decisions-2026-11-23",
+          "question": "Which recorded Marved Dark Cover is the tree smoke?",
+          "owner_selection": "The 11.064s smoke"
+        }
+      ]
+    },
+    {
+      "case_id": 4,
+      "sessions": [
+        "worksheet-2026-11-23"
+      ],
+      "round": [
+        "2629390",
+        "cd0ede88-b842-4de2-ae9f-bb8776a99437",
+        "round-1"
+      ],
+      "at_seconds": 90,
+      "status": "owner_reviewed",
+      "source_sha256": "5a670390d2dc53bace9e64ef9dbe55e71a06fc6acfca34a4a07aa08182e8ef3e",
+      "worksheet_prompt": "Ascent R1 at 90s \u2014 was kon4n moving off his own recon?",
+      "owner_responses": [
+        {
+          "prompt": "My read",
+          "owner_quote": "this dart was to clear hell on an A retake. After the dart scanned hell showing no enemies, he immediately turned to look main while his teammate looked for the fight on Ethan in main."
+        },
+        {
+          "prompt": "Cue for that read",
+          "owner_quote": "Idk if the event replay shows where utility lands, but yeah he cleared hell with that dart on a retake so he and Khalil could look for main and gen fights on the retake."
+        }
+      ],
+      "owner_quote": "this dart was to clear hell on an A retake. After the dart scanned hell showing no enemies, he immediately turned to look main while his teammate looked for the fight on Ethan in main.",
+      "interpretation": "kon4n's own dart cleared hell on an A retake; with nothing scanned he turned to main while Khalil took the main fight.",
+      "scope": "Owner assessment for this case, formed with the visualizer and the broadcast VOD. The export verifies cast times, casters and reported positions. It does not record where utility landed, what it blocked or revealed, where a player was facing, or any causal effect on the round.",
+      "window_assessment": {
+        "useful_support": null,
+        "acted_on_own_cast": true,
+        "reason": "this dart was to clear hell on an A retake. After the dart scanned hell showing no enemies, he immediately turned to look main while his teammate looked for the fight on Ethan in main."
+      },
+      "feed_check": {
+        "source": "Assistant check of the recorded events on November 23, 2026; not an owner statement",
+        "findings": [
+          "Recorded: Ethan plants at 64.435s. kon4n and Khalil are the two living defenders after 79.785s. kon4n Recon Bolt 82.226s. Ethan kills Khalil at 84.974s.",
+          "kon4n's reported position changes by about 259 feed units between 84.974s and 85.777s.",
+          "The export does not record the scan result, where the dart landed, or where kon4n was facing."
+        ]
+      },
+      "favored_side": null,
+      "missing_evidence": null,
+      "focus_player_ids": [
+        "19"
+      ],
+      "event_assessments": [
+        {
+          "event_id": "9c564643-2635-4482-8198-429648f92da6",
+          "ability": "recon-bolt",
+          "caster_id": "19",
+          "caster": "kon4n",
+          "at_cast_seconds": 82.226,
+          "relation": "self",
+          "owner_role": "Clear hell on an A retake",
+          "useful_entry_support": null,
+          "owner_quote": "this dart was to clear hell on an A retake. After the dart scanned hell showing no enemies, he immediately turned to look main while his teammate looked for the fight on Ethan in main.",
+          "evidence_source": "Project owner's hand-labeled worksheet, pasted into this project chat on November 23, 2026",
+          "reported_effect_area": "hell",
+          "reported_result": "Scanned hell showing no enemies"
+        }
+      ]
+    },
+    {
+      "case_id": 5,
+      "sessions": [
+        "worksheet-2026-11-23"
+      ],
+      "round": [
+        "2629390",
+        "719f343f-e8d5-44de-98c5-e66f04d0f5ab",
+        "round-4"
+      ],
+      "at_seconds": 80,
+      "status": "owner_reviewed",
+      "source_sha256": "5a670390d2dc53bace9e64ef9dbe55e71a06fc6acfca34a4a07aa08182e8ef3e",
+      "worksheet_prompt": "Breeze R4 at 80s \u2014 did the five-second rule miss support?",
+      "owner_responses": [
+        {
+          "prompt": "My read",
+          "owner_quote": "This movement seems to be him getting a kill on Victor then immediately walking around the A site pyramid to get the timing to kill Marved in the 2v1. This isn\u2019t really an example of movement for map control, just moving around the site in a 2v1 to swing Marved."
+        },
+        {
+          "prompt": "Follow-up on the 60.167\u201361.304s pair, November 23, 2026",
+          "owner_quote": "describe what i should be looking for on the visualizer here. im seeing from 60 seconds to 1:02, mwzera moves from in front of the right pyramid to the right side of the pyramid, is that it?"
+        }
+      ],
+      "owner_quote": "This movement seems to be him getting a kill on Victor then immediately walking around the A site pyramid to get the timing to kill Marved in the 2v1. This isn\u2019t really an example of movement for map control, just moving around the site in a 2v1 to swing Marved.",
+      "interpretation": "Not movement for map control: repositioning around the A site pyramid in a 2v1 to swing Marved after killing Victor. The owner recorded the earlier 60.167s to 61.304s move as post-plant repositioning too, and names no missed allied support.",
+      "scope": "Owner assessment for this case, formed with the visualizer and the broadcast VOD. The export verifies cast times, casters and reported positions. It does not record where utility landed, what it blocked or revealed, where a player was facing, or any causal effect on the round.",
+      "window_assessment": {
+        "useful_support": null,
+        "movement_for_map_control": false,
+        "reason": "This movement seems to be him getting a kill on Victor then immediately walking around the A site pyramid to get the timing to kill Marved in the 2v1. This isn\u2019t really an example of movement for map control, just moving around the site in a 2v1 to swing Marved."
+      },
+      "feed_check": {
+        "source": "Assistant check of the recorded events on November 23, 2026; not an owner statement",
+        "findings": [
+          "The worksheet's pair is 60.167s to 61.304s: from liazzi's kill on crashies to Victor's kill on liazzi (3v2 to 2v2).",
+          "mwzera's kill on Victor is recorded at 73.768s, leaving 2v1. His kill on Marved at 80.078s ends the round.",
+          "No event falls between 61.304s and 73.768s, or between 73.768s and 80.078s, so the feed has no position report for the walk the owner describes.",
+          "mwzera's reports at 60.167s and 61.304s are about 855 feed units apart, from just below the viewer's A marker to its right."
+        ]
+      },
+      "favored_side": null,
+      "missing_evidence": null,
+      "focus_player_ids": [
+        "57"
+      ],
+      "followups": [
+        {
+          "session": "decisions-2026-11-23",
+          "question": "The 60.167\u201361.304s move is mwzera going from in front of the A pyramid to its right side during the post-plant fight. How should I record that move?",
+          "owner_selection": "Post-plant repositioning",
+          "option_text": "Same as your read of the later movement: shifting around the pyramid while the fight plays out. Not movement for map control, and no allied utility was meant to support it."
+        }
+      ]
+    },
+    {
+      "case_id": 6,
+      "sessions": [
+        "worksheet-2026-11-23"
+      ],
+      "round": [
+        "2629390",
+        "cd0ede88-b842-4de2-ae9f-bb8776a99437",
+        "round-1"
+      ],
+      "at_seconds": 40,
+      "status": "owner_reviewed",
+      "source_sha256": "5a670390d2dc53bace9e64ef9dbe55e71a06fc6acfca34a4a07aa08182e8ef3e",
+      "worksheet_prompt": "Ascent R1 at 40s \u2014 what can we tell from repeated positions?",
+      "owner_responses": [
+        {
+          "prompt": "My read",
+          "owner_quote": "My read on this is that after being pushed out of tree by liazzi\u2019s paranoia and havoc\u2019s flash out of the tree smoke, NRG had to then reclear mid to fight for something. FURIA knew this would happen, as kon4n and havoc rotated out of tree to fight it with khalil and liazzi, leaving mwzera to anchor A to look for a late tree re-walk or an A main lurker."
+        }
+      ],
+      "owner_quote": "My read on this is that after being pushed out of tree by liazzi\u2019s paranoia and havoc\u2019s flash out of the tree smoke, NRG had to then reclear mid to fight for something. FURIA knew this would happen, as kon4n and havoc rotated out of tree to fight it with khalil and liazzi, leaving mwzera to anchor A to look for a late tree re-walk or an A main lurker.",
+      "interpretation": "After FURIA's utility pushed NRG out of tree, NRG had to re-clear mid; kon4n and havoc rotated out of tree to fight it with Khalil and liazzi while mwzera anchored A.",
+      "scope": "Owner assessment for this case, formed with the visualizer and the broadcast VOD. The export verifies cast times, casters and reported positions. It does not record where utility landed, what it blocked or revealed, where a player was facing, or any causal effect on the round.",
+      "window_assessment": {
+        "useful_support": null,
+        "reason": "My read on this is that after being pushed out of tree by liazzi\u2019s paranoia and havoc\u2019s flash out of the tree smoke, NRG had to then reclear mid to fight for something. FURIA knew this would happen, as kon4n and havoc rotated out of tree to fight it with khalil and liazzi, leaving mwzera to anchor A to look for a late tree re-walk or an A main lurker."
+      },
+      "feed_check": {
+        "source": "Assistant check of the recorded events on November 23, 2026; not an owner statement",
+        "findings": [
+          "No event falls between 19.307s and 31.682s, so the feed has no position report for 12.4s.",
+          "The eight unchanged pairs are the same players at two kill events 0.467s apart: havoc kills Demon1 at 31.682s and Marved kills havoc at 32.149s. They say nothing about movement.",
+          "Across the 12.4s gap the reports show net changes of about 2,703 feed units for kon4n and 3,661 for havoc, ending about 490 units apart. That is consistent with the rotation the owner describes, and the two-second rule discards it.",
+          "The owner's read answers the tactical question. It does not address the repeated coordinates."
+        ]
+      },
+      "favored_side": null,
       "missing_evidence": null
+    },
+    {
+      "case_id": 7,
+      "sessions": [
+        "worksheet-2026-11-23"
+      ],
+      "round": [
+        "2629390",
+        "719f343f-e8d5-44de-98c5-e66f04d0f5ab",
+        "round-5"
+      ],
+      "at_seconds": 55,
+      "status": "owner_reviewed",
+      "source_sha256": "5a670390d2dc53bace9e64ef9dbe55e71a06fc6acfca34a4a07aa08182e8ef3e",
+      "worksheet_prompt": "Breeze R5 at 55s \u2014 is there enough evidence to describe movement?",
+      "owner_responses": [
+        {
+          "prompt": "My read",
+          "owner_quote": "the round is already over here, they\u2019re just jumping/sitting around while marved defuses the spike."
+        }
+      ],
+      "owner_quote": "the round is already over here, they\u2019re just jumping/sitting around while marved defuses the spike.",
+      "interpretation": "The round is effectively over in this window; remaining movement has no tactical meaning.",
+      "scope": "Owner assessment for this case, formed with the visualizer and the broadcast VOD. The export verifies cast times, casters and reported positions. It does not record where utility landed, what it blocked or revealed, where a player was facing, or any causal effect on the round.",
+      "window_assessment": {
+        "useful_support": null,
+        "tactically_meaningful_movement": false,
+        "reason": "the round is already over here, they\u2019re just jumping/sitting around while marved defuses the spike."
+      },
+      "feed_check": {
+        "source": "Assistant check of the recorded events on November 23, 2026; not an owner statement",
+        "findings": [
+          "Recorded: plant 28.518s. The last attacker dies at 43.189s with four defenders alive. Marved begins the defuse at 48.658s and completes it at 55.670s.",
+          "The six unchanged pairs come from two events 0.012s apart (a kill at 36.232s and a cast at 36.244s).",
+          "The 45s, 50s and 55s endpoints of this round are eligible windows although no attacker is alive. Sixteen of the 555 eligible windows, in nine rounds, are in that state; all nine were defender wins."
+        ]
+      },
+      "favored_side": null,
+      "missing_evidence": null
+    }
+  ],
+  "design_decisions": [
+    {
+      "id": "support-span",
+      "session": "decisions-2026-11-23",
+      "question": "How long before an attacker's entry should a smoke or molly still count as supporting it? Flashes and recon stay at the 3 seconds described for Ascent R13.",
+      "owner_selection": "5 seconds (Recommended)",
+      "assistant_recommended_this_option": true,
+      "effect": "Vision-block and damage casts count for 5 seconds; vision-impair and recon casts for 3."
+    },
+    {
+      "id": "combination-functions",
+      "session": "decisions-2026-11-23",
+      "question": "Combination utility means smokes and walls, flashes and blinds, recon, and damage. Which changes do you want, if any?",
+      "owner_selection": "Keep the four as they are (Recommended)",
+      "assistant_recommended_this_option": true,
+      "effect": "Suppression and detain are not added. Sensors and traps stay excluded. Spycam still counts as recon."
+    },
+    {
+      "id": "entry-marker",
+      "session": "decisions-2026-11-23",
+      "question": "Which casts should mark an attacker's entry?",
+      "owner_selection": "Tailwind and Updraft",
+      "assistant_recommended_this_option": null,
+      "effect": "Only Tailwind and Updraft mark an entry. Shrouded Step and From the Shadows do not.",
+      "note": "No option was recommended. In this series one player per team casts these two abilities."
+    },
+    {
+      "id": "tailwind-event-time",
+      "session": "decisions-2026-11-23",
+      "question": "In Ascent R13 the feed records mwzera's Tailwind at 15.116s, but his largest position jump is between 20.667s and 21.349s. From the VOD, what does the 15.116s event mark?",
+      "owner_selection": "The activation",
+      "assistant_recommended_this_option": null,
+      "effect": "Entry timing is measured from the Tailwind activation. The dash time is not in the feed.",
+      "note": "No option was recommended. This is the owner's observation from the VOD of one round.",
+      "option_text": "He primed Tailwind at about 15s and dashed later. Support timing measured from the event would then be early by however long he held it."
+    },
+    {
+      "id": "retake-channel",
+      "session": "decisions-2026-11-23",
+      "question": "Should defender utility after the plant get its own channel?",
+      "owner_selection": "Not in the first experiment (Recommended)",
+      "assistant_recommended_this_option": true,
+      "effect": "No retake channel. Post-plant defender casts remain in the defender combination channels."
+    },
+    {
+      "id": "answer-rule",
+      "session": "decisions-2026-11-23",
+      "question": "The defender answer channel counts defender utility cast within 10 seconds after an attacker smoke or wall, using timing only. What should happen to it?",
+      "owner_selection": "Keep at 10s, test later (Recommended)",
+      "assistant_recommended_this_option": true,
+      "effect": "The answer family keeps its 10-second lookback and is a later experiment arm."
+    },
+    {
+      "id": "eliminated-attacker-windows",
+      "session": "decisions-2026-11-23",
+      "question": "16 of the 555 scored windows come after every attacker is dead with the spike planted. How should evaluation treat them?",
+      "owner_selection": "Report both ways (Recommended)",
+      "assistant_recommended_this_option": true,
+      "effect": "The 555-window dataset is unchanged. Each metric is reported for all windows and for the 539 with a living attacker."
+    },
+    {
+      "id": "long-gap-rotation",
+      "session": "decisions-2026-11-23",
+      "question": "Should 'how far a player moved between two distant snapshots' become a rotation feature?",
+      "owner_selection": "Later, as its own experiment (Recommended)",
+      "assistant_recommended_this_option": true,
+      "effect": "Recorded as the candidate for the rotation work. Not part of the utility experiment.",
+      "clarification_requested": "what do you mean it fell in a 12.4 second stretch with no position reports but their net position change across the gap is large",
+      "note": "The owner selected after the assistant explained that the feed reports positions only when an event fires."
+    },
+    {
+      "id": "ascent-site-labels",
+      "session": "decisions-2026-11-23",
+      "question": "On the Ascent minimap the viewer labels the top site B and the bottom site A. Is the viewer's labelling wrong?",
+      "owner_selection": "Wrong: fix it",
+      "assistant_recommended_this_option": null,
+      "effect": "The two Ascent labels in viewer/maps/manifest.json were swapped. No feature uses them.",
+      "note": "The assistant raised the mismatch from the owner's site calls; no option was recommended."
     }
   ]
 }

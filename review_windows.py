@@ -100,7 +100,11 @@ def build_review(data_dir, study_dir, study_result, reveal=False, annotations=No
     for name, expected in protocol["source_sha256"].items():
         # UI/server revisions do not change reconstructed evidence. Retain checks
         # for all study computation and map calibration used by this reviewer.
-        if name in {"serve.py", "viewer/app.js", "viewer/index.html"}:
+        # The map manifest's Ascent A/B display labels were corrected on 2026-11-23,
+        # so its whole-file hash differs from the study's. Its calibration numbers
+        # stay bound: read_manifest() below rejects any run whose contract, which
+        # embeds them, differs from the current one.
+        if name in {"serve.py", "viewer/app.js", "viewer/index.html", "viewer/maps/manifest.json"}:
             continue
         path = (repo / name).resolve()
         if not path.is_relative_to(repo) or hashlib.sha256(path.read_bytes()).hexdigest() != expected:

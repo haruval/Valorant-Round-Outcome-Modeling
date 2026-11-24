@@ -5,7 +5,7 @@ economy, and objective state. A temporal CNN receives 20 seconds of observations
 and updates every five seconds. This began as an undergraduate ML final project
 and is now an independent study of temporal modeling with sparse event data.
 
-**Current status:** 74 standard-library tests pass. The unchanged ML execution
+**Current status:** 100 standard-library tests pass. The unchanged ML execution
 code previously passed four runtime tests and the full event audit. A
 [three-seed follow-up](docs/controlled-experiment.md#completed-reduced-input-seed-check)
 found that removing current spatial features improved log loss in 11 of 12
@@ -18,8 +18,17 @@ The [full-input study](docs/controlled-experiment.md#completed-12-run-study),
 and follow-up retain every outcome, including weaker runs. All 4,440 new
 follow-up prediction rows reproduced exactly after reload. The visualizer
 compares separately verified validation runs and includes an
-[untrained utility/movement prototype](docs/feature-review.md#utilitymovement-prototype)
+[untrained utility/movement prototype](entry_support.py)
 for domain review. Earlier results remain in the [v1 record](docs/ml-validation.md#completed-run).
+
+The project owner reviewed that prototype's seven cases by hand on November 23,
+2026. Each verdict and design decision is recorded in
+[gameplay-annotations.json](docs/gameplay-annotations.json), and a second, still
+untrained prototype, [`utility_structure.py`](utility_structure.py), follows from
+them. Those channels are wired into a separate training entry point, and a
+[36-run draft plan](docs/utility-structure-plan.json) awaits approval. No model
+has been trained on either prototype, and the new model and training code has
+not been executed.
 
 The dataset contains 44 rounds from Breeze and Ascent in one FURIA–NRG series:
 VCT Americas Kickoff, February 16, 2024. Its 555 overlapping windows are not
@@ -113,14 +122,16 @@ python3 -E -S -B audit_inputs.py data
 All 16,650 v2 event-channel comparisons pass across 555 windows.
 [The event audit](docs/feature-audit-v2.json) and
 [training-support audit](docs/feature-support-v2.json) bind results to the source
-hash. [Review examples](docs/feature-review.md) identify concrete sequences for
-checking gameplay assumptions. The standard-library
+hash. [Saved review cases](docs/entry-support-review.json) identify concrete
+sequences for checking gameplay assumptions. The standard-library
 [disagreement review](review_windows.py) reconstructs six validation cases with
 outcomes and probabilities withheld by default. Its saved
 [evidence](docs/disagreement-review.json) includes source events, position ages,
 input-mask exclusions and run provenance. Initial owner guidance covers entry
-movement supported by utility and information-driven rotations; case assessments
-remain incomplete.
+movement supported by utility and information-driven rotations; assessments of
+those six disagreement cases remain incomplete. The owner's completed review of
+the seven utility/movement cases is recorded in
+[gameplay-annotations.json](docs/gameplay-annotations.json).
 
 ML execution uses NumPy, scikit-learn, PyTorch, and safetensors. No new dependency
 is needed for v2. The reviewed environment and v1 artifacts remain in
@@ -167,6 +178,9 @@ rounds do not resolve that limitation.
 | `train_rolling.py`, `predict_rolling.py` | Approved-runtime training and export |
 | `audit_rolling.py`, `audit_inputs.py` | Standard-library audits |
 | `entry_support.py`, `comparison_data.py` | Untrained relationship evidence and separately verified comparison runs |
+| `utility_structure.py` | Untrained cast-structure channels revised after the owner's case review |
+| `structure_inputs.py`, `plan_structure.py` | Extension inputs beside the frozen v2 contract; draft run plan |
+| `structure_model.py`, `train_structure.py`, `predict_structure.py` | Approved-runtime training with extension channels; not yet executed |
 | `serve.py`, `replay_data.py`, `viewer/` | Local replay and prediction inspection |
 | `tests/`, `tests_ml/` | Separate standard-library and optional ML tests |
 | `schemas/` | Historical contracts for JSON replay |
