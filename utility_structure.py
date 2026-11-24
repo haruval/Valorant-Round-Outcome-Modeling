@@ -1,4 +1,8 @@
-"""Owner-reviewed utility-structure prototype (v1); untrained; standard library only.
+"""Utility-structure channels (v1) from a hand review of replay cases; standard library only.
+
+Six of the twelve channels (the `structure` family) were trained in the 36-run
+experiment in docs/experiment-results.md. The answer and caster-spacing channels
+have not been trained.
 
 Revises `entry-support-prototype-v0` after the owner's seven-case review and design
 decisions recorded in docs/gameplay-annotations.json. Report-pair links are replaced
@@ -52,6 +56,8 @@ FAMILIES = {"structure": [n for n in FEATURE_NAMES if "_spacing" not in n and "_
 
 
 def contract():
+    # Frozen: this dictionary is hashed into the completed runs, so its text is not updated.
+    # The status string below was written before that experiment was approved and run.
     return {"id": "utility-structure-prototype-v1", "status": "untrained_experiment_not_approved",
             "revises": "entry-support-prototype-v0", "bin_seconds": 1,
             "owner_decisions": "docs/gameplay-annotations.json design_decisions, 2026-11-23",

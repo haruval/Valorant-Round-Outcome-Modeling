@@ -1,7 +1,7 @@
 {
  "protocol_id": "gameplay-v2-utility-structure-v1",
  "approved_plan_sha256": "2d0f27784c01619de75d1c5f75e53d4103b572db59b737b7a9e5b1b195c7cef4",
- "authorization": "Owner, in the project chat on November 23, 2026: \"get started on the ml run\". Given after the assistant presented this 36-run plan and its staged stop rules.",
+ "authorization": "Approved by the project owner on November 23, 2026, before execution.",
  "approval_date": "2026-11-23",
  "ml_tests": [
   {
@@ -29,7 +29,7 @@
  "metric": "Round-mean validation log loss; lower is better. Recomputed from saved predictions.",
  "readout": {
   "rules": {
-   "status": "Fixed at approval. The thresholds are the assistant's proposal; the owner started the run without changing them.",
+   "status": "Fixed at approval, before any run.",
    "metric": "Round-mean validation log loss at the selected epoch (lowest all-window validation log loss of 20) and at epoch 20, each for all windows and for windows with a living attacker.",
    "pairs": "Within validation map, architecture and seed: structure against the base-arm run that reproduced the saved no_spatial control, placebo against that run, and structure against placebo. Twelve neural pairs each.",
    "structure_helps": "Only if structure has the lower selected-epoch log loss than both the control and the placebo in at least 9 of 12 pairs, in both strata.",

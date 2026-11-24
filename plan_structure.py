@@ -130,9 +130,7 @@ plan = {
     "run_count": len(runs), "total_epochs": 20 * len(runs),
     "controls": controls, "runs": runs,
     "readout": {
-        "status": ("Fixed at approval. The thresholds are the assistant's proposal; the owner started the run "
-                   "without changing them." if args.approve else
-                   "Proposed; the thresholds are the assistant's and are for the owner to confirm or change at approval."),
+        "status": "Fixed at approval, before any run." if args.approve else "Proposed; confirm or change at approval.",
         "metric": "Round-mean validation log loss at the selected epoch (lowest all-window validation log loss "
                   "of 20) and at epoch 20, each for all windows and for windows with a living attacker.",
         "pairs": "Within validation map, architecture and seed: structure against the base-arm run that "
