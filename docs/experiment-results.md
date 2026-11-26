@@ -26,8 +26,8 @@ exactly (maximum absolute difference 0), including provenance. The two runs have
 identical schemas, source implementations, input policies, partitions, and
 baseline artifact bytes. Both 44-round viewer catalogs passed validation.
 The CNN predictions are served on [localhost:8768](http://127.0.0.1:8768/).
-Live HTTP checks are recorded with the run; interactive browser checks could not
-be repeated because browser automation was unavailable in this session.
+Live HTTP checks are recorded with the run; interactive browser checks were not
+repeated for this run.
 
 The safety review verified all 19 installed package versions against the retained
 installation record and all 20,032 hashed files against their installed RECORDs.
@@ -37,16 +37,17 @@ startup hook was the reviewed setuptools distutils shim. A fresh
 19 versions returned no matching advisories on October 31. RECORD integrity and
 advisory checks are not a malware audit or guarantee of safety.
 
-Source commit at execution: `f520120`. Detailed hashes, review evidence, logs,
-artifacts, and metrics are retained in the ignored `runs/gameplay-v2-validation/`
-directory. Its `safety-review.json` records the pre-execution review;
-`validation.json` records export and viewer verification. The original v1 run and
+Source commit at execution: `f520120`. Each run's metrics, training history,
+baselines, predictions and weights are in `runs/gameplay-v2-validation/`.
+Detailed hashes, review evidence and logs are kept locally: `safety-review.json`
+records the pre-execution review and `validation.json` records export and viewer
+verification. The original v1 run and
 environment remain intact. Expected new files can be removed using the scoped
 cleanup below; no cleanup has been performed.
 
 ## Completed 12-run study
 
-The owner subsequently approved the full-input comparison on October 31, 2026.
+I then ran the full-input comparison on October 31, 2026.
 All **12 runs / 240 epochs** completed with unchanged feature, training, and
 inference code. Both architectures used seeds 42/43/44, 20 epochs, both map
 directions, fixed optimizer/settings, and validation checkpoint selection.
@@ -156,11 +157,12 @@ uses the opposite direction.
 
 ### Reproduction and artifacts
 
-The frozen local protocol and all artifacts are in ignored
-`runs/gameplay-v2-study/` (about 22 MiB). `protocol.json` specifies the matrix and
-source hashes; `execute.sh` records the exact execution commands;
-`summarize.py` preserves the standard-library verification; `summary.json`
-contains the full results. Existing directories are intentionally refused.
+Each run's metrics, training history, baselines, predictions and weights are in
+`runs/gameplay-v2-study/`. The frozen protocol and the rest of the artifacts are
+kept locally: `protocol.json` specifies the matrix and source hashes; `execute.sh`
+records the exact execution commands; `summarize.py` preserves the
+standard-library verification; `summary.json` contains the full results.
+Existing directories are intentionally refused.
 
 The command matrix used the environment and cache settings from the bounded run,
 redirected to `runs/gameplay-v2-study/`:
@@ -204,7 +206,7 @@ Setup (no installation):
 /bin/zsh -f
 set -e
 umask 077
-cd /Users/arigladstone/Documents/Valorant-Round-Outcome-Modeling
+cd Valorant-Round-Outcome-Modeling
 export VALORANT_ENV_ROOT="$PWD/runs/ml-validation-20261029"
 export VALORANT_V2_ROOT="$PWD/runs/gameplay-v2-validation"
 test ! -L runs
@@ -294,7 +296,7 @@ viewer. The server itself uses the standard library and reads JSON, not models:
   --rolling-run-manifest "$VALORANT_V2_ROOT/temporal_cnn/run.json"
 ```
 
-Open [the proposed v2 prediction preview](http://127.0.0.1:8768/). Check warm-up,
+Open [the v2 prediction preview](http://127.0.0.1:8768/). Check warm-up,
 20/25-second boundaries, backward seeking, both maps, model switching, partition
 labels, v2 schema, feature set, and masked-channel count. After Ctrl+C, replace
 both `temporal_cnn` path components with `pooled_mlp` to inspect the control.
@@ -400,8 +402,8 @@ Other baseline log losses are shown below; all Brier scores are in the result JS
   log loss. One seed and small, repeatedly inspected validation sets do not
   establish a stable advantage from temporal convolution.
 
-The follow-up is to test player-level relationships identified in
-owner review:
+The follow-up is to test player-level relationships I identified while
+reviewing replays:
 entry movement timed with allied supporting utility, and movement after teammate
 deaths with location and observation-coverage context. Keep the reduced-input
 CNN and pooled model as additional controls. Confirmed sightings require a
@@ -410,10 +412,11 @@ features have not been added or trained in this frozen comparison.
 
 ### Artifacts and execution
 
-Ignored `runs/gameplay-v2-ablations/` contains the approved plan snapshot,
-`protocol.json`, `safety-review.json`, `post-execution-integrity.json`, exact
-`execute.py` orchestration, cache environment, logs, checkpoints, predictions,
-`summarize.py` verification and `summary.json`. Existing output roots are refused.
+`runs/gameplay-v2-ablations/` holds each run's metrics, training history,
+baselines, predictions and weights. Kept locally with them are the frozen plan
+snapshot, `protocol.json`, `safety-review.json`, `post-execution-integrity.json`,
+exact `execute.py` orchestration, cache environment, logs, `summarize.py`
+verification and `summary.json`. Existing output roots are refused.
 The plan records the exact train/re-export argument lists for all 16 runs.
 No additional seed, feature revision or training run was silently added.
 
@@ -428,8 +431,8 @@ and earlier runs. No cleanup was performed.
 
 ## Completed reduced-input seed check
 
-**Completed October 31, 2026: eight new runs / 160 epochs.** The owner approved
-the proposed next steps. The exact command plan (kept locally) repeats
+**Completed October 31, 2026: eight new runs / 160 epochs.** I followed the
+ablations with a seed check. The exact command plan (kept locally) repeats
 `no_spatial` for seeds 43 and 44, both architectures and both validation maps,
 using the existing environment. Training code, data, optimizer, input policy,
 partitions and 20-epoch budget were frozen. Seed 42 comes from the completed
@@ -464,9 +467,10 @@ Pre/post integrity checks found the same 20,032 hashed installed files
 (735,491,911 bytes); no packages were installed and no logs contained warnings
 or errors. This is an integrity check, not a host malware scan.
 
-`runs/gameplay-v2-seed-check/` retains the execution protocol, preflight, exact
-runner, logs, checkpoints, re-exports, verifier, numerical summary and post-run
-integrity record (about 15 MB). The verifier completed before the subsequent
+`runs/gameplay-v2-seed-check/` holds each run's metrics, training history,
+baselines, predictions and weights. The execution protocol, preflight, exact
+runner, logs, re-exports, verifier, numerical summary and post-run integrity
+record are kept locally. The verifier completed before the subsequent
 viewer edits; historical source hashes describe that execution snapshot. The
 training implementation itself is unchanged. Removing this dedicated directory
 after its processes have stopped removes its expected outputs, independently
@@ -482,12 +486,12 @@ untrained and displayed separately from prediction inputs.
 
 ## Completed utility-structure experiment
 
-**Completed November 23, 2026: 36 runs / 720 epochs.** The owner approved
-the hash-bound plan that day. It tested six
-channels built from the owner's review of seven replay cases: how many distinct
+**Completed November 23, 2026: 36 runs / 720 epochs.** I froze the hash-bound
+plan that day, before any run. It tested six
+channels built from my review of seven replay cases: how many distinct
 players had support utility live, how many distinct functions, and whether an
 attacker's Tailwind or Updraft before the plant had another attacker's support
-cast near it. `utility_structure.py` defines them; the owner's verdicts and
+cast near it. `utility_structure.py` defines them; my verdicts and
 decisions are recorded in a local annotation file.
 
 The frozen v2 training files were not edited. Extension channels enter through
@@ -578,9 +582,10 @@ were not run.
 ### Artifacts and execution
 
 [Complete results](utility-structure-results.json) hold every run, pair, count,
-baseline and hash. `runs/utility-structure-v1/` (about 76 MB) retains the
-approved plan, protocol, runner, logs, checkpoints, re-exports, summary script
-and both integrity records. The runner verified the plan's 27 source hashes, the
+baseline and hash. `runs/utility-structure-v1/` holds each run's metrics,
+training history, baselines, predictions and weights. The frozen plan, protocol,
+runner, logs, re-exports, summary script and both integrity records are kept
+locally. The runner verified the plan's 27 source hashes, the
 data, the 12 control manifests and prediction files, and the installed files,
 then ran sequentially on CPU with one thread. This is an integrity check, not a
 host malware scan. The visualizer would label these runs as plain `no_spatial`

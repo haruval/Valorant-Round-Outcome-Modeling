@@ -1,0 +1,17 @@
+{
+  "train": {
+    "kept_channels": [],
+    "constant_training_channels_changed": [],
+    "handling": "always masked; never expand support using evaluation data"
+  },
+  "validation": {
+    "kept_channels": [],
+    "constant_training_channels_changed": [],
+    "handling": "always masked; never expand support using evaluation data"
+  },
+  "test": {
+    "kept_channels": [],
+    "constant_training_channels_changed": [],
+    "handling": "always masked; never expand support using evaluation data"
+  }
+}

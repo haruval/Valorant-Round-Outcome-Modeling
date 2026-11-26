@@ -1,0 +1,1716 @@
+{
+  "validation": {
+    "train_prior": {
+      "windows": 269,
+      "rounds": 21,
+      "round_mean_log_loss": 0.6647541252773346,
+      "round_mean_brier": 0.2359348276172473,
+      "by_elapsed_seconds": {
+        "20": {
+          "n": 21,
+          "attacker_win_rate": 0.38095238095238093,
+          "accuracy": 0.6190476190476191,
+          "balanced_accuracy": 0.5,
+          "attacker_f1": 0.0,
+          "roc_auc": 0.5,
+          "log_loss": 0.6647541252773346,
+          "brier_score": 0.2359348276172473,
+          "confusion_matrix": [
+            [
+              13,
+              0
+            ],
+            [
+              8,
+              0
+            ]
+          ]
+        },
+        "25": {
+          "n": 21,
+          "attacker_win_rate": 0.38095238095238093,
+          "accuracy": 0.6190476190476191,
+          "balanced_accuracy": 0.5,
+          "attacker_f1": 0.0,
+          "roc_auc": 0.5,
+          "log_loss": 0.6647541252773346,
+          "brier_score": 0.2359348276172473,
+          "confusion_matrix": [
+            [
+              13,
+              0
+            ],
+            [
+              8,
+              0
+            ]
+          ]
+        },
+        "30": {
+          "n": 21,
+          "attacker_win_rate": 0.38095238095238093,
+          "accuracy": 0.6190476190476191,
+          "balanced_accuracy": 0.5,
+          "attacker_f1": 0.0,
+          "roc_auc": 0.5,
+          "log_loss": 0.6647541252773346,
+          "brier_score": 0.2359348276172473,
+          "confusion_matrix": [
+            [
+              13,
+              0
+            ],
+            [
+              8,
+              0
+            ]
+          ]
+        },
+        "35": {
+          "n": 21,
+          "attacker_win_rate": 0.38095238095238093,
+          "accuracy": 0.6190476190476191,
+          "balanced_accuracy": 0.5,
+          "attacker_f1": 0.0,
+          "roc_auc": 0.5,
+          "log_loss": 0.6647541252773346,
+          "brier_score": 0.2359348276172473,
+          "confusion_matrix": [
+            [
+              13,
+              0
+            ],
+            [
+              8,
+              0
+            ]
+          ]
+        },
+        "40": {
+          "n": 21,
+          "attacker_win_rate": 0.38095238095238093,
+          "accuracy": 0.6190476190476191,
+          "balanced_accuracy": 0.5,
+          "attacker_f1": 0.0,
+          "roc_auc": 0.5,
+          "log_loss": 0.6647541252773346,
+          "brier_score": 0.2359348276172473,
+          "confusion_matrix": [
+            [
+              13,
+              0
+            ],
+            [
+              8,
+              0
+            ]
+          ]
+        },
+        "45": {
+          "n": 17,
+          "attacker_win_rate": 0.4117647058823529,
+          "accuracy": 0.5882352941176471,
+          "balanced_accuracy": 0.5,
+          "attacker_f1": 0.0,
+          "roc_auc": 0.5,
+          "log_loss": 0.67836801960526,
+          "brier_score": 0.24263315912376296,
+          "confusion_matrix": [
+            [
+              10,
+              0
+            ],
+            [
+              7,
+              0
+            ]
+          ]
+        },
+        "50": {
+          "n": 16,
+          "attacker_win_rate": 0.4375,
+          "accuracy": 0.5625,
+          "balanced_accuracy": 0.5,
+          "attacker_f1": 0.0,
+          "roc_auc": 0.5,
+          "log_loss": 0.6897387154359707,
+          "brier_score": 0.24822778827977318,
+          "confusion_matrix": [
+            [
+              9,
+              0
+            ],
+            [
+              7,
+              0
+            ]
+          ]
+        },
+        "55": {
+          "n": 16,
+          "attacker_win_rate": 0.4375,
+          "accuracy": 0.5625,
+          "balanced_accuracy": 0.5,
+          "attacker_f1": 0.0,
+          "roc_auc": 0.5,
+          "log_loss": 0.6897387154359707,
+          "brier_score": 0.24822778827977318,
+          "confusion_matrix": [
+            [
+              9,
+              0
+            ],
+            [
+              7,
+              0
+            ]
+          ]
+        },
+        "60": {
+          "n": 16,
+          "attacker_win_rate": 0.4375,
+          "accuracy": 0.5625,
+          "balanced_accuracy": 0.5,
+          "attacker_f1": 0.0,
+          "roc_auc": 0.5,
+          "log_loss": 0.6897387154359707,
+          "brier_score": 0.24822778827977318,
+          "confusion_matrix": [
+            [
+              9,
+              0
+            ],
+            [
+              7,
+              0
+            ]
+          ]
+        },
+        "65": {
+          "n": 14,
+          "attacker_win_rate": 0.42857142857142855,
+          "accuracy": 0.5714285714285714,
+          "balanced_accuracy": 0.5,
+          "attacker_f1": 0.0,
+          "roc_auc": 0.5,
+          "log_loss": 0.685793780147765,
+          "brier_score": 0.2462867944909533,
+          "confusion_matrix": [
+            [
+              8,
+              0
+            ],
+            [
+              6,
+              0
+            ]
+          ]
+        },
+        "70": {
+          "n": 13,
+          "attacker_win_rate": 0.46153846153846156,
+          "accuracy": 0.5384615384615384,
+          "balanced_accuracy": 0.5,
+          "attacker_f1": 0.0,
+          "roc_auc": 0.5,
+          "log_loss": 0.7003596950580631,
+          "brier_score": 0.25345354078813437,
+          "confusion_matrix": [
+            [
+              7,
+              0
+            ],
+            [
+              6,
+              0
+            ]
+          ]
+        },
+        "75": {
+          "n": 12,
+          "attacker_win_rate": 0.5,
+          "accuracy": 0.5,
+          "balanced_accuracy": 0.5,
+          "attacker_f1": 0.0,
+          "roc_auc": 0.5,
+          "log_loss": 0.7173532624534106,
+          "brier_score": 0.2618147448015123,
+          "confusion_matrix": [
+            [
+              6,
+              0
+            ],
+            [
+              6,
+              0
+            ]
+          ]
+        },
+        "80": {
+          "n": 11,
+          "attacker_win_rate": 0.5454545454545454,
+          "accuracy": 0.45454545454545453,
+          "balanced_accuracy": 0.5,
+          "attacker_f1": 0.0,
+          "roc_auc": 0.5,
+          "log_loss": 0.7374365693751851,
+          "brier_score": 0.27169616772641353,
+          "confusion_matrix": [
+            [
+              5,
+              0
+            ],
+            [
+              6,
+              0
+            ]
+          ]
+        },
+        "85": {
+          "n": 10,
+          "attacker_win_rate": 0.6,
+          "accuracy": 0.4,
+          "balanced_accuracy": 0.5,
+          "attacker_f1": 0.0,
+          "roc_auc": 0.5,
+          "log_loss": 0.7615365376813145,
+          "brier_score": 0.28355387523629494,
+          "confusion_matrix": [
+            [
+              4,
+              0
+            ],
+            [
+              6,
+              0
+            ]
+          ]
+        },
+        "90": {
+          "n": 7,
+          "attacker_win_rate": 0.7142857142857143,
+          "accuracy": 0.2857142857142857,
+          "balanced_accuracy": 0.5,
+          "attacker_f1": 0.0,
+          "roc_auc": 0.5,
+          "log_loss": 0.8120317093703476,
+          "brier_score": 0.30839859573318934,
+          "confusion_matrix": [
+            [
+              2,
+              0
+            ],
+            [
+              5,
+              0
+            ]
+          ]
+        },
+        "95": {
+          "n": 7,
+          "attacker_win_rate": 0.7142857142857143,
+          "accuracy": 0.2857142857142857,
+          "balanced_accuracy": 0.5,
+          "attacker_f1": 0.0,
+          "roc_auc": 0.5,
+          "log_loss": 0.8120317093703476,
+          "brier_score": 0.30839859573318934,
+          "confusion_matrix": [
+            [
+              2,
+              0
+            ],
+            [
+              5,
+              0
+            ]
+          ]
+        },
+        "100": {
+          "n": 7,
+          "attacker_win_rate": 0.7142857142857143,
+          "accuracy": 0.2857142857142857,
+          "balanced_accuracy": 0.5,
+          "attacker_f1": 0.0,
+          "roc_auc": 0.5,
+          "log_loss": 0.8120317093703476,
+          "brier_score": 0.30839859573318934,
+          "confusion_matrix": [
+            [
+              2,
+              0
+            ],
+            [
+              5,
+              0
+            ]
+          ]
+        },
+        "105": {
+          "n": 6,
+          "attacker_win_rate": 0.6666666666666666,
+          "accuracy": 0.3333333333333333,
+          "balanced_accuracy": 0.5,
+          "attacker_f1": 0.0,
+          "roc_auc": 0.5,
+          "log_loss": 0.7909920544999172,
+          "brier_score": 0.29804662885948335,
+          "confusion_matrix": [
+            [
+              2,
+              0
+            ],
+            [
+              4,
+              0
+            ]
+          ]
+        },
+        "110": {
+          "n": 6,
+          "attacker_win_rate": 0.6666666666666666,
+          "accuracy": 0.3333333333333333,
+          "balanced_accuracy": 0.5,
+          "attacker_f1": 0.0,
+          "roc_auc": 0.5,
+          "log_loss": 0.7909920544999172,
+          "brier_score": 0.29804662885948335,
+          "confusion_matrix": [
+            [
+              2,
+              0
+            ],
+            [
+              4,
+              0
+            ]
+          ]
+        },
+        "115": {
+          "n": 3,
+          "attacker_win_rate": 1.0,
+          "accuracy": 0.0,
+          "balanced_accuracy": null,
+          "attacker_f1": 0.0,
+          "roc_auc": null,
+          "log_loss": 0.9382696385929302,
+          "brier_score": 0.37051039697542537,
+          "confusion_matrix": [
+            [
+              0,
+              0
+            ],
+            [
+              3,
+              0
+            ]
+          ]
+        },
+        "120": {
+          "n": 3,
+          "attacker_win_rate": 1.0,
+          "accuracy": 0.0,
+          "balanced_accuracy": null,
+          "attacker_f1": 0.0,
+          "roc_auc": null,
+          "log_loss": 0.9382696385929302,
+          "brier_score": 0.37051039697542537,
+          "confusion_matrix": [
+            [
+              0,
+              0
+            ],
+            [
+              3,
+              0
+            ]
+          ]
+        }
+      }
+    },
+    "snapshot_logistic": {
+      "windows": 269,
+      "rounds": 21,
+      "round_mean_log_loss": 0.3591370632250872,
+      "round_mean_brier": 0.11265761243775747,
+      "by_elapsed_seconds": {
+        "20": {
+          "n": 21,
+          "attacker_win_rate": 0.38095238095238093,
+          "accuracy": 0.8571428571428571,
+          "balanced_accuracy": 0.8125,
+          "attacker_f1": 0.7692307692307693,
+          "roc_auc": 0.875,
+          "log_loss": 0.4888616377052765,
+          "brier_score": 0.1586417353833868,
+          "confusion_matrix": [
+            [
+              13,
+              0
+            ],
+            [
+              3,
+              5
+            ]
+          ]
+        },
+        "25": {
+          "n": 21,
+          "attacker_win_rate": 0.38095238095238093,
+          "accuracy": 0.8571428571428571,
+          "balanced_accuracy": 0.8125,
+          "attacker_f1": 0.7692307692307693,
+          "roc_auc": 0.8942307692307693,
+          "log_loss": 0.4701774614074597,
+          "brier_score": 0.15065664243475432,
+          "confusion_matrix": [
+            [
+              13,
+              0
+            ],
+            [
+              3,
+              5
+            ]
+          ]
+        },
+        "30": {
+          "n": 21,
+          "attacker_win_rate": 0.38095238095238093,
+          "accuracy": 0.7142857142857143,
+          "balanced_accuracy": 0.6730769230769231,
+          "attacker_f1": 0.5714285714285714,
+          "roc_auc": 0.7692307692307693,
+          "log_loss": 0.5433805016655344,
+          "brier_score": 0.18800551721601097,
+          "confusion_matrix": [
+            [
+              11,
+              2
+            ],
+            [
+              4,
+              4
+            ]
+          ]
+        },
+        "35": {
+          "n": 21,
+          "attacker_win_rate": 0.38095238095238093,
+          "accuracy": 0.7142857142857143,
+          "balanced_accuracy": 0.6490384615384616,
+          "attacker_f1": 0.5,
+          "roc_auc": 0.8846153846153846,
+          "log_loss": 0.4648248416147977,
+          "brier_score": 0.15884039760191873,
+          "confusion_matrix": [
+            [
+              12,
+              1
+            ],
+            [
+              5,
+              3
+            ]
+          ]
+        },
+        "40": {
+          "n": 21,
+          "attacker_win_rate": 0.38095238095238093,
+          "accuracy": 0.7142857142857143,
+          "balanced_accuracy": 0.6730769230769231,
+          "attacker_f1": 0.5714285714285714,
+          "roc_auc": 0.875,
+          "log_loss": 0.45074009521085173,
+          "brier_score": 0.1542784206518876,
+          "confusion_matrix": [
+            [
+              11,
+              2
+            ],
+            [
+              4,
+              4
+            ]
+          ]
+        },
+        "45": {
+          "n": 17,
+          "attacker_win_rate": 0.4117647058823529,
+          "accuracy": 0.6470588235294118,
+          "balanced_accuracy": 0.6142857142857143,
+          "attacker_f1": 0.5,
+          "roc_auc": 0.8142857142857143,
+          "log_loss": 0.5048758355445404,
+          "brier_score": 0.18007104856491343,
+          "confusion_matrix": [
+            [
+              8,
+              2
+            ],
+            [
+              4,
+              3
+            ]
+          ]
+        },
+        "50": {
+          "n": 16,
+          "attacker_win_rate": 0.4375,
+          "accuracy": 0.75,
+          "balanced_accuracy": 0.7301587301587301,
+          "attacker_f1": 0.6666666666666666,
+          "roc_auc": 0.8095238095238095,
+          "log_loss": 0.46778065585440265,
+          "brier_score": 0.1596626848277071,
+          "confusion_matrix": [
+            [
+              8,
+              1
+            ],
+            [
+              3,
+              4
+            ]
+          ]
+        },
+        "55": {
+          "n": 16,
+          "attacker_win_rate": 0.4375,
+          "accuracy": 0.75,
+          "balanced_accuracy": 0.7301587301587301,
+          "attacker_f1": 0.6666666666666666,
+          "roc_auc": 0.8571428571428571,
+          "log_loss": 0.4533903641858945,
+          "brier_score": 0.1535271736425539,
+          "confusion_matrix": [
+            [
+              8,
+              1
+            ],
+            [
+              3,
+              4
+            ]
+          ]
+        },
+        "60": {
+          "n": 16,
+          "attacker_win_rate": 0.4375,
+          "accuracy": 0.8125,
+          "balanced_accuracy": 0.8015873015873016,
+          "attacker_f1": 0.7692307692307693,
+          "roc_auc": 0.873015873015873,
+          "log_loss": 0.42566751162331024,
+          "brier_score": 0.139845899040739,
+          "confusion_matrix": [
+            [
+              8,
+              1
+            ],
+            [
+              2,
+              5
+            ]
+          ]
+        },
+        "65": {
+          "n": 14,
+          "attacker_win_rate": 0.42857142857142855,
+          "accuracy": 0.9285714285714286,
+          "balanced_accuracy": 0.9166666666666667,
+          "attacker_f1": 0.9090909090909091,
+          "roc_auc": 0.9583333333333334,
+          "log_loss": 0.34783923557906554,
+          "brier_score": 0.10266888266103172,
+          "confusion_matrix": [
+            [
+              8,
+              0
+            ],
+            [
+              1,
+              5
+            ]
+          ]
+        },
+        "70": {
+          "n": 13,
+          "attacker_win_rate": 0.46153846153846156,
+          "accuracy": 1.0,
+          "balanced_accuracy": 1.0,
+          "attacker_f1": 1.0,
+          "roc_auc": 1.0,
+          "log_loss": 0.2561795608525739,
+          "brier_score": 0.06522334216980069,
+          "confusion_matrix": [
+            [
+              7,
+              0
+            ],
+            [
+              0,
+              6
+            ]
+          ]
+        },
+        "75": {
+          "n": 12,
+          "attacker_win_rate": 0.5,
+          "accuracy": 1.0,
+          "balanced_accuracy": 1.0,
+          "attacker_f1": 1.0,
+          "roc_auc": 1.0,
+          "log_loss": 0.26889110446041903,
+          "brier_score": 0.07207228467270549,
+          "confusion_matrix": [
+            [
+              6,
+              0
+            ],
+            [
+              0,
+              6
+            ]
+          ]
+        },
+        "80": {
+          "n": 11,
+          "attacker_win_rate": 0.5454545454545454,
+          "accuracy": 1.0,
+          "balanced_accuracy": 1.0,
+          "attacker_f1": 1.0,
+          "roc_auc": 1.0,
+          "log_loss": 0.1700295270457978,
+          "brier_score": 0.031383689494624285,
+          "confusion_matrix": [
+            [
+              5,
+              0
+            ],
+            [
+              0,
+              6
+            ]
+          ]
+        },
+        "85": {
+          "n": 10,
+          "attacker_win_rate": 0.6,
+          "accuracy": 1.0,
+          "balanced_accuracy": 1.0,
+          "attacker_f1": 1.0,
+          "roc_auc": 1.0,
+          "log_loss": 0.16597112751211857,
+          "brier_score": 0.028670516952975077,
+          "confusion_matrix": [
+            [
+              4,
+              0
+            ],
+            [
+              0,
+              6
+            ]
+          ]
+        },
+        "90": {
+          "n": 7,
+          "attacker_win_rate": 0.7142857142857143,
+          "accuracy": 1.0,
+          "balanced_accuracy": 1.0,
+          "attacker_f1": 1.0,
+          "roc_auc": 1.0,
+          "log_loss": 0.16320975469009008,
+          "brier_score": 0.025994741121039534,
+          "confusion_matrix": [
+            [
+              2,
+              0
+            ],
+            [
+              0,
+              5
+            ]
+          ]
+        },
+        "95": {
+          "n": 7,
+          "attacker_win_rate": 0.7142857142857143,
+          "accuracy": 1.0,
+          "balanced_accuracy": 1.0,
+          "attacker_f1": 1.0,
+          "roc_auc": 1.0,
+          "log_loss": 0.20419980642631105,
+          "brier_score": 0.041924552284534546,
+          "confusion_matrix": [
+            [
+              2,
+              0
+            ],
+            [
+              0,
+              5
+            ]
+          ]
+        },
+        "100": {
+          "n": 7,
+          "attacker_win_rate": 0.7142857142857143,
+          "accuracy": 1.0,
+          "balanced_accuracy": 1.0,
+          "attacker_f1": 1.0,
+          "roc_auc": 1.0,
+          "log_loss": 0.20491377701588434,
+          "brier_score": 0.043570159726675564,
+          "confusion_matrix": [
+            [
+              2,
+              0
+            ],
+            [
+              0,
+              5
+            ]
+          ]
+        },
+        "105": {
+          "n": 6,
+          "attacker_win_rate": 0.6666666666666666,
+          "accuracy": 1.0,
+          "balanced_accuracy": 1.0,
+          "attacker_f1": 1.0,
+          "roc_auc": 1.0,
+          "log_loss": 0.16089884781241023,
+          "brier_score": 0.028753783020460274,
+          "confusion_matrix": [
+            [
+              2,
+              0
+            ],
+            [
+              0,
+              4
+            ]
+          ]
+        },
+        "110": {
+          "n": 6,
+          "attacker_win_rate": 0.6666666666666666,
+          "accuracy": 1.0,
+          "balanced_accuracy": 1.0,
+          "attacker_f1": 1.0,
+          "roc_auc": 1.0,
+          "log_loss": 0.08306067365239912,
+          "brier_score": 0.007180046745095995,
+          "confusion_matrix": [
+            [
+              2,
+              0
+            ],
+            [
+              0,
+              4
+            ]
+          ]
+        },
+        "115": {
+          "n": 3,
+          "attacker_win_rate": 1.0,
+          "accuracy": 1.0,
+          "balanced_accuracy": null,
+          "attacker_f1": 1.0,
+          "roc_auc": null,
+          "log_loss": 0.07956655793225352,
+          "brier_score": 0.006498850311083364,
+          "confusion_matrix": [
+            [
+              0,
+              0
+            ],
+            [
+              0,
+              3
+            ]
+          ]
+        },
+        "120": {
+          "n": 3,
+          "attacker_win_rate": 1.0,
+          "accuracy": 1.0,
+          "balanced_accuracy": null,
+          "attacker_f1": 1.0,
+          "roc_auc": null,
+          "log_loss": 0.06531481351703498,
+          "brier_score": 0.00445816188964179,
+          "confusion_matrix": [
+            [
+              0,
+              0
+            ],
+            [
+              0,
+              3
+            ]
+          ]
+        }
+      }
+    },
+    "history_logistic": {
+      "windows": 269,
+      "rounds": 21,
+      "round_mean_log_loss": 0.3355429549518692,
+      "round_mean_brier": 0.1061531722164567,
+      "by_elapsed_seconds": {
+        "20": {
+          "n": 21,
+          "attacker_win_rate": 0.38095238095238093,
+          "accuracy": 0.8571428571428571,
+          "balanced_accuracy": 0.8125,
+          "attacker_f1": 0.7692307692307693,
+          "roc_auc": 0.8557692307692307,
+          "log_loss": 0.48463725147102676,
+          "brier_score": 0.1577508226799304,
+          "confusion_matrix": [
+            [
+              13,
+              0
+            ],
+            [
+              3,
+              5
+            ]
+          ]
+        },
+        "25": {
+          "n": 21,
+          "attacker_win_rate": 0.38095238095238093,
+          "accuracy": 0.8571428571428571,
+          "balanced_accuracy": 0.8125,
+          "attacker_f1": 0.7692307692307693,
+          "roc_auc": 0.875,
+          "log_loss": 0.46091572080300125,
+          "brier_score": 0.14793841841724362,
+          "confusion_matrix": [
+            [
+              13,
+              0
+            ],
+            [
+              3,
+              5
+            ]
+          ]
+        },
+        "30": {
+          "n": 21,
+          "attacker_win_rate": 0.38095238095238093,
+          "accuracy": 0.7142857142857143,
+          "balanced_accuracy": 0.6730769230769231,
+          "attacker_f1": 0.5714285714285714,
+          "roc_auc": 0.8076923076923077,
+          "log_loss": 0.5060246497476404,
+          "brier_score": 0.17247462514596373,
+          "confusion_matrix": [
+            [
+              11,
+              2
+            ],
+            [
+              4,
+              4
+            ]
+          ]
+        },
+        "35": {
+          "n": 21,
+          "attacker_win_rate": 0.38095238095238093,
+          "accuracy": 0.7619047619047619,
+          "balanced_accuracy": 0.7115384615384616,
+          "attacker_f1": 0.6153846153846154,
+          "roc_auc": 0.875,
+          "log_loss": 0.4418676809744144,
+          "brier_score": 0.14918034286325407,
+          "confusion_matrix": [
+            [
+              12,
+              1
+            ],
+            [
+              4,
+              4
+            ]
+          ]
+        },
+        "40": {
+          "n": 21,
+          "attacker_win_rate": 0.38095238095238093,
+          "accuracy": 0.7142857142857143,
+          "balanced_accuracy": 0.6730769230769231,
+          "attacker_f1": 0.5714285714285714,
+          "roc_auc": 0.8653846153846154,
+          "log_loss": 0.4363949105485324,
+          "brier_score": 0.15039552818132948,
+          "confusion_matrix": [
+            [
+              11,
+              2
+            ],
+            [
+              4,
+              4
+            ]
+          ]
+        },
+        "45": {
+          "n": 17,
+          "attacker_win_rate": 0.4117647058823529,
+          "accuracy": 0.6470588235294118,
+          "balanced_accuracy": 0.6142857142857143,
+          "attacker_f1": 0.5,
+          "roc_auc": 0.8142857142857143,
+          "log_loss": 0.501614517754738,
+          "brier_score": 0.1812273277295804,
+          "confusion_matrix": [
+            [
+              8,
+              2
+            ],
+            [
+              4,
+              3
+            ]
+          ]
+        },
+        "50": {
+          "n": 16,
+          "attacker_win_rate": 0.4375,
+          "accuracy": 0.6875,
+          "balanced_accuracy": 0.6746031746031746,
+          "attacker_f1": 0.6153846153846154,
+          "roc_auc": 0.8253968253968254,
+          "log_loss": 0.4794234032272218,
+          "brier_score": 0.17001936450181143,
+          "confusion_matrix": [
+            [
+              7,
+              2
+            ],
+            [
+              3,
+              4
+            ]
+          ]
+        },
+        "55": {
+          "n": 16,
+          "attacker_win_rate": 0.4375,
+          "accuracy": 0.75,
+          "balanced_accuracy": 0.7301587301587301,
+          "attacker_f1": 0.6666666666666666,
+          "roc_auc": 0.8095238095238095,
+          "log_loss": 0.46660505375889133,
+          "brier_score": 0.16435828209607836,
+          "confusion_matrix": [
+            [
+              8,
+              1
+            ],
+            [
+              3,
+              4
+            ]
+          ]
+        },
+        "60": {
+          "n": 16,
+          "attacker_win_rate": 0.4375,
+          "accuracy": 0.8125,
+          "balanced_accuracy": 0.8015873015873016,
+          "attacker_f1": 0.7692307692307693,
+          "roc_auc": 0.8571428571428571,
+          "log_loss": 0.41919683921494005,
+          "brier_score": 0.14153835289598418,
+          "confusion_matrix": [
+            [
+              8,
+              1
+            ],
+            [
+              2,
+              5
+            ]
+          ]
+        },
+        "65": {
+          "n": 14,
+          "attacker_win_rate": 0.42857142857142855,
+          "accuracy": 0.9285714285714286,
+          "balanced_accuracy": 0.9166666666666667,
+          "attacker_f1": 0.9090909090909091,
+          "roc_auc": 0.9166666666666666,
+          "log_loss": 0.3390121245011488,
+          "brier_score": 0.10062596732823556,
+          "confusion_matrix": [
+            [
+              8,
+              0
+            ],
+            [
+              1,
+              5
+            ]
+          ]
+        },
+        "70": {
+          "n": 13,
+          "attacker_win_rate": 0.46153846153846156,
+          "accuracy": 1.0,
+          "balanced_accuracy": 1.0,
+          "attacker_f1": 1.0,
+          "roc_auc": 1.0,
+          "log_loss": 0.22300813673839198,
+          "brier_score": 0.05381735674223341,
+          "confusion_matrix": [
+            [
+              7,
+              0
+            ],
+            [
+              0,
+              6
+            ]
+          ]
+        },
+        "75": {
+          "n": 12,
+          "attacker_win_rate": 0.5,
+          "accuracy": 1.0,
+          "balanced_accuracy": 1.0,
+          "attacker_f1": 1.0,
+          "roc_auc": 1.0,
+          "log_loss": 0.2066027460215553,
+          "brier_score": 0.04817273109733392,
+          "confusion_matrix": [
+            [
+              6,
+              0
+            ],
+            [
+              0,
+              6
+            ]
+          ]
+        },
+        "80": {
+          "n": 11,
+          "attacker_win_rate": 0.5454545454545454,
+          "accuracy": 1.0,
+          "balanced_accuracy": 1.0,
+          "attacker_f1": 1.0,
+          "roc_auc": 1.0,
+          "log_loss": 0.11651434019583645,
+          "brier_score": 0.016119286536163895,
+          "confusion_matrix": [
+            [
+              5,
+              0
+            ],
+            [
+              0,
+              6
+            ]
+          ]
+        },
+        "85": {
+          "n": 10,
+          "attacker_win_rate": 0.6,
+          "accuracy": 1.0,
+          "balanced_accuracy": 1.0,
+          "attacker_f1": 1.0,
+          "roc_auc": 1.0,
+          "log_loss": 0.09891398816140536,
+          "brier_score": 0.011254941995208937,
+          "confusion_matrix": [
+            [
+              4,
+              0
+            ],
+            [
+              0,
+              6
+            ]
+          ]
+        },
+        "90": {
+          "n": 7,
+          "attacker_win_rate": 0.7142857142857143,
+          "accuracy": 1.0,
+          "balanced_accuracy": 1.0,
+          "attacker_f1": 1.0,
+          "roc_auc": 1.0,
+          "log_loss": 0.09043348287571108,
+          "brier_score": 0.008216175956200184,
+          "confusion_matrix": [
+            [
+              2,
+              0
+            ],
+            [
+              0,
+              5
+            ]
+          ]
+        },
+        "95": {
+          "n": 7,
+          "attacker_win_rate": 0.7142857142857143,
+          "accuracy": 1.0,
+          "balanced_accuracy": 1.0,
+          "attacker_f1": 1.0,
+          "roc_auc": 1.0,
+          "log_loss": 0.09740980961261021,
+          "brier_score": 0.010805085277314762,
+          "confusion_matrix": [
+            [
+              2,
+              0
+            ],
+            [
+              0,
+              5
+            ]
+          ]
+        },
+        "100": {
+          "n": 7,
+          "attacker_win_rate": 0.7142857142857143,
+          "accuracy": 1.0,
+          "balanced_accuracy": 1.0,
+          "attacker_f1": 1.0,
+          "roc_auc": 1.0,
+          "log_loss": 0.10485390684890107,
+          "brier_score": 0.013849037844701,
+          "confusion_matrix": [
+            [
+              2,
+              0
+            ],
+            [
+              0,
+              5
+            ]
+          ]
+        },
+        "105": {
+          "n": 6,
+          "attacker_win_rate": 0.6666666666666666,
+          "accuracy": 1.0,
+          "balanced_accuracy": 1.0,
+          "attacker_f1": 1.0,
+          "roc_auc": 1.0,
+          "log_loss": 0.08982124841056958,
+          "brier_score": 0.011018846127959586,
+          "confusion_matrix": [
+            [
+              2,
+              0
+            ],
+            [
+              0,
+              4
+            ]
+          ]
+        },
+        "110": {
+          "n": 6,
+          "attacker_win_rate": 0.6666666666666666,
+          "accuracy": 1.0,
+          "balanced_accuracy": 1.0,
+          "attacker_f1": 1.0,
+          "roc_auc": 1.0,
+          "log_loss": 0.04518482507776119,
+          "brier_score": 0.0024944771301577307,
+          "confusion_matrix": [
+            [
+              2,
+              0
+            ],
+            [
+              0,
+              4
+            ]
+          ]
+        },
+        "115": {
+          "n": 3,
+          "attacker_win_rate": 1.0,
+          "accuracy": 1.0,
+          "balanced_accuracy": null,
+          "attacker_f1": 1.0,
+          "roc_auc": null,
+          "log_loss": 0.03500717361153006,
+          "brier_score": 0.0015228561237650704,
+          "confusion_matrix": [
+            [
+              0,
+              0
+            ],
+            [
+              0,
+              3
+            ]
+          ]
+        },
+        "120": {
+          "n": 3,
+          "attacker_win_rate": 1.0,
+          "accuracy": 1.0,
+          "balanced_accuracy": null,
+          "attacker_f1": 1.0,
+          "roc_auc": null,
+          "log_loss": 0.024942247961258584,
+          "brier_score": 0.0007488922177298934,
+          "confusion_matrix": [
+            [
+              0,
+              0
+            ],
+            [
+              0,
+              3
+            ]
+          ]
+        }
+      }
+    },
+    "pooled_mlp": {
+      "windows": 269,
+      "rounds": 21,
+      "round_mean_log_loss": 0.35589478933293134,
+      "round_mean_brier": 0.11039362571992285,
+      "by_elapsed_seconds": {
+        "20": {
+          "n": 21,
+          "attacker_win_rate": 0.38095238095238093,
+          "accuracy": 0.6666666666666666,
+          "balanced_accuracy": 0.6346153846153846,
+          "attacker_f1": 0.5333333333333333,
+          "roc_auc": 0.8173076923076923,
+          "log_loss": 0.5059406633723922,
+          "brier_score": 0.16502047182767374,
+          "confusion_matrix": [
+            [
+              10,
+              3
+            ],
+            [
+              4,
+              4
+            ]
+          ]
+        },
+        "25": {
+          "n": 21,
+          "attacker_win_rate": 0.38095238095238093,
+          "accuracy": 0.7619047619047619,
+          "balanced_accuracy": 0.7355769230769231,
+          "attacker_f1": 0.6666666666666666,
+          "roc_auc": 0.875,
+          "log_loss": 0.4708370997552686,
+          "brier_score": 0.14830620888246016,
+          "confusion_matrix": [
+            [
+              11,
+              2
+            ],
+            [
+              3,
+              5
+            ]
+          ]
+        },
+        "30": {
+          "n": 21,
+          "attacker_win_rate": 0.38095238095238093,
+          "accuracy": 0.6666666666666666,
+          "balanced_accuracy": 0.6586538461538461,
+          "attacker_f1": 0.5882352941176471,
+          "roc_auc": 0.8461538461538461,
+          "log_loss": 0.5048432026771762,
+          "brier_score": 0.16582577192273934,
+          "confusion_matrix": [
+            [
+              9,
+              4
+            ],
+            [
+              3,
+              5
+            ]
+          ]
+        },
+        "35": {
+          "n": 21,
+          "attacker_win_rate": 0.38095238095238093,
+          "accuracy": 0.8095238095238095,
+          "balanced_accuracy": 0.7740384615384616,
+          "attacker_f1": 0.7142857142857143,
+          "roc_auc": 0.8653846153846154,
+          "log_loss": 0.43584231655984323,
+          "brier_score": 0.13708091111850304,
+          "confusion_matrix": [
+            [
+              12,
+              1
+            ],
+            [
+              3,
+              5
+            ]
+          ]
+        },
+        "40": {
+          "n": 21,
+          "attacker_win_rate": 0.38095238095238093,
+          "accuracy": 0.7619047619047619,
+          "balanced_accuracy": 0.7355769230769231,
+          "attacker_f1": 0.6666666666666666,
+          "roc_auc": 0.8846153846153846,
+          "log_loss": 0.4416690036473231,
+          "brier_score": 0.14371906228416664,
+          "confusion_matrix": [
+            [
+              11,
+              2
+            ],
+            [
+              3,
+              5
+            ]
+          ]
+        },
+        "45": {
+          "n": 17,
+          "attacker_win_rate": 0.4117647058823529,
+          "accuracy": 0.7058823529411765,
+          "balanced_accuracy": 0.6857142857142857,
+          "attacker_f1": 0.6153846153846154,
+          "roc_auc": 0.8142857142857143,
+          "log_loss": 0.5383360616364977,
+          "brier_score": 0.1852653801245301,
+          "confusion_matrix": [
+            [
+              8,
+              2
+            ],
+            [
+              3,
+              4
+            ]
+          ]
+        },
+        "50": {
+          "n": 16,
+          "attacker_win_rate": 0.4375,
+          "accuracy": 0.6875,
+          "balanced_accuracy": 0.6746031746031746,
+          "attacker_f1": 0.6153846153846154,
+          "roc_auc": 0.8571428571428571,
+          "log_loss": 0.5275098628862949,
+          "brier_score": 0.18008362137005177,
+          "confusion_matrix": [
+            [
+              7,
+              2
+            ],
+            [
+              3,
+              4
+            ]
+          ]
+        },
+        "55": {
+          "n": 16,
+          "attacker_win_rate": 0.4375,
+          "accuracy": 0.75,
+          "balanced_accuracy": 0.7301587301587301,
+          "attacker_f1": 0.6666666666666666,
+          "roc_auc": 0.8095238095238095,
+          "log_loss": 0.5140972900215368,
+          "brier_score": 0.17248025972218228,
+          "confusion_matrix": [
+            [
+              8,
+              1
+            ],
+            [
+              3,
+              4
+            ]
+          ]
+        },
+        "60": {
+          "n": 16,
+          "attacker_win_rate": 0.4375,
+          "accuracy": 0.75,
+          "balanced_accuracy": 0.7301587301587301,
+          "attacker_f1": 0.6666666666666666,
+          "roc_auc": 0.8571428571428571,
+          "log_loss": 0.4846521690540058,
+          "brier_score": 0.15753403743763778,
+          "confusion_matrix": [
+            [
+              8,
+              1
+            ],
+            [
+              3,
+              4
+            ]
+          ]
+        },
+        "65": {
+          "n": 14,
+          "attacker_win_rate": 0.42857142857142855,
+          "accuracy": 0.7857142857142857,
+          "balanced_accuracy": 0.75,
+          "attacker_f1": 0.6666666666666666,
+          "roc_auc": 0.875,
+          "log_loss": 0.4184149953749095,
+          "brier_score": 0.12338370712565692,
+          "confusion_matrix": [
+            [
+              8,
+              0
+            ],
+            [
+              3,
+              3
+            ]
+          ]
+        },
+        "70": {
+          "n": 13,
+          "attacker_win_rate": 0.46153846153846156,
+          "accuracy": 0.8461538461538461,
+          "balanced_accuracy": 0.8333333333333333,
+          "attacker_f1": 0.8,
+          "roc_auc": 0.9761904761904762,
+          "log_loss": 0.3135928109472183,
+          "brier_score": 0.0981009963751871,
+          "confusion_matrix": [
+            [
+              7,
+              0
+            ],
+            [
+              2,
+              4
+            ]
+          ]
+        },
+        "75": {
+          "n": 12,
+          "attacker_win_rate": 0.5,
+          "accuracy": 0.8333333333333334,
+          "balanced_accuracy": 0.8333333333333333,
+          "attacker_f1": 0.8,
+          "roc_auc": 0.9722222222222222,
+          "log_loss": 0.30286831134107733,
+          "brier_score": 0.09639619824936872,
+          "confusion_matrix": [
+            [
+              6,
+              0
+            ],
+            [
+              2,
+              4
+            ]
+          ]
+        },
+        "80": {
+          "n": 11,
+          "attacker_win_rate": 0.5454545454545454,
+          "accuracy": 1.0,
+          "balanced_accuracy": 1.0,
+          "attacker_f1": 1.0,
+          "roc_auc": 1.0,
+          "log_loss": 0.16322846253059486,
+          "brier_score": 0.03670426053101183,
+          "confusion_matrix": [
+            [
+              5,
+              0
+            ],
+            [
+              0,
+              6
+            ]
+          ]
+        },
+        "85": {
+          "n": 10,
+          "attacker_win_rate": 0.6,
+          "accuracy": 1.0,
+          "balanced_accuracy": 1.0,
+          "attacker_f1": 1.0,
+          "roc_auc": 1.0,
+          "log_loss": 0.13291067355386127,
+          "brier_score": 0.02396521960432785,
+          "confusion_matrix": [
+            [
+              4,
+              0
+            ],
+            [
+              0,
+              6
+            ]
+          ]
+        },
+        "90": {
+          "n": 7,
+          "attacker_win_rate": 0.7142857142857143,
+          "accuracy": 1.0,
+          "balanced_accuracy": 1.0,
+          "attacker_f1": 1.0,
+          "roc_auc": 1.0,
+          "log_loss": 0.12661675951483853,
+          "brier_score": 0.018542303498951147,
+          "confusion_matrix": [
+            [
+              2,
+              0
+            ],
+            [
+              0,
+              5
+            ]
+          ]
+        },
+        "95": {
+          "n": 7,
+          "attacker_win_rate": 0.7142857142857143,
+          "accuracy": 1.0,
+          "balanced_accuracy": 1.0,
+          "attacker_f1": 1.0,
+          "roc_auc": 1.0,
+          "log_loss": 0.12524231489606086,
+          "brier_score": 0.01808175259834722,
+          "confusion_matrix": [
+            [
+              2,
+              0
+            ],
+            [
+              0,
+              5
+            ]
+          ]
+        },
+        "100": {
+          "n": 7,
+          "attacker_win_rate": 0.7142857142857143,
+          "accuracy": 1.0,
+          "balanced_accuracy": 1.0,
+          "attacker_f1": 1.0,
+          "roc_auc": 1.0,
+          "log_loss": 0.13096233477299105,
+          "brier_score": 0.019299820137149388,
+          "confusion_matrix": [
+            [
+              2,
+              0
+            ],
+            [
+              0,
+              5
+            ]
+          ]
+        },
+        "105": {
+          "n": 6,
+          "attacker_win_rate": 0.6666666666666666,
+          "accuracy": 1.0,
+          "balanced_accuracy": 1.0,
+          "attacker_f1": 1.0,
+          "roc_auc": 1.0,
+          "log_loss": 0.12538642965188512,
+          "brier_score": 0.018421635583539635,
+          "confusion_matrix": [
+            [
+              2,
+              0
+            ],
+            [
+              0,
+              4
+            ]
+          ]
+        },
+        "110": {
+          "n": 6,
+          "attacker_win_rate": 0.6666666666666666,
+          "accuracy": 1.0,
+          "balanced_accuracy": 1.0,
+          "attacker_f1": 1.0,
+          "roc_auc": 1.0,
+          "log_loss": 0.06679791322461,
+          "brier_score": 0.0048625929899294915,
+          "confusion_matrix": [
+            [
+              2,
+              0
+            ],
+            [
+              0,
+              4
+            ]
+          ]
+        },
+        "115": {
+          "n": 3,
+          "attacker_win_rate": 1.0,
+          "accuracy": 1.0,
+          "balanced_accuracy": null,
+          "attacker_f1": 1.0,
+          "roc_auc": null,
+          "log_loss": 0.06873388655865975,
+          "brier_score": 0.004926992611592833,
+          "confusion_matrix": [
+            [
+              0,
+              0
+            ],
+            [
+              0,
+              3
+            ]
+          ]
+        },
+        "120": {
+          "n": 3,
+          "attacker_win_rate": 1.0,
+          "accuracy": 1.0,
+          "balanced_accuracy": null,
+          "attacker_f1": 1.0,
+          "roc_auc": null,
+          "log_loss": 0.056856621173261714,
+          "brier_score": 0.0034111613115352193,
+          "confusion_matrix": [
+            [
+              0,
+              0
+            ],
+            [
+              0,
+              3
+            ]
+          ]
+        }
+      }
+    }
+  }
+}

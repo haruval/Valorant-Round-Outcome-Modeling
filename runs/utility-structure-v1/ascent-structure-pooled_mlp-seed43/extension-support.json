@@ -1,0 +1,38 @@
+{
+  "train": {
+    "kept_channels": [
+      "atk_combo_casters",
+      "atk_combo_functions",
+      "atk_supported_entry",
+      "atk_entry_support_casters",
+      "def_combo_casters",
+      "def_combo_functions"
+    ],
+    "constant_training_channels_changed": [],
+    "handling": "always masked; never expand support using evaluation data"
+  },
+  "validation": {
+    "kept_channels": [
+      "atk_combo_casters",
+      "atk_combo_functions",
+      "atk_supported_entry",
+      "atk_entry_support_casters",
+      "def_combo_casters",
+      "def_combo_functions"
+    ],
+    "constant_training_channels_changed": [],
+    "handling": "always masked; never expand support using evaluation data"
+  },
+  "test": {
+    "kept_channels": [
+      "atk_combo_casters",
+      "atk_combo_functions",
+      "atk_supported_entry",
+      "atk_entry_support_casters",
+      "def_combo_casters",
+      "def_combo_functions"
+    ],
+    "constant_training_channels_changed": [],
+    "handling": "always masked; never expand support using evaluation data"
+  }
+}

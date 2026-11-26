@@ -10,12 +10,24 @@ venv/
 !.env.example
 *.pem
 *.key
-runs/
+runs/**
 artifacts/
 *.pt
 *.pth
 *.bin
 *.safetensors
+# Published per-run output: numeric results and weights only.
+!runs/*/
+!runs/*/*/
+!runs/*/*/metrics.json
+!runs/*/*/metrics-living-attacker.json
+!runs/*/*/history.json
+!runs/*/*/baselines.json
+!runs/*/*/predictions.jsonl
+!runs/*/*/input-support.json
+!runs/*/*/extension-support.json
+!runs/*/*/model/
+!runs/*/*/model/model.safetensors
 *.npz
 reports/
 valorantcnnreports/
