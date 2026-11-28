@@ -139,8 +139,7 @@ rounds do not resolve that limitation.
 
 ## Results so far
 
-So far the temporal CNN has not shown an advantage over simpler models on this
-data.
+Both neural models clearly beat the logistic baselines with full inputs. On Ascent the temporal CNN reached 0.346 validation log loss and the pooled control 0.352, against 0.472 for the best logistic model. On Breeze they reached 0.448 and 0.432, against 0.569. With the full inputs, the temporal CNN had the best average on Ascent. Whether temporal ordering itself adds anything is still open, the CNN and a non-temporal neural control of similar size stay within seed to seed variation of each other.
 
 - In a [three-seed follow-up](docs/experiment-results.md#completed-reduced-input-seed-check),
   removing the current spatial features improved log loss in 11 of 12 matched
@@ -154,8 +153,8 @@ data.
   4 of 12 matched pairs, against a threshold of 9 fixed in advance
   ([results](docs/utility-structure-results.json)).
 
-The sample limits what these results can say. My API access ended after the
-hackathon, so the dataset stops at 44 rounds from one series. Most differences
+The sample size limits what these results can say. My API access ended after the
+hackathon where I was getting this data from, so the dataset stops at 44 rounds from one series. Most differences
 between models here are about 0.01 in log loss or less, while the same model
 varies from 0.30 to 0.37 across random seeds on Ascent. A sample this small cannot
 separate an effect of that size from noise, so these results do not tell me
@@ -164,4 +163,4 @@ independent matches.
 
 The [full-input study](docs/experiment-results.md#completed-12-run-study),
 [feature ablations](docs/experiment-results.md#completed-feature-ablations),
-and follow-ups retain every outcome, including weaker runs.
+and [`runs/`](runs/) contain every result.
